@@ -30,13 +30,13 @@ public class ServerListScreen : mScreen, IActionListener
 
 	private int lY;
 
-	public static string smartPhone;
+	public static string smartPhone = "Vũ trụ 1:dragon1.teamobi.com:14445:0,Vũ trụ 2:dragon2.teamobi.com:14445:0,Vũ trụ 3:dragon3.teamobi.com:14445:0,Vũ trụ 4:dragon4.teamobi.com:14445:0,Vũ trụ 5:dragon5.teamobi.com:14445:0,Vũ trụ 6:dragon6.teamobi.com:14445:0,Vũ trụ 7:dragon7.teamobi.com:14445:0,Võ đài liên vũ trụ:dragonwar.teamobi.com:20000:0,Universe 1:dragon.indonaga.com:14445:1,0,6";
 
-	public static string java;
+	public static string java = "Vũ trụ 1:112.213.94.23:14445:0,Vũ trụ 2:210.211.109.199:14445:0,Vũ trụ 3:112.213.85.88:14445:0,Vũ trụ 4:27.0.12.164:14445:0,Vũ trụ 5:27.0.12.16:14445:0,Vũ trụ 6:27.0.12.173:14445:0,Vũ trụ 7:112.213.94.223:14445:0,Võ đài liên vũ trụ:27.0.12.173:20000:0,Universe 1:54.179.255.27:14445:1,0,6";
 
-	public static string linkGetHost;
+	public static string linkGetHost = "http://sv1.ngocrongonline.com/game/ngocrong031_t.php";
 
-	public static string linkDefault;
+	public static string linkDefault = java;
 
 	public const sbyte languageVersion = 2;
 
@@ -46,13 +46,13 @@ public class ServerListScreen : mScreen, IActionListener
 
 	public static bool stopDownload;
 
-	public static string linkweb;
+	public static string linkweb = "http://ngocrongonline.com";
 
 	public static bool waitToLogin;
 
 	public static int tWaitToLogin;
 
-	public static int[] lengthServer;
+	public static int[] lengthServer = new int[3];
 
 	public static int ipSelect;
 
@@ -72,7 +72,7 @@ public class ServerListScreen : mScreen, IActionListener
 
 	public static int maxBg;
 
-	public static bool isGetData;
+	public static bool isGetData = false;
 
 	public static Command cmdDownload;
 
@@ -82,7 +82,7 @@ public class ServerListScreen : mScreen, IActionListener
 
 	public static int p;
 
-	public static int testConnect;
+	public static int testConnect = -1;
 
 	public static bool loadScreen;
 
@@ -417,13 +417,13 @@ public class ServerListScreen : mScreen, IActionListener
 		{
 			Session_ME.gI().close();
 		}
-		GameMidlet.IP = address[A0.server];
-		GameMidlet.PORT = port[A0.server];
-		if (language[A0.server] != mResources.language)
+		GameMidlet.IP = address[ipSelect];
+		GameMidlet.PORT = port[ipSelect];
+		if (language[ipSelect] != mResources.language)
 		{
-			mResources.loadLanguague(language[A0.server]);
+			mResources.loadLanguague(language[ipSelect]);
 		}
-		LoginScr.serverName = nameServer[A0.server];
+		LoginScr.serverName = nameServer[ipSelect];
 		initCommand();
 		GameCanvas.connect();
 	}
@@ -938,17 +938,5 @@ public class ServerListScreen : mScreen, IActionListener
 		strWait = mResources.PLEASEWAIT;
 		init();
 		base.switchToMe();
-	}
-
-	static ServerListScreen()
-	{
-		smartPhone = "Vũ trụ 1:dragon1.teamobi.com:14445:0,Vũ trụ 2:dragon2.teamobi.com:14445:0,Vũ trụ 3:dragon3.teamobi.com:14445:0,Vũ trụ 4:dragon4.teamobi.com:14445:0,Vũ trụ 5:dragon5.teamobi.com:14445:0,Vũ trụ 6:dragon6.teamobi.com:14445:0,Vũ trụ 7:dragon7.teamobi.com:14445:0,Võ đài liên vũ trụ:dragonwar.teamobi.com:20000:0,Universe 1:dragon.indonaga.com:14445:1,0,6";
-		java = "Vũ trụ 1:112.213.94.23:14445:0,Vũ trụ 2:210.211.109.199:14445:0,Vũ trụ 3:112.213.85.88:14445:0,Vũ trụ 4:27.0.12.164:14445:0,Vũ trụ 5:27.0.12.16:14445:0,Vũ trụ 6:27.0.12.173:14445:0,Vũ trụ 7:112.213.94.223:14445:0,Võ đài liên vũ trụ:27.0.12.173:20000:0,Universe 1:54.179.255.27:14445:1,0,6";
-		linkGetHost = "http://sv1.ngocrongonline.com/game/ngocrong031_t.php";
-		linkDefault = java;
-		linkweb = "http://ngocrongonline.com";
-		lengthServer = new int[3];
-		isGetData = false;
-		testConnect = -1;
 	}
 }

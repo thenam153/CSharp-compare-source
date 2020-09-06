@@ -1,6 +1,5 @@
 using Assets.src.g;
 using System;
-using UnityEngine;
 
 public class Service
 {
@@ -181,8 +180,7 @@ public class Service
 		Message message = null;
 		try
 		{
-			Debug.Log(action + " " + playerID + " " + index + " " + num);
-			message = new Message(-86);
+			message = new Message((sbyte)(-86));
 			message.writer().writeByte(action);
 			if (action == 0 || action == 1)
 			{

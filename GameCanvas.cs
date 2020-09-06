@@ -1,21 +1,20 @@
 using Assets.src.g;
 using System;
-using System.Threading;
 using UnityEngine;
 
 public class GameCanvas : IActionListener
 {
-	public static long timeNow;
+	public static long timeNow = 0L;
 
 	public static bool open3Hour;
 
-	public static bool lowGraphic;
+	public static bool lowGraphic = false;
 
-	public static bool isMoveNumberPad;
+	public static bool isMoveNumberPad = true;
 
 	public static bool isLoading;
 
-	public static bool isTouch;
+	public static bool isTouch = false;
 
 	public static bool isTouchControl;
 
@@ -29,11 +28,11 @@ public class GameCanvas : IActionListener
 
 	public static bool bRun;
 
-	public static bool[] keyPressed;
+	public static bool[] keyPressed = new bool[30];
 
-	public static bool[] keyReleased;
+	public static bool[] keyReleased = new bool[30];
 
-	public static bool[] keyHold;
+	public static bool[] keyHold = new bool[30];
 
 	public static bool isPointerDown;
 
@@ -57,7 +56,7 @@ public class GameCanvas : IActionListener
 
 	public static int pyMouse;
 
-	public static Position[] arrPos;
+	public static Position[] arrPos = new Position[4];
 
 	public static int gameTick;
 
@@ -97,7 +96,7 @@ public class GameCanvas : IActionListener
 
 	public static mScreen currentScreen;
 
-	public static Menu menu;
+	public static Menu menu = new Menu();
 
 	public static Panel panel;
 
@@ -113,7 +112,7 @@ public class GameCanvas : IActionListener
 
 	public static InputDlg inputDlg;
 
-	public static MyVector currentPopup;
+	public static MyVector currentPopup = new MyVector();
 
 	public static int requestLoseCount;
 
@@ -127,23 +126,23 @@ public class GameCanvas : IActionListener
 
 	public static int skyColor;
 
-	public static int curPos;
+	public static int curPos = 0;
 
 	public static int[] bgW;
 
 	public static int[] bgH;
 
-	public static int planet;
+	public static int planet = 0;
 
 	private mGraphics g = new mGraphics();
 
 	public static Image img12;
 
-	public static Image[] imgBlue;
+	public static Image[] imgBlue = new Image[7];
 
-	public static Image[] imgViolet;
+	public static Image[] imgViolet = new Image[7];
 
-	public static bool isPlaySound;
+	public static bool isPlaySound = true;
 
 	private static int clearOldData;
 
@@ -159,7 +158,7 @@ public class GameCanvas : IActionListener
 
 	public static MyVector debugSession;
 
-	private static bool isShowErrorForm;
+	private static bool isShowErrorForm = false;
 
 	public static bool paintBG;
 
@@ -185,7 +184,7 @@ public class GameCanvas : IActionListener
 
 	public static Image imgClear;
 
-	public static Image[] imgBorder;
+	public static Image[] imgBorder = new Image[3];
 
 	public static int borderConnerW;
 
@@ -219,11 +218,11 @@ public class GameCanvas : IActionListener
 
 	public static int tBolt;
 
-	public static int typeBg;
+	public static int typeBg = -1;
 
 	public static int transY;
 
-	public static int[] yb;
+	public static int[] yb = new int[5];
 
 	public static int[] colorTop;
 
@@ -235,25 +234,33 @@ public class GameCanvas : IActionListener
 
 	public static int yb3;
 
-	public static int nBg;
+	public static int nBg = 0;
 
-	public static int lastBg;
+	public static int lastBg = -1;
 
-	public static int[] bgRain;
+	public static int[] bgRain = new int[3]
+	{
+		1,
+		4,
+		11
+	};
 
-	public static int[] bgRainFont;
+	public static int[] bgRainFont = new int[1]
+	{
+		-1
+	};
 
 	public static Image imgCaycot;
 
 	public static Image tam;
 
-	public static int typeBackGround;
+	public static int typeBackGround = -1;
 
-	public static int saveIDBg;
+	public static int saveIDBg = -10;
 
 	public static bool isLoadBGok;
 
-	private static long lastTimePress;
+	private static long lastTimePress = 0L;
 
 	public static int keyAsciiPress;
 
@@ -261,17 +268,17 @@ public class GameCanvas : IActionListener
 
 	private static Image imgSignal;
 
-	public static MyVector flyTexts;
+	public static MyVector flyTexts = new MyVector();
 
 	public int longTime;
 
-	public static bool isPointerJustDown;
+	public static bool isPointerJustDown = false;
 
 	private int count = 1;
 
 	public static bool csWait;
 
-	public static MyRandom r;
+	public static MyRandom r = new MyRandom();
 
 	public static bool isBlackScreen;
 
@@ -617,11 +624,11 @@ public class GameCanvas : IActionListener
 			{
 				if (Controller.isMain)
 				{
-					GameMidlet.IP = ServerListScreen.address[A0.server];
-					GameMidlet.PORT = ServerListScreen.port[A0.server];
+					GameMidlet.IP = ServerListScreen.address[ServerListScreen.ipSelect];
+					GameMidlet.PORT = ServerListScreen.port[ServerListScreen.ipSelect];
 					Cout.println("Connect ok");
 					ServerListScreen.testConnect = 2;
-					Rms.saveRMSInt("svselect", A0.server);
+					Rms.saveRMSInt("svselect", ServerListScreen.ipSelect);
 					Rms.saveIP(GameMidlet.IP + ":" + GameMidlet.PORT);
 					Service.gI().setClientType();
 					Service.gI().androidPack();
@@ -713,12 +720,12 @@ public class GameCanvas : IActionListener
 		{
 			if (currentScreen != serverScreen && currentScreen != loginScr)
 			{
-				new Thread(autoLogin).Start();
+				startOKDlg(mResources.maychutathoacmatsong);
 			}
 		}
 		else
 		{
-			new Thread(autoLogin).Start();
+			startOKDlg(mResources.maychutathoacmatsong);
 		}
 		mSystem.endKey();
 	}
@@ -727,25 +734,28 @@ public class GameCanvas : IActionListener
 	{
 		if (currentScreen.Equals(SplashScr.instance))
 		{
-			if (ServerListScreen.hasConnected == null)
+			if (ServerListScreen.hasConnected != null)
 			{
-				startOK(mResources.pls_restart_game_error, 8885, null);
-			}
-			else if (!ServerListScreen.hasConnected[0])
-			{
-				ServerListScreen.hasConnected[0] = true;
-				ServerListScreen.ipSelect = 0;
-				GameMidlet.IP = ServerListScreen.address[A0.server];
-				Rms.saveRMSInt("svselect", A0.server);
-				connect();
-			}
-			else if (!ServerListScreen.hasConnected[2])
-			{
-				ServerListScreen.hasConnected[2] = true;
-				ServerListScreen.ipSelect = 2;
-				GameMidlet.IP = ServerListScreen.address[A0.server];
-				Rms.saveRMSInt("svselect", A0.server);
-				connect();
+				if (!ServerListScreen.hasConnected[0])
+				{
+					ServerListScreen.hasConnected[0] = true;
+					ServerListScreen.ipSelect = 0;
+					GameMidlet.IP = ServerListScreen.address[ServerListScreen.ipSelect];
+					Rms.saveRMSInt("svselect", ServerListScreen.ipSelect);
+					connect();
+				}
+				else if (!ServerListScreen.hasConnected[2])
+				{
+					ServerListScreen.hasConnected[2] = true;
+					ServerListScreen.ipSelect = 2;
+					GameMidlet.IP = ServerListScreen.address[ServerListScreen.ipSelect];
+					Rms.saveRMSInt("svselect", ServerListScreen.ipSelect);
+					connect();
+				}
+				else
+				{
+					startOK(mResources.pls_restart_game_error, 8885, null);
+				}
 			}
 			else
 			{
@@ -772,7 +782,7 @@ public class GameCanvas : IActionListener
 		{
 			loginScr = new LoginScr();
 		}
-		LoginScr.serverName = ServerListScreen.nameServer[A0.server];
+		LoginScr.serverName = ServerListScreen.nameServer[ServerListScreen.ipSelect];
 		if (currentScreen != serverScreen)
 		{
 			startOK(mResources.lost_connection + LoginScr.serverName, 888395, null);
@@ -2919,78 +2929,5 @@ public class GameCanvas : IActionListener
 
 	public static void backToRegister()
 	{
-	}
-
-	static GameCanvas()
-	{
-		timeNow = 0L;
-		lowGraphic = false;
-		isMoveNumberPad = true;
-		isTouch = false;
-		keyPressed = new bool[30];
-		keyReleased = new bool[30];
-		keyHold = new bool[30];
-		arrPos = new Position[4];
-		menu = new Menu();
-		currentPopup = new MyVector();
-		curPos = 0;
-		planet = 0;
-		imgBlue = new Image[7];
-		imgViolet = new Image[7];
-		isPlaySound = true;
-		isShowErrorForm = false;
-		imgBorder = new Image[3];
-		typeBg = -1;
-		yb = new int[5];
-		nBg = 0;
-		lastBg = -1;
-		bgRain = new int[3]
-		{
-			1,
-			4,
-			11
-		};
-		bgRainFont = new int[1]
-		{
-			-1
-		};
-		typeBackGround = -1;
-		saveIDBg = -10;
-		lastTimePress = 0L;
-		flyTexts = new MyVector();
-		isPointerJustDown = false;
-		r = new MyRandom();
-	}
-
-	public static void autoLogin()
-	{
-		for (int num = 25; num >= 0; num--)
-		{
-			startOK("Vào lại game sau " + num + " giây", 8885, null);
-			Thread.Sleep(1000);
-		}
-		while (!ServerListScreen.loadScreen)
-		{
-			Thread.Sleep(10);
-		}
-		if (Rms.loadRMSInt("svselect") != A0.server)
-		{
-			Rms.saveRMSInt("svselect", A0.server);
-			ServerListScreen.ipSelect = A0.server;
-			serverScreen.selectServer();
-		}
-		while (!Session_ME.gI().isConnected())
-		{
-			Thread.Sleep(100);
-		}
-		Thread.Sleep(100);
-		if (loginScr == null)
-		{
-			loginScr = new LoginScr();
-		}
-		loginScr.switchToMe();
-		loginScr.doLogin();
-		Thread.Sleep(1000);
-		gameTick = 0;
 	}
 }

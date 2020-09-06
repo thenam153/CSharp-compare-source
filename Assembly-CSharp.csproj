@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{8BFCA88F-9811-45E4-B2B2-24426F6591F0}</ProjectGuid>
+    <ProjectGuid>{6F6E4EE4-824B-4E1E-868B-8D94CC34E8BA}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <OutputType>Library</OutputType>
@@ -28,14 +28,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
-      <HintPath>D:\workspace\ngocrong\code-mod\Dragonboy_vn_v183_loi\Dragonboy_vn_v183_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>D:\workspace\ngocrong\code-mod\Dragonboy_vn_v183\Dragonboy_vn_v183_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="System">
-      <HintPath>D:\workspace\ngocrong\code-mod\Dragonboy_vn_v183_loi\Dragonboy_vn_v183_Data\Managed\System.dll</HintPath>
+      <HintPath>D:\workspace\ngocrong\code-mod\Dragonboy_vn_v183\Dragonboy_vn_v183_Data\Managed\System.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="A0.cs" />
     <Compile Include="ActionChat.cs" />
     <Compile Include="ActionPaint.cs" />
     <Compile Include="ActionUpdate.cs" />

@@ -10,7 +10,7 @@ public class Main : MonoBehaviour
 
 	public static GameMidlet midlet;
 
-	public static string res;
+	public static string res = "res";
 
 	public static string mainThreadName;
 
@@ -32,9 +32,9 @@ public class Main : MonoBehaviour
 
 	public static int versionIp;
 
-	public static int numberQuit;
+	public static int numberQuit = 1;
 
-	public static int typeClient;
+	public static int typeClient = 4;
 
 	public const sbyte PC_VERSION = 4;
 
@@ -72,15 +72,15 @@ public class Main : MonoBehaviour
 
 	public static bool isResume;
 
-	public static bool isMiniApp;
+	public static bool isMiniApp = true;
 
 	public static bool isQuitApp;
 
 	private Vector2 lastMousePos = default(Vector2);
 
-	public static int a;
+	public static int a = 1;
 
-	public static bool isCompactDevice;
+	public static bool isCompactDevice = true;
 
 	private void Start()
 	{
@@ -88,7 +88,6 @@ public class Main : MonoBehaviour
 		{
 			return;
 		}
-		A0.getData();
 		if (Thread.CurrentThread.Name != "Main")
 		{
 			Thread.CurrentThread.Name = "Main";
@@ -430,15 +429,5 @@ public class Main : MonoBehaviour
 			return true;
 		}
 		return false;
-	}
-
-	static Main()
-	{
-		res = "res";
-		numberQuit = 1;
-		typeClient = 4;
-		isMiniApp = true;
-		a = 1;
-		isCompactDevice = true;
 	}
 }

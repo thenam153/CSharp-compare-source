@@ -6,7 +6,7 @@ public class LoginScr : mScreen, IActionListener
 
 	public TField tfPass;
 
-	public static bool isContinueToLogin;
+	public static bool isContinueToLogin = false;
 
 	private int focus;
 
@@ -40,7 +40,7 @@ public class LoginScr : mScreen, IActionListener
 
 	private string numSupport = string.Empty;
 
-	public static bool isLocal;
+	public static bool isLocal = false;
 
 	public static bool isUpdateAll;
 
@@ -70,7 +70,14 @@ public class LoginScr : mScreen, IActionListener
 
 	public int lineY;
 
-	public static int[] bgId;
+	public static int[] bgId = new int[5]
+	{
+		0,
+		8,
+		2,
+		6,
+		9
+	};
 
 	public static bool isTryGetIPFromWap;
 
@@ -443,7 +450,43 @@ public class LoginScr : mScreen, IActionListener
 
 	public void doLogin()
 	{
-		Service.gI().login(A0.username, A0.password, GameMidlet.VERSION, 0);
+		string text = Rms.loadRMSString("acc");
+		string text2 = Rms.loadRMSString("pass");
+		if (text != null && !text.Equals(string.Empty))
+		{
+			isLogin2 = false;
+		}
+		else if (Rms.loadRMSString("userAo" + ServerListScreen.ipSelect) != null && !Rms.loadRMSString("userAo" + ServerListScreen.ipSelect).Equals(string.Empty))
+		{
+			isLogin2 = true;
+		}
+		else
+		{
+			isLogin2 = false;
+		}
+		if ((text == null || text.Equals(string.Empty)) && isLogin2)
+		{
+			text = Rms.loadRMSString("userAo" + ServerListScreen.ipSelect);
+			text2 = "a";
+		}
+		if (text == null || text2 == null || GameMidlet.VERSION == null || text.Equals(string.Empty))
+		{
+			return;
+		}
+		if (text2.Equals(string.Empty))
+		{
+			focus = 1;
+			tfUser.isFocus = false;
+			tfPass.isFocus = true;
+			if (!GameCanvas.isTouch)
+			{
+				right = tfPass.cmdClear;
+			}
+			return;
+		}
+		GameCanvas.connect();
+		Res.outz("ccccccc " + text + " " + text2 + " " + GameMidlet.VERSION + " " + (sbyte)(isLogin2 ? 1 : 0));
+		Service.gI().login(text, text2, GameMidlet.VERSION, (sbyte)(isLogin2 ? 1 : 0));
 		if (Session_ME.connected)
 		{
 			GameCanvas.startWaitDlg();
@@ -451,6 +494,11 @@ public class LoginScr : mScreen, IActionListener
 		else
 		{
 			GameCanvas.startOKDlg(mResources.maychutathoacmatsong);
+		}
+		focus = 0;
+		if (!isLogin2)
+		{
+			actRegisterLeft();
 		}
 	}
 
@@ -984,19 +1032,5 @@ public class LoginScr : mScreen, IActionListener
 		GameCanvas.instance.resetToLoginScr = false;
 		GameCanvas.instance.doResetToLoginScr(GameCanvas.loginScr);
 		Session_ME.gI().close();
-	}
-
-	static LoginScr()
-	{
-		isContinueToLogin = false;
-		isLocal = false;
-		bgId = new int[5]
-		{
-			0,
-			8,
-			2,
-			6,
-			9
-		};
 	}
 }

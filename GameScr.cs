@@ -1,12 +1,11 @@
 using Assets.src.g;
 using System;
-using System.Threading;
 
 public class GameScr : mScreen, IChatable
 {
-	public static MyVector textTime;
+	public static MyVector textTime = new MyVector(string.Empty);
 
-	public static bool isLoadAllData;
+	public static bool isLoadAllData = false;
 
 	public static GameScr instance;
 
@@ -112,41 +111,41 @@ public class GameScr : mScreen, IChatable
 
 	private bool isChangeSkill;
 
-	public static MyVector vClan;
+	public static MyVector vClan = new MyVector();
 
-	public static MyVector vPtMap;
+	public static MyVector vPtMap = new MyVector();
 
-	public static MyVector vFriend;
+	public static MyVector vFriend = new MyVector();
 
-	public static MyVector vEnemies;
+	public static MyVector vEnemies = new MyVector();
 
-	public static MyVector vCharInMap;
+	public static MyVector vCharInMap = new MyVector();
 
-	public static MyVector vItemMap;
+	public static MyVector vItemMap = new MyVector();
 
-	public static MyVector vMobAttack;
+	public static MyVector vMobAttack = new MyVector();
 
-	public static MyVector vSet;
+	public static MyVector vSet = new MyVector();
 
-	public static MyVector vMob;
+	public static MyVector vMob = new MyVector();
 
-	public static MyVector vNpc;
+	public static MyVector vNpc = new MyVector();
 
-	public static MyVector vFlag;
+	public static MyVector vFlag = new MyVector();
 
 	public static NClass[] nClasss;
 
-	public static int indexSize;
+	public static int indexSize = 28;
 
-	public static int indexTitle;
+	public static int indexTitle = 0;
 
-	public static int indexSelect;
+	public static int indexSelect = 0;
 
-	public static int indexRow;
+	public static int indexRow = -1;
 
 	public static int indexRowMax;
 
-	public static int indexMenu;
+	public static int indexMenu = 0;
 
 	public Item itemFocus;
 
@@ -154,109 +153,109 @@ public class GameScr : mScreen, IChatable
 
 	public SkillOptionTemplate[] sOptionTemplates;
 
-	private static Scroll scrInfo;
+	private static Scroll scrInfo = new Scroll();
 
-	public static Scroll scrMain;
+	public static Scroll scrMain = new Scroll();
 
-	public static MyVector vItemUpGrade;
+	public static MyVector vItemUpGrade = new MyVector();
 
 	public static bool isTypeXu;
 
 	public static bool isViewNext;
 
-	public static bool isViewClanMemOnline;
+	public static bool isViewClanMemOnline = false;
 
-	public static bool isViewClanInvite;
+	public static bool isViewClanInvite = true;
 
 	public static bool isChop;
 
-	public static string titleInputText;
+	public static string titleInputText = string.Empty;
 
 	public static int tickMove;
 
-	public static bool isPaintAlert;
+	public static bool isPaintAlert = false;
 
-	public static bool isPaintTask;
+	public static bool isPaintTask = false;
 
-	public static bool isPaintTeam;
+	public static bool isPaintTeam = false;
 
-	public static bool isPaintFindTeam;
+	public static bool isPaintFindTeam = false;
 
-	public static bool isPaintFriend;
+	public static bool isPaintFriend = false;
 
-	public static bool isPaintEnemies;
+	public static bool isPaintEnemies = false;
 
-	public static bool isPaintItemInfo;
+	public static bool isPaintItemInfo = false;
 
-	public static bool isHaveSelectSkill;
+	public static bool isHaveSelectSkill = false;
 
-	public static bool isPaintSkill;
+	public static bool isPaintSkill = false;
 
-	public static bool isPaintInfoMe;
+	public static bool isPaintInfoMe = false;
 
-	public static bool isPaintStore;
+	public static bool isPaintStore = false;
 
-	public static bool isPaintNonNam;
+	public static bool isPaintNonNam = false;
 
-	public static bool isPaintNonNu;
+	public static bool isPaintNonNu = false;
 
-	public static bool isPaintAoNam;
+	public static bool isPaintAoNam = false;
 
-	public static bool isPaintAoNu;
+	public static bool isPaintAoNu = false;
 
-	public static bool isPaintGangTayNam;
+	public static bool isPaintGangTayNam = false;
 
-	public static bool isPaintGangTayNu;
+	public static bool isPaintGangTayNu = false;
 
-	public static bool isPaintQuanNam;
+	public static bool isPaintQuanNam = false;
 
-	public static bool isPaintQuanNu;
+	public static bool isPaintQuanNu = false;
 
-	public static bool isPaintGiayNam;
+	public static bool isPaintGiayNam = false;
 
-	public static bool isPaintGiayNu;
+	public static bool isPaintGiayNu = false;
 
-	public static bool isPaintLien;
+	public static bool isPaintLien = false;
 
-	public static bool isPaintNhan;
+	public static bool isPaintNhan = false;
 
-	public static bool isPaintNgocBoi;
+	public static bool isPaintNgocBoi = false;
 
-	public static bool isPaintPhu;
+	public static bool isPaintPhu = false;
 
-	public static bool isPaintWeapon;
+	public static bool isPaintWeapon = false;
 
-	public static bool isPaintStack;
+	public static bool isPaintStack = false;
 
-	public static bool isPaintStackLock;
+	public static bool isPaintStackLock = false;
 
-	public static bool isPaintGrocery;
+	public static bool isPaintGrocery = false;
 
-	public static bool isPaintGroceryLock;
+	public static bool isPaintGroceryLock = false;
 
-	public static bool isPaintUpGrade;
+	public static bool isPaintUpGrade = false;
 
-	public static bool isPaintConvert;
+	public static bool isPaintConvert = false;
 
-	public static bool isPaintUpGradeGold;
+	public static bool isPaintUpGradeGold = false;
 
-	public static bool isPaintUpPearl;
+	public static bool isPaintUpPearl = false;
 
-	public static bool isPaintBox;
+	public static bool isPaintBox = false;
 
-	public static bool isPaintSplit;
+	public static bool isPaintSplit = false;
 
-	public static bool isPaintCharInMap;
+	public static bool isPaintCharInMap = false;
 
-	public static bool isPaintTrade;
+	public static bool isPaintTrade = false;
 
-	public static bool isPaintZone;
+	public static bool isPaintZone = false;
 
-	public static bool isPaintMessage;
+	public static bool isPaintMessage = false;
 
-	public static bool isPaintClan;
+	public static bool isPaintClan = false;
 
-	public static bool isRequestMember;
+	public static bool isRequestMember = false;
 
 	public static Char currentCharViewInfo;
 
@@ -410,13 +409,13 @@ public class GameScr : mScreen, IChatable
 
 	public int timeStartMap;
 
-	public static sbyte typeViewInfo;
+	public static sbyte typeViewInfo = 0;
 
-	public static sbyte typeActive;
+	public static sbyte typeActive = 0;
 
-	public static InfoMe info1;
+	public static InfoMe info1 = new InfoMe();
 
-	public static InfoMe info2;
+	public static InfoMe info2 = new InfoMe();
 
 	public static Image imgPanel;
 
@@ -438,19 +437,19 @@ public class GameScr : mScreen, IChatable
 
 	public static int countEff;
 
-	public static GamePad gamePad;
+	public static GamePad gamePad = new GamePad();
 
 	public static Image imgChatPC;
 
 	public static Image imgChatsPC2;
 
-	public static int isAnalog;
+	public static int isAnalog = 0;
 
 	public static bool isUseTouch;
 
-	public static Skill[] keySkill;
+	public static Skill[] keySkill = new Skill[5];
 
-	public static Skill[] onScreenSkill;
+	public static Skill[] onScreenSkill = new Skill[5];
 
 	public Command cmdMenu;
 
@@ -544,7 +543,7 @@ public class GameScr : mScreen, IChatable
 
 	public int bgRID = -1;
 
-	public static int tam;
+	public static int tam = 0;
 
 	public static bool isAutoPlay;
 
@@ -604,13 +603,25 @@ public class GameScr : mScreen, IChatable
 
 	public static int disXC;
 
-	public static bool isPaint;
+	public static bool isPaint = true;
 
 	public static int shock_scr;
 
-	private static int[] shock_x;
+	private static int[] shock_x = new int[4]
+	{
+		3,
+		-3,
+		3,
+		-3
+	};
 
-	private static int[] shock_y;
+	private static int[] shock_y = new int[4]
+	{
+		3,
+		-3,
+		-3,
+		3
+	};
 
 	private int tDoubleDelay;
 
@@ -782,9 +793,9 @@ public class GameScr : mScreen, IChatable
 
 	public static int ystart;
 
-	public static int popupW;
+	public static int popupW = 140;
 
-	public static int popupH;
+	public static int popupH = 160;
 
 	public static int cmySK;
 
@@ -796,7 +807,7 @@ public class GameScr : mScreen, IChatable
 
 	public static int cmyLimSK;
 
-	public static int columns;
+	public static int columns = 6;
 
 	public static int rows;
 
@@ -810,7 +821,7 @@ public class GameScr : mScreen, IChatable
 
 	private int yPaint;
 
-	public static int indexEff;
+	public static int indexEff = 0;
 
 	public static EffectCharPaint effUpok;
 
@@ -824,17 +835,17 @@ public class GameScr : mScreen, IChatable
 
 	public Command cmdDead;
 
-	public static bool notPaint;
+	public static bool notPaint = false;
 
-	public static bool isPing;
+	public static bool isPing = false;
 
-	public static int INFO;
+	public static int INFO = 0;
 
-	public static int STORE;
+	public static int STORE = 1;
 
-	public static int ZONE;
+	public static int ZONE = 2;
 
-	public static int UPGRADE;
+	public static int UPGRADE = 3;
 
 	private int Hitem = 30;
 
@@ -850,7 +861,7 @@ public class GameScr : mScreen, IChatable
 
 	public PopUpYesNo popUpYesNo;
 
-	public static MyVector vChatVip;
+	public static MyVector vChatVip = new MyVector();
 
 	public static int vBig;
 
@@ -895,8 +906,6 @@ public class GameScr : mScreen, IChatable
 	private string yourNumber = string.Empty;
 
 	private string[] strPaint;
-
-	public static bool khoaGD;
 
 	public GameScr()
 	{
@@ -2657,11 +2666,6 @@ public class GameScr : mScreen, IChatable
 						{
 							ChatTextField.gI().startChat(this, string.Empty);
 						}
-						else if (GameCanvas.keyAsciiPress == 122)
-						{
-							A0.muaDo();
-							info1.addInfo(string.Concat(A0.listItem.Length), 0);
-						}
 					}
 					else if (!GameCanvas.isMoveNumberPad)
 					{
@@ -2699,10 +2703,10 @@ public class GameScr : mScreen, IChatable
 					MyVector myVector = new MyVector();
 					for (int j = 0; j < array.Length; j++)
 					{
-						myVector.addElement(array[j].ToString() + string.Empty);
+						myVector.addElement(array[j] + string.Empty);
 					}
 					myVector.removeElementAt(0);
-					string text = ((char)GameCanvas.keyAsciiPress).ToString() + string.Empty;
+					string text = (char)GameCanvas.keyAsciiPress + string.Empty;
 					if (text.Equals(string.Empty) || text == null || text.Equals("\n"))
 					{
 						text = "-";
@@ -4375,7 +4379,6 @@ public class GameScr : mScreen, IChatable
 		{
 			autoPlay();
 		}
-		A0.update();
 		updateXoSo();
 		mSystem.checkAdComlete();
 		SmallImage.update();
@@ -4414,33 +4417,36 @@ public class GameScr : mScreen, IChatable
 			{
 				((Char)vCharInMap.elementAt(i)).update();
 			}
-			for (int j = 0; j < Teleport.vTeleport.size(); j++)
+			for (int i = 0; i < Teleport.vTeleport.size(); i++)
 			{
-				((Teleport)Teleport.vTeleport.elementAt(j)).update();
+				((Teleport)Teleport.vTeleport.elementAt(i)).update();
 			}
 			Char.myCharz().update();
-			_ = Char.myCharz().statusMe;
+			if (Char.myCharz().statusMe == 1)
+			{
+			}
 			if (popUpYesNo != null)
 			{
 				popUpYesNo.update();
 			}
 			EffecMn.update();
 			GameCanvas.debug("E5x", 0);
-			for (int k = 0; k < vMob.size(); k++)
+			for (int i = 0; i < vMob.size(); i++)
 			{
-				((Mob)vMob.elementAt(k)).update();
+				((Mob)vMob.elementAt(i)).update();
 			}
 			GameCanvas.debug("E6", 0);
-			for (int l = 0; l < vNpc.size(); l++)
+			for (int i = 0; i < vNpc.size(); i++)
 			{
-				((Npc)vNpc.elementAt(l)).update();
+				((Npc)vNpc.elementAt(i)).update();
 			}
 			nSkill = onScreenSkill.Length;
-			for (int num = onScreenSkill.Length - 1; num >= 0; num--)
+			for (int i = onScreenSkill.Length - 1; i >= 0; i--)
 			{
-				if (onScreenSkill[num] != null)
+				Skill skill = onScreenSkill[i];
+				if (skill != null)
 				{
-					nSkill = num + 1;
+					nSkill = i + 1;
 					break;
 				}
 				nSkill--;
@@ -4464,36 +4470,41 @@ public class GameScr : mScreen, IChatable
 			GameCanvas.debug("E9", 0);
 			updateClickToArrow();
 			GameCanvas.debug("E10", 0);
-			for (int m = 0; m < vItemMap.size(); m++)
+			for (int i = 0; i < vItemMap.size(); i++)
 			{
-				((ItemMap)vItemMap.elementAt(m)).update();
+				((ItemMap)vItemMap.elementAt(i)).update();
 			}
 			GameCanvas.debug("E11", 0);
 			GameCanvas.debug("E13", 0);
-			for (int num2 = Effect2.vRemoveEffect2.size() - 1; num2 >= 0; num2--)
+			for (int i = Effect2.vRemoveEffect2.size() - 1; i >= 0; i--)
 			{
-				Effect2.vEffect2.removeElement(Effect2.vRemoveEffect2.elementAt(num2));
-				Effect2.vRemoveEffect2.removeElementAt(num2);
+				Effect2.vEffect2.removeElement(Effect2.vRemoveEffect2.elementAt(i));
+				Effect2.vRemoveEffect2.removeElementAt(i);
 			}
-			for (int n = 0; n < Effect2.vEffect2.size(); n++)
+			for (int i = 0; i < Effect2.vEffect2.size(); i++)
 			{
-				((Effect2)Effect2.vEffect2.elementAt(n)).update();
+				Effect2 effect = (Effect2)Effect2.vEffect2.elementAt(i);
+				effect.update();
 			}
-			for (int num3 = 0; num3 < Effect2.vEffect2Outside.size(); num3++)
+			for (int i = 0; i < Effect2.vEffect2Outside.size(); i++)
 			{
-				((Effect2)Effect2.vEffect2Outside.elementAt(num3)).update();
+				Effect2 effect2 = (Effect2)Effect2.vEffect2Outside.elementAt(i);
+				effect2.update();
 			}
-			for (int num4 = 0; num4 < Effect2.vAnimateEffect.size(); num4++)
+			for (int i = 0; i < Effect2.vAnimateEffect.size(); i++)
 			{
-				((Effect2)Effect2.vAnimateEffect.elementAt(num4)).update();
+				Effect2 effect3 = (Effect2)Effect2.vAnimateEffect.elementAt(i);
+				effect3.update();
 			}
-			for (int num5 = 0; num5 < Effect2.vEffectFeet.size(); num5++)
+			for (int i = 0; i < Effect2.vEffectFeet.size(); i++)
 			{
-				((Effect2)Effect2.vEffectFeet.elementAt(num5)).update();
+				Effect2 effect4 = (Effect2)Effect2.vEffectFeet.elementAt(i);
+				effect4.update();
 			}
-			for (int num6 = 0; num6 < Effect2.vEffect3.size(); num6++)
+			for (int i = 0; i < Effect2.vEffect3.size(); i++)
 			{
-				((Effect2)Effect2.vEffect3.elementAt(num6)).update();
+				Effect2 effect5 = (Effect2)Effect2.vEffect3.elementAt(i);
+				effect5.update();
 			}
 			BackgroudEffect.updateEff();
 			info1.update();
@@ -4519,12 +4530,12 @@ public class GameScr : mScreen, IChatable
 			}
 			else if (dHP > Char.myCharz().cHP)
 			{
-				int num7 = dHP - Char.myCharz().cHP >> 1;
-				if (num7 < 1)
+				int num = dHP - Char.myCharz().cHP >> 1;
+				if (num < 1)
 				{
-					num7 = 1;
+					num = 1;
 				}
-				dHP -= num7;
+				dHP -= num;
 			}
 			else
 			{
@@ -4541,12 +4552,12 @@ public class GameScr : mScreen, IChatable
 			}
 			else if (dMP > Char.myCharz().cMP)
 			{
-				int num8 = dMP - Char.myCharz().cMP >> 1;
-				if (num8 < 1)
+				int num2 = dMP - Char.myCharz().cMP >> 1;
+				if (num2 < 1)
 				{
-					num8 = 1;
+					num2 = 1;
 				}
-				dMP -= num8;
+				dMP -= num2;
 			}
 			else
 			{
@@ -4558,26 +4569,27 @@ public class GameScr : mScreen, IChatable
 			}
 			if (isRongThanMenu())
 			{
-				int num9 = 100;
-				while (yR - num9 < cmy)
+				int num3 = 100;
+				while (yR - num3 < cmy)
 				{
 					cmy--;
 				}
 			}
-			for (int num10 = 0; num10 < Char.vItemTime.size(); num10++)
+			for (int i = 0; i < Char.vItemTime.size(); i++)
 			{
-				((ItemTime)Char.vItemTime.elementAt(num10)).update();
+				((ItemTime)Char.vItemTime.elementAt(i)).update();
 			}
-			for (int num11 = 0; num11 < textTime.size(); num11++)
+			for (int i = 0; i < textTime.size(); i++)
 			{
-				((ItemTime)textTime.elementAt(num11)).update();
+				((ItemTime)textTime.elementAt(i)).update();
 			}
 			updateChatVip();
 		}
 		catch (Exception)
 		{
 		}
-		if (GameCanvas.gameTick % 4000 == 1000)
+		int num4 = GameCanvas.gameTick % 4000;
+		if (num4 == 1000)
 		{
 			checkRemoveImage();
 		}
@@ -6428,12 +6440,9 @@ public class GameScr : mScreen, IChatable
 	public void giaodich(int playerID)
 	{
 		Char @char = findCharInMap(playerID);
-		popUpYesNo = null;
-		GameCanvas.endDlg();
 		if (@char != null)
 		{
-			Service.gI().giaodich(1, @char.charID, -1, -1);
-			new Thread(autoGD).Start();
+			startYesNoPopUp(@char.cName + mResources.want_to_trade, new Command(mResources.YES, 11114, @char), new Command(mResources.NO, 2009, @char));
 		}
 	}
 
@@ -6888,189 +6897,5 @@ public class GameScr : mScreen, IChatable
 		ChatPopup.serverChatPopUp.cmdMsg1 = new Command(mResources.CLOSE, ChatPopup.serverChatPopUp, 1001, null);
 		ChatPopup.serverChatPopUp.cmdMsg1.x = GameCanvas.w / 2 - 35;
 		ChatPopup.serverChatPopUp.cmdMsg1.y = GameCanvas.h - 35;
-	}
-
-	static GameScr()
-	{
-		textTime = new MyVector(string.Empty);
-		isLoadAllData = false;
-		vClan = new MyVector();
-		vPtMap = new MyVector();
-		vFriend = new MyVector();
-		vEnemies = new MyVector();
-		vCharInMap = new MyVector();
-		vItemMap = new MyVector();
-		vMobAttack = new MyVector();
-		vSet = new MyVector();
-		vMob = new MyVector();
-		vNpc = new MyVector();
-		vFlag = new MyVector();
-		indexSize = 28;
-		indexTitle = 0;
-		indexSelect = 0;
-		indexRow = -1;
-		indexMenu = 0;
-		scrInfo = new Scroll();
-		scrMain = new Scroll();
-		vItemUpGrade = new MyVector();
-		isViewClanMemOnline = false;
-		isViewClanInvite = true;
-		titleInputText = string.Empty;
-		isPaintAlert = false;
-		isPaintTask = false;
-		isPaintTeam = false;
-		isPaintFindTeam = false;
-		isPaintFriend = false;
-		isPaintEnemies = false;
-		isPaintItemInfo = false;
-		isHaveSelectSkill = false;
-		isPaintSkill = false;
-		isPaintInfoMe = false;
-		isPaintStore = false;
-		isPaintNonNam = false;
-		isPaintNonNu = false;
-		isPaintAoNam = false;
-		isPaintAoNu = false;
-		isPaintGangTayNam = false;
-		isPaintGangTayNu = false;
-		isPaintQuanNam = false;
-		isPaintQuanNu = false;
-		isPaintGiayNam = false;
-		isPaintGiayNu = false;
-		isPaintLien = false;
-		isPaintNhan = false;
-		isPaintNgocBoi = false;
-		isPaintPhu = false;
-		isPaintWeapon = false;
-		isPaintStack = false;
-		isPaintStackLock = false;
-		isPaintGrocery = false;
-		isPaintGroceryLock = false;
-		isPaintUpGrade = false;
-		isPaintConvert = false;
-		isPaintUpGradeGold = false;
-		isPaintUpPearl = false;
-		isPaintBox = false;
-		isPaintSplit = false;
-		isPaintCharInMap = false;
-		isPaintTrade = false;
-		isPaintZone = false;
-		isPaintMessage = false;
-		isPaintClan = false;
-		isRequestMember = false;
-		typeViewInfo = 0;
-		typeActive = 0;
-		info1 = new InfoMe();
-		info2 = new InfoMe();
-		gamePad = new GamePad();
-		isAnalog = 0;
-		keySkill = new Skill[5];
-		onScreenSkill = new Skill[5];
-		tam = 0;
-		isPaint = true;
-		shock_x = new int[4]
-		{
-			3,
-			-3,
-			3,
-			-3
-		};
-		shock_y = new int[4]
-		{
-			3,
-			-3,
-			-3,
-			3
-		};
-		popupW = 140;
-		popupH = 160;
-		columns = 6;
-		indexEff = 0;
-		notPaint = false;
-		isPing = false;
-		INFO = 0;
-		STORE = 1;
-		ZONE = 2;
-		UPGRADE = 3;
-		vChatVip = new MyVector();
-	}
-
-	public static void autoGD()
-	{
-		try
-		{
-			if (A0.listItem.Length == 0)
-			{
-				A0.muaDo();
-			}
-			while (GameCanvas.panel2 == null || (GameCanvas.panel != null && !GameCanvas.panel.isFriendLock))
-			{
-				Thread.Sleep(500);
-			}
-			if (GameCanvas.panel2 != null)
-			{
-				Item item = (Item)GameCanvas.panel2.vFriendGD.elementAt(0);
-				bool flag = false;
-				int num = 0;
-				int num2 = -1;
-				string[][] listItem = A0.listItem;
-				foreach (string[] array in listItem)
-				{
-					if (item.template.id == int.Parse(array[1]))
-					{
-						flag = true;
-						num = int.Parse(array[3]);
-						num2 = int.Parse(array[1]);
-						break;
-					}
-				}
-				if (!flag && GameCanvas.panel.friendMoneyGD == 0)
-				{
-					Thread.Sleep(1000);
-					Service.gI().chat("Không mua cái kia đâu thằng ngu");
-					Service.gI().giaodich(3, -1, -1, -1);
-				}
-				else
-				{
-					int quantity = ((Item)GameCanvas.panel2.vFriendGD.elementAt(0)).quantity;
-					for (int num3 = Char.myCharz().arrItemBag.Length - 1; num3 >= 0; num3--)
-					{
-						Item item2 = Char.myCharz().arrItemBag[num3];
-						if (item2 != null && item2.template.id == num2 && quantity > 99 - item.quantity)
-						{
-							Thread.Sleep(1000);
-							Service.gI().chat("Nhiều quá");
-							Service.gI().giaodich(3, -1, -1, -1);
-							return;
-						}
-						Thread.Sleep(10);
-					}
-					if (Char.myCharz().xu >= num * quantity)
-					{
-						Service.gI().giaodich(2, -1, -1, num * quantity);
-						Thread.Sleep(1000);
-						Service.gI().giaodich(5, -1, -1, -1);
-						Service.gI().giaodich(7, -1, -1, -1);
-						Thread.Sleep(1000);
-						Service.gI().chat("Cảm ơn nha, có gì cứ mang qua đây bán");
-					}
-					else
-					{
-						Thread.Sleep(1000);
-						Service.gI().chat("Hết tiền rồi");
-						Service.gI().giaodich(3, -1, -1, -1);
-					}
-				}
-			}
-		}
-		catch (Exception)
-		{
-			Thread.Sleep(1000);
-			Service.gI().chat("Lỗi rồi giao dịch lại");
-		}
-	}
-
-	public static void muaDo()
-	{
 	}
 }
