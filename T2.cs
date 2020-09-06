@@ -1,11 +1,9 @@
-﻿using System;
-
-// Token: 0x02000083 RID: 131
 public class T2 : mResources
 {
-	// Token: 0x0600041D RID: 1053 RVA: 0x00020328 File Offset: 0x0001E528
 	public static void load()
 	{
+		mResources.functionMaintain1 = "Function in maintenance.";
+		mResources.napngoc = "Buy more gems";
 		mResources.nhatvatpham = "Are you sure you want to pick this item ?";
 		mResources.xinchucmung = "Congratulations, you have won lucky number";
 		mResources.tang = "level";
@@ -52,7 +50,7 @@ public class T2 : mResources
 		mResources.note = "You will lost your account forever if you change to another account,do you agree ?";
 		mResources.REGISTOPROTECT = "Register to protect account";
 		mResources.finishBomong = "You must finish the mission find 6 star dragon ball to recharge";
-		mResources.charger = "Forum and Recharge";
+		mResources.charger = "Recharge";
 		mResources.notYetSell = "No items to buy";
 		mResources.getUp = "Hold up to get more";
 		mResources.getDown = "Hold down to get more";
@@ -97,13 +95,13 @@ public class T2 : mResources
 		mResources.selectServer = "Select\nserver";
 		mResources.forgetPass = "Forget pwd";
 		mResources.password = "Password";
-		mResources.LOGINLABELS = new string[]
+		mResources.LOGINLABELS = new string[2]
 		{
 			"Didn't have account? Please",
 			"choose register menu."
 		};
 		mResources.msg = "Message";
-		mResources.msgg = new string[]
+		mResources.msgg = new string[2]
 		{
 			"Message",
 			string.Empty
@@ -146,7 +144,7 @@ public class T2 : mResources
 		mResources.website = "Website\nforum";
 		mResources.server = "Server";
 		mResources.planet = "Planet";
-		mResources.MENUME = new string[]
+		mResources.MENUME = new string[5]
 		{
 			"Inventory",
 			"Skill",
@@ -154,13 +152,13 @@ public class T2 : mResources
 			"Info",
 			"Equipment"
 		};
-		mResources.MENUNEWCHAR = new string[]
+		mResources.MENUNEWCHAR = new string[3]
 		{
 			string.Empty,
 			"People: ",
 			"Hair: "
 		};
-		mResources.MENUGENDER = new string[]
+		mResources.MENUGENDER = new string[3]
 		{
 			"Earth",
 			"Namekian",
@@ -168,14 +166,14 @@ public class T2 : mResources
 		};
 		if (mSystem.clientType == 7)
 		{
-			mResources.MENUGENDER = new string[]
+			mResources.MENUGENDER = new string[3]
 			{
 				"Earth dragon",
 				"Green dragon",
 				"Red dragon"
 			};
 		}
-		mResources.CHAR_ORDER = new string[]
+		mResources.CHAR_ORDER = new string[10]
 		{
 			"Challenge",
 			"Practice",
@@ -188,89 +186,89 @@ public class T2 : mResources
 			"Invite to clan",
 			"Block invite to clan"
 		};
-		mResources.mainTab1 = new string[][]
+		mResources.mainTab1 = new string[4][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Quest",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Inven-",
 				"tory"
 			},
-			new string[]
+			new string[2]
 			{
 				"Skill",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Func-",
 				"tion"
 			}
 		};
-		mResources.mainTab2 = new string[][]
+		mResources.mainTab2 = new string[5][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Quest",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Inven-",
 				"tory"
 			},
-			new string[]
+			new string[2]
 			{
 				"Skill",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Clan",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Func-",
 				"tion"
 			}
 		};
-		mResources.petMainTab = new string[][]
+		mResources.petMainTab = new string[3][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Dis-",
 				"ciple"
 			},
-			new string[]
+			new string[2]
 			{
 				"Status",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Inven-",
 				"tory"
 			}
 		};
-		mResources.petMainTab2 = new string[][]
+		mResources.petMainTab2 = new string[2][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Dis-",
 				"ciple"
 			},
-			new string[]
+			new string[2]
 			{
 				"Status",
 				string.Empty
 			}
 		};
-		mResources.key_skill_qwerty = new string[]
+		mResources.key_skill_qwerty = new string[5]
 		{
 			"Add\nkey 1",
 			"Add\nkey 2",
@@ -278,7 +276,7 @@ public class T2 : mResources
 			"Add\nkey 4",
 			"Add\nkey 5"
 		};
-		mResources.key_skill = new string[]
+		mResources.key_skill = new string[5]
 		{
 			"Add\nkey 7",
 			"Add\nkey 8",
@@ -289,27 +287,27 @@ public class T2 : mResources
 		mResources.SKILL_FAIL = "Your current attack skill didn't add points";
 		mResources.HP_EMPTY = "Out of Senzu Bean. Come back and harvest more";
 		mResources.ZONE_HERE = "You are already in this zone";
-		mResources.DES_TASK = new string[]
+		mResources.DES_TASK = new string[4]
 		{
 			"Find ",
 			" at ",
 			" to receive quest.",
 			"You now complete all quests of this version, please wait for upcoming version."
 		};
-		mResources.DIES = new string[]
+		mResources.DIES = new string[4]
 		{
 			"Exhausted",
 			"Wait",
 			"Return\nhome",
 			"Revive\nnow\n(1 gem)"
 		};
-		mResources.SYNTHESIS = new string[]
+		mResources.SYNTHESIS = new string[3]
 		{
 			"Map",
 			"Quest",
 			"Clan"
 		};
-		mResources.tips = new string[]
+		mResources.tips = new string[13]
 		{
 			"Senzu Bean is used for recovering HP and KI immediately",
 			"You can only keep 10 Senzu Beans belong with you. If you want to have more, ask from your clan's friend",
@@ -395,37 +393,37 @@ public class T2 : mResources
 		mResources.x2Screen = "Big screen";
 		mResources.changeSizeScreen = "Do you want to exit game to change screen size?";
 		mResources.chest = "Chest";
-		mResources.chestt = new string[]
+		mResources.chestt = new string[2]
 		{
 			"Chest",
 			string.Empty
 		};
-		mResources.inventory = new string[]
+		mResources.inventory = new string[2]
 		{
 			"Inven-",
 			"tory"
 		};
-		mResources.combine = new string[]
+		mResources.combine = new string[2]
 		{
 			"Combine",
 			string.Empty
 		};
-		mResources.mapp = new string[]
+		mResources.mapp = new string[2]
 		{
 			"Map",
 			string.Empty
 		};
-		mResources.item_give = new string[]
+		mResources.item_give = new string[2]
 		{
 			"Give",
 			"item"
 		};
-		mResources.item_receive = new string[]
+		mResources.item_receive = new string[2]
 		{
 			"Receive",
 			"item"
 		};
-		mResources.zonee = new string[]
+		mResources.zonee = new string[2]
 		{
 			"Zone",
 			string.Empty
@@ -483,40 +481,40 @@ public class T2 : mResources
 		mResources.clan_coleader = "Clan coleader";
 		mResources.power_point = "Power points";
 		mResources.member = "Member";
-		mResources.memberr = new string[]
+		mResources.memberr = new string[2]
 		{
 			"Member",
 			string.Empty
 		};
-		mResources.chatClan = new string[]
+		mResources.chatClan = new string[2]
 		{
 			"Chat",
 			"clan"
 		};
-		mResources.leaveClan = new string[]
+		mResources.leaveClan = new string[2]
 		{
 			"Leave",
 			"clan"
 		};
-		mResources.createClan = new string[]
+		mResources.createClan = new string[2]
 		{
 			"Create",
 			"clan"
 		};
-		mResources.findClan = new string[]
+		mResources.findClan = new string[2]
 		{
 			"Find",
 			"clan"
 		};
-		mResources.khau_hieuu = new string[]
+		mResources.khau_hieuu = new string[1]
 		{
 			"Slogan"
 		};
-		mResources.bieu_tuongg = new string[]
+		mResources.bieu_tuongg = new string[1]
 		{
 			"Icon"
 		};
-		mResources.request_pea2 = new string[]
+		mResources.request_pea2 = new string[2]
 		{
 			"Request",
 			"bean"
@@ -528,7 +526,7 @@ public class T2 : mResources
 		mResources.find = "Find";
 		mResources.leave = "Leave";
 		mResources.not_join_clan = "Not joint clan";
-		mResources.clanEmpty = new string[]
+		mResources.clanEmpty = new string[5]
 		{
 			"You are the only one",
 			" member of this clan.",
@@ -648,21 +646,21 @@ public class T2 : mResources
 		mResources.to_gain_20hp = "to gain 20 HP";
 		mResources.to_gain_20mp = "to gain 20 MP";
 		mResources.to_gain_1pow = "to gain 1 power point";
-		mResources.hairStyleName = new string[][]
+		mResources.hairStyleName = new string[3][]
 		{
-			new string[]
+			new string[3]
 			{
 				"Gohan",
 				"Krillin",
 				"Yamcha"
 			},
-			new string[]
+			new string[3]
 			{
 				"Dende",
 				"Piccolo",
 				"Kami"
 			},
-			new string[]
+			new string[3]
 			{
 				"Vegeta",
 				"Raditz",
@@ -671,21 +669,21 @@ public class T2 : mResources
 		};
 		if (mSystem.clientType == 7)
 		{
-			mResources.hairStyleName = new string[][]
+			mResources.hairStyleName = new string[3][]
 			{
-				new string[]
+				new string[3]
 				{
 					"Hango",
 					"Linkhi",
 					"Chayam"
 				},
-				new string[]
+				new string[3]
 				{
 					"Deden",
 					"Cololo",
 					"Mika"
 				},
-				new string[]
+				new string[3]
 				{
 					"Tageve",
 					"Ditra",

@@ -1,53 +1,94 @@
-﻿using System;
-
-// Token: 0x0200003A RID: 58
 public class EffectPanel : Effect2
 {
-	// Token: 0x06000268 RID: 616 RVA: 0x00003584 File Offset: 0x00001784
-	public static void addServerEffect(int id, int cx, int cy, int loopCount)
-	{
-	}
-
-	// Token: 0x06000269 RID: 617 RVA: 0x00003584 File Offset: 0x00001784
-	public override void paint(mGraphics g)
-	{
-	}
-
-	// Token: 0x0600026A RID: 618 RVA: 0x00003584 File Offset: 0x00001784
-	public override void update()
-	{
-	}
-
-	// Token: 0x040002BE RID: 702
 	public EffectCharPaint eff;
 
-	// Token: 0x040002BF RID: 703
 	private int i0;
 
-	// Token: 0x040002C0 RID: 704
 	private int dx0;
 
-	// Token: 0x040002C1 RID: 705
 	private int dy0;
 
-	// Token: 0x040002C2 RID: 706
 	private int x;
 
-	// Token: 0x040002C3 RID: 707
 	private int y;
 
-	// Token: 0x040002C4 RID: 708
-	private global::Char c;
+	private Char c;
 
-	// Token: 0x040002C5 RID: 709
 	private Mob m;
 
-	// Token: 0x040002C6 RID: 710
 	private short loopCount;
 
-	// Token: 0x040002C7 RID: 711
 	private long endTime;
 
-	// Token: 0x040002C8 RID: 712
 	private int trans;
+
+	public static void addServerEffect(int id, int cx, int cy, int loopCount)
+	{
+		EffectPanel effectPanel = new EffectPanel();
+		effectPanel.eff = GameScr.efs[id - 1];
+		effectPanel.x = cx;
+		effectPanel.y = cy;
+		effectPanel.loopCount = (short)loopCount;
+		Effect2.vEffect3.addElement(effectPanel);
+	}
+
+	public override void paint(mGraphics g)
+	{
+		if (mGraphics.zoomLevel == 1)
+		{
+			GameScr.countEff++;
+		}
+		if (GameScr.countEff < 8)
+		{
+			if (c != null)
+			{
+				x = c.cx;
+				y = c.cy + GameCanvas.transY;
+			}
+			if (m != null)
+			{
+				x = m.x;
+				y = m.y + GameCanvas.transY;
+			}
+			int num = x + dx0 + eff.arrEfInfo[i0].dx;
+			int num2 = y + dy0 + eff.arrEfInfo[i0].dy;
+			SmallImage.drawSmallImage(g, eff.arrEfInfo[i0].idImg, num, num2, trans, mGraphics.VCENTER | mGraphics.HCENTER);
+		}
+	}
+
+	public override void update()
+	{
+		if (endTime != 0)
+		{
+			i0++;
+			if (i0 >= eff.arrEfInfo.Length)
+			{
+				i0 = 0;
+			}
+			if (mSystem.currentTimeMillis() - endTime > 0)
+			{
+				Effect2.vEffect3.removeElement(this);
+			}
+		}
+		else
+		{
+			i0++;
+			if (i0 >= eff.arrEfInfo.Length)
+			{
+				loopCount--;
+				if (loopCount <= 0)
+				{
+					Effect2.vEffect3.removeElement(this);
+				}
+				else
+				{
+					i0 = 0;
+				}
+			}
+		}
+		if (GameCanvas.gameTick % 11 == 0 && c != null && c != Char.myCharz() && !GameScr.vCharInMap.contains(c))
+		{
+			Effect2.vEffect3.removeElement(this);
+		}
+	}
 }

@@ -1,22 +1,33 @@
-﻿using System;
+using System;
 
-// Token: 0x02000038 RID: 56
 public class EffectData
 {
-	// Token: 0x0600025B RID: 603 RVA: 0x00012988 File Offset: 0x00010B88
+	public Image img;
+
+	public ImageInfo[] imgInfo;
+
+	public Frame[] frame;
+
+	public short[] arrFrame;
+
+	public int ID;
+
+	public int width;
+
+	public int height;
+
 	public ImageInfo getImageInfo(sbyte id)
 	{
-		for (int i = 0; i < this.imgInfo.Length; i++)
+		for (int i = 0; i < imgInfo.Length; i++)
 		{
-			if (this.imgInfo[i].ID == (int)id)
+			if (imgInfo[i].ID == id)
 			{
-				return this.imgInfo[i];
+				return imgInfo[i];
 			}
 		}
 		return null;
 	}
 
-	// Token: 0x0600025C RID: 604 RVA: 0x000129CC File Offset: 0x00010BCC
 	public void readData(string patch)
 	{
 		DataInputStream dataInputStream = null;
@@ -24,14 +35,13 @@ public class EffectData
 		{
 			dataInputStream = MyStream.readFile(patch);
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
 			return;
 		}
-		this.readData(dataInputStream.r);
+		readData(dataInputStream.r);
 	}
 
-	// Token: 0x0600025D RID: 605 RVA: 0x00012A10 File Offset: 0x00010C10
 	public void readData2(string patch)
 	{
 		DataInputStream dataInputStream = null;
@@ -39,14 +49,13 @@ public class EffectData
 		{
 			dataInputStream = MyStream.readFile(patch);
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
 			return;
 		}
-		this.readEffect(dataInputStream.r);
+		readEffect(dataInputStream.r);
 	}
 
-	// Token: 0x0600025E RID: 606 RVA: 0x00012A54 File Offset: 0x00010C54
 	public void readEffect(myReader msg)
 	{
 		int num = 0;
@@ -57,57 +66,57 @@ public class EffectData
 		{
 			sbyte b = msg.readByte();
 			Res.outz("size IMG==========" + b);
-			this.imgInfo = new ImageInfo[(int)b];
-			for (int i = 0; i < (int)b; i++)
+			imgInfo = new ImageInfo[b];
+			for (int i = 0; i < b; i++)
 			{
-				this.imgInfo[i] = new ImageInfo();
-				this.imgInfo[i].ID = (int)msg.readByte();
-				this.imgInfo[i].x0 = (int)msg.readUnsignedByte();
-				this.imgInfo[i].y0 = (int)msg.readUnsignedByte();
-				this.imgInfo[i].w = (int)msg.readUnsignedByte();
-				this.imgInfo[i].h = (int)msg.readUnsignedByte();
+				imgInfo[i] = new ImageInfo();
+				imgInfo[i].ID = msg.readByte();
+				imgInfo[i].x0 = msg.readUnsignedByte();
+				imgInfo[i].y0 = msg.readUnsignedByte();
+				imgInfo[i].w = msg.readUnsignedByte();
+				imgInfo[i].h = msg.readUnsignedByte();
 			}
 			short num5 = msg.readShort();
-			this.frame = new Frame[(int)num5];
-			for (int j = 0; j < this.frame.Length; j++)
+			frame = new Frame[num5];
+			for (int j = 0; j < frame.Length; j++)
 			{
-				this.frame[j] = new Frame();
+				frame[j] = new Frame();
 				sbyte b2 = msg.readByte();
-				this.frame[j].dx = new short[(int)b2];
-				this.frame[j].dy = new short[(int)b2];
-				this.frame[j].idImg = new sbyte[(int)b2];
-				for (int k = 0; k < (int)b2; k++)
+				frame[j].dx = new short[b2];
+				frame[j].dy = new short[b2];
+				frame[j].idImg = new sbyte[b2];
+				for (int k = 0; k < b2; k++)
 				{
-					this.frame[j].dx[k] = msg.readShort();
-					this.frame[j].dy[k] = msg.readShort();
-					this.frame[j].idImg[k] = msg.readByte();
+					frame[j].dx[k] = msg.readShort();
+					frame[j].dy[k] = msg.readShort();
+					frame[j].idImg[k] = msg.readByte();
 					if (j == 0)
 					{
-						if (num > (int)this.frame[j].dx[k])
+						if (num > frame[j].dx[k])
 						{
-							num = (int)this.frame[j].dx[k];
+							num = frame[j].dx[k];
 						}
-						if (num2 > (int)this.frame[j].dy[k])
+						if (num2 > frame[j].dy[k])
 						{
-							num2 = (int)this.frame[j].dy[k];
+							num2 = frame[j].dy[k];
 						}
-						if (num3 < (int)this.frame[j].dx[k] + this.imgInfo[(int)this.frame[j].idImg[k]].w)
+						if (num3 < frame[j].dx[k] + imgInfo[frame[j].idImg[k]].w)
 						{
-							num3 = (int)this.frame[j].dx[k] + this.imgInfo[(int)this.frame[j].idImg[k]].w;
+							num3 = frame[j].dx[k] + imgInfo[frame[j].idImg[k]].w;
 						}
-						if (num4 < (int)this.frame[j].dy[k] + this.imgInfo[(int)this.frame[j].idImg[k]].h)
+						if (num4 < frame[j].dy[k] + imgInfo[frame[j].idImg[k]].h)
 						{
-							num4 = (int)this.frame[j].dy[k] + this.imgInfo[(int)this.frame[j].idImg[k]].h;
+							num4 = frame[j].dy[k] + imgInfo[frame[j].idImg[k]].h;
 						}
-						this.width = num3 - num;
-						this.height = num4 - num2;
+						width = num3 - num;
+						height = num4 - num2;
 					}
 				}
 			}
-			this.arrFrame = new short[(int)msg.readShort()];
-			for (int l = 0; l < this.arrFrame.Length; l++)
+			arrFrame = new short[msg.readShort()];
+			for (int l = 0; l < arrFrame.Length; l++)
 			{
-				this.arrFrame[l] = msg.readShort();
+				arrFrame[l] = msg.readShort();
 			}
 		}
 		catch (Exception ex)
@@ -117,7 +126,6 @@ public class EffectData
 		}
 	}
 
-	// Token: 0x0600025F RID: 607 RVA: 0x00012DBC File Offset: 0x00010FBC
 	public void readData(myReader iss)
 	{
 		int num = 0;
@@ -127,58 +135,58 @@ public class EffectData
 		try
 		{
 			sbyte b = iss.readByte();
-			this.imgInfo = new ImageInfo[(int)b];
-			for (int i = 0; i < (int)b; i++)
+			imgInfo = new ImageInfo[b];
+			for (int i = 0; i < b; i++)
 			{
-				this.imgInfo[i] = new ImageInfo();
-				this.imgInfo[i].ID = (int)iss.readByte();
-				this.imgInfo[i].x0 = (int)iss.readByte();
-				this.imgInfo[i].y0 = (int)iss.readByte();
-				this.imgInfo[i].w = (int)iss.readByte();
-				this.imgInfo[i].h = (int)iss.readByte();
+				imgInfo[i] = new ImageInfo();
+				imgInfo[i].ID = iss.readByte();
+				imgInfo[i].x0 = iss.readByte();
+				imgInfo[i].y0 = iss.readByte();
+				imgInfo[i].w = iss.readByte();
+				imgInfo[i].h = iss.readByte();
 			}
 			short num5 = iss.readShort();
-			this.frame = new Frame[(int)num5];
-			for (int j = 0; j < (int)num5; j++)
+			frame = new Frame[num5];
+			for (int j = 0; j < num5; j++)
 			{
-				this.frame[j] = new Frame();
+				frame[j] = new Frame();
 				sbyte b2 = iss.readByte();
-				this.frame[j].dx = new short[(int)b2];
-				this.frame[j].dy = new short[(int)b2];
-				this.frame[j].idImg = new sbyte[(int)b2];
-				for (int k = 0; k < (int)b2; k++)
+				frame[j].dx = new short[b2];
+				frame[j].dy = new short[b2];
+				frame[j].idImg = new sbyte[b2];
+				for (int k = 0; k < b2; k++)
 				{
-					this.frame[j].dx[k] = iss.readShort();
-					this.frame[j].dy[k] = iss.readShort();
-					this.frame[j].idImg[k] = iss.readByte();
+					frame[j].dx[k] = iss.readShort();
+					frame[j].dy[k] = iss.readShort();
+					frame[j].idImg[k] = iss.readByte();
 					if (j == 0)
 					{
-						if (num > (int)this.frame[j].dx[k])
+						if (num > frame[j].dx[k])
 						{
-							num = (int)this.frame[j].dx[k];
+							num = frame[j].dx[k];
 						}
-						if (num2 > (int)this.frame[j].dy[k])
+						if (num2 > frame[j].dy[k])
 						{
-							num2 = (int)this.frame[j].dy[k];
+							num2 = frame[j].dy[k];
 						}
-						if (num3 < (int)this.frame[j].dx[k] + this.imgInfo[(int)this.frame[j].idImg[k]].w)
+						if (num3 < frame[j].dx[k] + imgInfo[frame[j].idImg[k]].w)
 						{
-							num3 = (int)this.frame[j].dx[k] + this.imgInfo[(int)this.frame[j].idImg[k]].w;
+							num3 = frame[j].dx[k] + imgInfo[frame[j].idImg[k]].w;
 						}
-						if (num4 < (int)this.frame[j].dy[k] + this.imgInfo[(int)this.frame[j].idImg[k]].h)
+						if (num4 < frame[j].dy[k] + imgInfo[frame[j].idImg[k]].h)
 						{
-							num4 = (int)this.frame[j].dy[k] + this.imgInfo[(int)this.frame[j].idImg[k]].h;
+							num4 = frame[j].dy[k] + imgInfo[frame[j].idImg[k]].h;
 						}
-						this.width = num3 - num;
-						this.height = num4 - num2;
+						width = num3 - num;
+						height = num4 - num2;
 					}
 				}
 			}
 			short num6 = iss.readShort();
-			this.arrFrame = new short[(int)num6];
-			for (int l = 0; l < (int)num6; l++)
+			arrFrame = new short[num6];
+			for (int l = 0; l < num6; l++)
 			{
-				this.arrFrame[l] = iss.readShort();
+				arrFrame[l] = iss.readShort();
 			}
 		}
 		catch (Exception ex)
@@ -187,14 +195,18 @@ public class EffectData
 		}
 	}
 
-	// Token: 0x06000260 RID: 608 RVA: 0x0001310C File Offset: 0x0001130C
 	public void readData(sbyte[] data)
 	{
 		myReader iss = new myReader(data);
-		this.readData(iss);
+		readData(iss);
 	}
 
-	// Token: 0x06000261 RID: 609 RVA: 0x00013128 File Offset: 0x00011328
+	public void readData2(sbyte[] data)
+	{
+		myReader msg = new myReader(data);
+		readEffect(msg);
+	}
+
 	public void paintFrame(mGraphics g, int f, int x, int y, int trans, int layer)
 	{
 		if (this.frame != null && this.frame.Length != 0)
@@ -202,47 +214,26 @@ public class EffectData
 			Frame frame = this.frame[f];
 			for (int i = 0; i < frame.dx.Length; i++)
 			{
-				ImageInfo imageInfo = this.getImageInfo(frame.idImg[i]);
+				ImageInfo imageInfo = getImageInfo(frame.idImg[i]);
 				try
 				{
 					if (trans == 0)
 					{
-						g.drawRegion(this.img, imageInfo.x0, imageInfo.y0, imageInfo.w, imageInfo.h, 0, x + (int)frame.dx[i], y + (int)frame.dy[i] - ((layer >= 4 || layer <= 0) ? 0 : GameCanvas.transY), 0);
+						g.drawRegion(img, imageInfo.x0, imageInfo.y0, imageInfo.w, imageInfo.h, 0, x + frame.dx[i], y + frame.dy[i] - ((layer < 4 && layer > 0) ? GameCanvas.transY : 0), 0);
 					}
 					if (trans == 1)
 					{
-						g.drawRegion(this.img, imageInfo.x0, imageInfo.y0, imageInfo.w, imageInfo.h, 2, x - (int)frame.dx[i], y + (int)frame.dy[i] - ((layer >= 4 || layer <= 0) ? 0 : GameCanvas.transY), StaticObj.TOP_RIGHT);
+						g.drawRegion(img, imageInfo.x0, imageInfo.y0, imageInfo.w, imageInfo.h, 2, x - frame.dx[i], y + frame.dy[i] - ((layer < 4 && layer > 0) ? GameCanvas.transY : 0), StaticObj.TOP_RIGHT);
 					}
 					if (trans == 2)
 					{
-						g.drawRegion(this.img, imageInfo.x0, imageInfo.y0, imageInfo.w, imageInfo.h, 7, x - (int)frame.dx[i], y + (int)frame.dy[i] - ((layer >= 4 || layer <= 0) ? 0 : GameCanvas.transY), StaticObj.VCENTER_HCENTER);
+						g.drawRegion(img, imageInfo.x0, imageInfo.y0, imageInfo.w, imageInfo.h, 7, x - frame.dx[i], y + frame.dy[i] - ((layer < 4 && layer > 0) ? GameCanvas.transY : 0), StaticObj.VCENTER_HCENTER);
 					}
 				}
-				catch (Exception ex)
+				catch (Exception)
 				{
 				}
 			}
 		}
 	}
-
-	// Token: 0x040002B0 RID: 688
-	public Image img;
-
-	// Token: 0x040002B1 RID: 689
-	public ImageInfo[] imgInfo;
-
-	// Token: 0x040002B2 RID: 690
-	public Frame[] frame;
-
-	// Token: 0x040002B3 RID: 691
-	public short[] arrFrame;
-
-	// Token: 0x040002B4 RID: 692
-	public int ID;
-
-	// Token: 0x040002B5 RID: 693
-	public int width;
-
-	// Token: 0x040002B6 RID: 694
-	public int height;
 }

@@ -1,48 +1,65 @@
-﻿using System;
+using System;
 using System.Threading;
 using UnityEngine;
 
-// Token: 0x02000017 RID: 23
 public class SMS
 {
-	// Token: 0x0600009B RID: 155 RVA: 0x00003B3E File Offset: 0x00001D3E
+	private const int INTERVAL = 5;
+
+	private const int MAXTIME = 500;
+
+	private static int status;
+
+	private static int _result;
+
+	private static string _to;
+
+	private static string _content;
+
+	private static bool f;
+
+	private static int time;
+
+	public static bool sendEnable;
+
+	private static int time0;
+
 	public static int send(string content, string to)
 	{
 		if (Thread.CurrentThread.Name == Main.mainThreadName)
 		{
-			return SMS.__send(content, to);
+			return __send(content, to);
 		}
-		return SMS._send(content, to);
+		return _send(content, to);
 	}
 
-	// Token: 0x0600009C RID: 156 RVA: 0x00008D7C File Offset: 0x00006F7C
 	private static int _send(string content, string to)
 	{
-		if (SMS.status != 0)
+		if (status != 0)
 		{
 			for (int i = 0; i < 500; i++)
 			{
 				Thread.Sleep(5);
-				if (SMS.status == 0)
+				if (status == 0)
 				{
 					break;
 				}
 			}
-			if (SMS.status != 0)
+			if (status != 0)
 			{
-				Cout.LogError("CANNOT SEND SMS " + content + " WHEN SENDING " + SMS._content);
+				Cout.LogError("CANNOT SEND SMS " + content + " WHEN SENDING " + _content);
 				return -1;
 			}
 		}
-		SMS._content = content;
-		SMS._to = to;
-		SMS._result = -1;
-		SMS.status = 2;
+		_content = content;
+		_to = to;
+		_result = -1;
+		status = 2;
 		int j;
 		for (j = 0; j < 500; j++)
 		{
 			Thread.Sleep(5);
-			if (SMS.status == 0)
+			if (status == 0)
 			{
 				break;
 			}
@@ -50,68 +67,58 @@ public class SMS
 		if (j == 500)
 		{
 			Debug.LogError("TOO LONG FOR SEND SMS " + content);
-			SMS.status = 0;
+			status = 0;
 		}
 		else
 		{
-			Debug.Log(string.Concat(new object[]
-			{
-				"Send SMS ",
-				content,
-				" done in ",
-				j * 5,
-				"ms"
-			}));
+			Debug.Log("Send SMS " + content + " done in " + j * 5 + "ms");
 		}
-		return SMS._result;
+		return _result;
 	}
 
-	// Token: 0x0600009D RID: 157 RVA: 0x00008E8C File Offset: 0x0000708C
 	private static int __send(string content, string to)
 	{
 		int num = iOSPlugins.Check();
 		Cout.println("vao sms ko " + num);
 		if (num >= 0)
 		{
-			SMS.f = true;
-			SMS.sendEnable = true;
+			f = true;
+			sendEnable = true;
 			iOSPlugins.SMSsend(to, content, num);
 			Screen.orientation = ScreenOrientation.AutoRotation;
 		}
 		return num;
 	}
 
-	// Token: 0x0600009E RID: 158 RVA: 0x00008ED8 File Offset: 0x000070D8
 	public static void update()
 	{
 		float num = Time.time;
-		if (num - (float)SMS.time > 1f)
+		if (num - (float)time > 1f)
 		{
-			SMS.time++;
+			time++;
 		}
-		if (SMS.f)
+		if (f)
 		{
-			SMS.OnSMS();
+			OnSMS();
 		}
-		if (SMS.status == 2)
+		if (status == 2)
 		{
-			SMS.status = 1;
+			status = 1;
 			try
 			{
-				SMS._result = SMS.__send(SMS._content, SMS._to);
+				_result = __send(_content, _to);
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				Debug.Log("CANNOT SEND SMS");
 			}
-			SMS.status = 0;
+			status = 0;
 		}
 	}
 
-	// Token: 0x0600009F RID: 159 RVA: 0x00008F68 File Offset: 0x00007168
 	private static void OnSMS()
 	{
-		if (SMS.sendEnable)
+		if (sendEnable)
 		{
 			if (iOSPlugins.checkRotation() == 1)
 			{
@@ -133,60 +140,28 @@ public class SMS
 			{
 				Screen.orientation = ScreenOrientation.PortraitUpsideDown;
 			}
-			if (SMS.time0 < 5)
+			if (time0 < 5)
 			{
-				SMS.time0++;
+				time0++;
 			}
 			else
 			{
 				iOSPlugins.Send();
-				SMS.sendEnable = false;
-				SMS.time0 = 0;
+				sendEnable = false;
+				time0 = 0;
 			}
 		}
 		if (iOSPlugins.unpause() == 1)
 		{
 			Screen.orientation = ScreenOrientation.LandscapeLeft;
-			if (SMS.time0 < 5)
+			if (time0 < 5)
 			{
-				SMS.time0++;
+				time0++;
+				return;
 			}
-			else
-			{
-				SMS.f = false;
-				iOSPlugins.back();
-				SMS.time0 = 0;
-			}
+			f = false;
+			iOSPlugins.back();
+			time0 = 0;
 		}
 	}
-
-	// Token: 0x0400004B RID: 75
-	private const int INTERVAL = 5;
-
-	// Token: 0x0400004C RID: 76
-	private const int MAXTIME = 500;
-
-	// Token: 0x0400004D RID: 77
-	private static int status;
-
-	// Token: 0x0400004E RID: 78
-	private static int _result;
-
-	// Token: 0x0400004F RID: 79
-	private static string _to;
-
-	// Token: 0x04000050 RID: 80
-	private static string _content;
-
-	// Token: 0x04000051 RID: 81
-	private static bool f;
-
-	// Token: 0x04000052 RID: 82
-	private static int time;
-
-	// Token: 0x04000053 RID: 83
-	public static bool sendEnable;
-
-	// Token: 0x04000054 RID: 84
-	private static int time0;
 }

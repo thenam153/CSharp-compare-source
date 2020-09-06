@@ -1,11 +1,9 @@
-﻿using System;
-
-// Token: 0x02000084 RID: 132
 public class T3 : mResources
 {
-	// Token: 0x0600041F RID: 1055 RVA: 0x0002192C File Offset: 0x0001FB2C
 	public static void load()
 	{
+		mResources.functionMaintain1 = "Fungsi dalam maintenance.";
+		mResources.napngoc = "Beli lebih gems";
 		mResources.nhatvatpham = "Yakin ingin memilih barang ini ?";
 		mResources.tang = "Tingkat";
 		mResources.kquaVongQuay = "Hasil angka keberuntungan";
@@ -51,7 +49,7 @@ public class T3 : mResources
 		mResources.note = "Kamu akan kehilangan account kamu selamanya jika kamu berganti ke account yang lain. Apakah kamu setuju?";
 		mResources.REGISTOPROTECT = "Daftar untuk melindungi account";
 		mResources.finishBomong = "Kamu harus menyelesaikan misi mencari Dragon Ball bintang 6 untuk recharge";
-		mResources.charger = "Forum & Beli lebih gems";
+		mResources.charger = "Beli lebih gems";
 		mResources.notYetSell = "Tidak ada item untuk dibeli";
 		mResources.getUp = "Tekan atas untuk mendapatkan lebih banyak";
 		mResources.getDown = "Tekan bawah untuk mendapatkan lebih banyak";
@@ -97,13 +95,13 @@ public class T3 : mResources
 		mResources.selectServer = "Pilih\nserver";
 		mResources.forgetPass = "Lupa pass\n";
 		mResources.password = "Password";
-		mResources.LOGINLABELS = new string[]
+		mResources.LOGINLABELS = new string[2]
 		{
 			"Tidak memiliki account? Harap",
 			"memilih menu daftar"
 		};
 		mResources.msg = "Pesan";
-		mResources.msgg = new string[]
+		mResources.msgg = new string[2]
 		{
 			"Pesan",
 			string.Empty
@@ -146,7 +144,7 @@ public class T3 : mResources
 		mResources.website = "Website\nforum";
 		mResources.server = "Server";
 		mResources.planet = "Planet";
-		mResources.MENUME = new string[]
+		mResources.MENUME = new string[5]
 		{
 			"Inventory",
 			"Kriya",
@@ -154,19 +152,19 @@ public class T3 : mResources
 			"Info",
 			"Perlengkapan"
 		};
-		mResources.MENUNEWCHAR = new string[]
+		mResources.MENUNEWCHAR = new string[3]
 		{
 			string.Empty,
 			"Planit:",
 			"Rambut:"
 		};
-		mResources.MENUGENDER = new string[]
+		mResources.MENUGENDER = new string[3]
 		{
 			"Earth",
 			"Namekian",
 			"Saiyan"
 		};
-		mResources.CHAR_ORDER = new string[]
+		mResources.CHAR_ORDER = new string[10]
 		{
 			"Tantangan",
 			"Praktek",
@@ -179,89 +177,89 @@ public class T3 : mResources
 			"Undang ke clan",
 			"Blok undangan ke clan"
 		};
-		mResources.mainTab1 = new string[][]
+		mResources.mainTab1 = new string[4][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Quest",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Inven-",
 				"tory"
 			},
-			new string[]
+			new string[2]
 			{
 				"Skill",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Func-",
 				"tion"
 			}
 		};
-		mResources.mainTab2 = new string[][]
+		mResources.mainTab2 = new string[5][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Quest",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Inven-",
 				"tory"
 			},
-			new string[]
+			new string[2]
 			{
 				"Skill",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Clan",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Func-",
 				"tion"
 			}
 		};
-		mResources.petMainTab = new string[][]
+		mResources.petMainTab = new string[3][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Dis-",
 				"ciple"
 			},
-			new string[]
+			new string[2]
 			{
 				"Status",
 				string.Empty
 			},
-			new string[]
+			new string[2]
 			{
 				"Inven-",
 				"tory"
 			}
 		};
-		mResources.petMainTab2 = new string[][]
+		mResources.petMainTab2 = new string[2][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Dis-",
 				"ciple"
 			},
-			new string[]
+			new string[2]
 			{
 				"Status",
 				string.Empty
 			}
 		};
-		mResources.key_skill_qwerty = new string[]
+		mResources.key_skill_qwerty = new string[5]
 		{
 			"Tambah\nQ",
 			"Tambah\nW",
@@ -269,7 +267,7 @@ public class T3 : mResources
 			"Tambah\nR",
 			"Tambah\nT"
 		};
-		mResources.key_skill = new string[]
+		mResources.key_skill = new string[5]
 		{
 			"Tambah\n7",
 			"Tambah\n8",
@@ -280,7 +278,7 @@ public class T3 : mResources
 		mResources.SKILL_FAIL = "Teknik seranganmu tidak menambah point";
 		mResources.HP_EMPTY = "Senzu Bean habis. Datang kembali untuk mengambil lagi";
 		mResources.ZONE_HERE = "Kamu sudah di daerah ini";
-		mResources.DES_TASK = new string[]
+		mResources.DES_TASK = new string[5]
 		{
 			"Fenemukan",
 			"di",
@@ -288,20 +286,20 @@ public class T3 : mResources
 			"Kamu telah menyelesaikan semua quest di versi ini",
 			"harap menunggu versi yang akan datang."
 		};
-		mResources.DIES = new string[]
+		mResources.DIES = new string[4]
 		{
 			"Darah habis",
 			"Tunggu",
 			"Kembali ke rumah",
 			"Revive sekarang\n(1 gem)"
 		};
-		mResources.SYNTHESIS = new string[]
+		mResources.SYNTHESIS = new string[3]
 		{
 			"Peta",
 			"Penca\n-rian",
 			"Clan"
 		};
-		mResources.tips = new string[]
+		mResources.tips = new string[17]
 		{
 			"Minta dari teman clanmu",
 			"Semua skill bisa dipelajari dengan gratis di Kame-Sennin",
@@ -391,37 +389,37 @@ public class T3 : mResources
 		mResources.x2Screen = "Layar besar";
 		mResources.changeSizeScreen = "Apakah kamu ingin keluar untuk merubah ukuran layar?";
 		mResources.chest = "Peti";
-		mResources.chestt = new string[]
+		mResources.chestt = new string[2]
 		{
 			"Peti",
 			string.Empty
 		};
-		mResources.inventory = new string[]
+		mResources.inventory = new string[2]
 		{
 			"Inven-",
 			"taris"
 		};
-		mResources.combine = new string[]
+		mResources.combine = new string[2]
 		{
 			"mengga-",
 			"bungkan"
 		};
-		mResources.mapp = new string[]
+		mResources.mapp = new string[2]
 		{
 			"Peta",
 			string.Empty
 		};
-		mResources.item_give = new string[]
+		mResources.item_give = new string[2]
 		{
 			"membe-",
 			"rikan"
 		};
-		mResources.item_receive = new string[]
+		mResources.item_receive = new string[2]
 		{
 			"mene-",
 			"rima"
 		};
-		mResources.zonee = new string[]
+		mResources.zonee = new string[2]
 		{
 			"Zona",
 			string.Empty
@@ -479,40 +477,40 @@ public class T3 : mResources
 		mResources.clan_coleader = "Wakil pemimpin clan";
 		mResources.power_point = "Power points";
 		mResources.member = "Anggota";
-		mResources.memberr = new string[]
+		mResources.memberr = new string[2]
 		{
 			"Anggota",
 			string.Empty
 		};
-		mResources.chatClan = new string[]
+		mResources.chatClan = new string[2]
 		{
 			"Chat",
 			"clan"
 		};
-		mResources.leaveClan = new string[]
+		mResources.leaveClan = new string[2]
 		{
 			"Menin-",
 			"ggalkan"
 		};
-		mResources.createClan = new string[]
+		mResources.createClan = new string[2]
 		{
 			"Memb-",
 			"uat"
 		};
-		mResources.findClan = new string[]
+		mResources.findClan = new string[2]
 		{
 			"Mene-",
 			"mukan"
 		};
-		mResources.khau_hieuu = new string[]
+		mResources.khau_hieuu = new string[1]
 		{
 			"Slogan"
 		};
-		mResources.bieu_tuongg = new string[]
+		mResources.bieu_tuongg = new string[1]
 		{
 			"Icon"
 		};
-		mResources.request_pea2 = new string[]
+		mResources.request_pea2 = new string[2]
 		{
 			"Permintaan",
 			"kacang"
@@ -524,7 +522,7 @@ public class T3 : mResources
 		mResources.find = "Cari";
 		mResources.leave = "Pergi";
 		mResources.not_join_clan = "Tidak bergabung dengan clan";
-		mResources.clanEmpty = new string[]
+		mResources.clanEmpty = new string[5]
 		{
 			"Kamulah satu-satunya",
 			"anggota klan ini",
@@ -643,21 +641,21 @@ public class T3 : mResources
 		mResources.to_gain_20hp = "untuk mendapatkan 20 HP";
 		mResources.to_gain_20mp = "untuk mendapatkan 20 MP";
 		mResources.to_gain_1pow = "untuk mendapatkan 1 power point";
-		mResources.hairStyleName = new string[][]
+		mResources.hairStyleName = new string[3][]
 		{
-			new string[]
+			new string[3]
 			{
 				"Gohan",
 				"Krillin",
 				"Yamcha"
 			},
-			new string[]
+			new string[3]
 			{
 				"Dende",
 				"Piccolo",
 				"Kami"
 			},
-			new string[]
+			new string[3]
 			{
 				"Vegeta",
 				"Raditz",

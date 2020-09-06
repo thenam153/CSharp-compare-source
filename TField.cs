@@ -1,838 +1,33 @@
-﻿using System;
+using System;
 using System.Threading;
 
-// Token: 0x0200001B RID: 27
 public class TField : IActionListener
 {
-	// Token: 0x060000CA RID: 202 RVA: 0x00009964 File Offset: 0x00007B64
-	public TField(mScreen parentScr)
-	{
-		this.text = string.Empty;
-		this.parentScr = parentScr;
-		this.init();
-	}
-
-	// Token: 0x060000CB RID: 203 RVA: 0x00009A04 File Offset: 0x00007C04
-	public TField()
-	{
-		this.text = string.Empty;
-		this.init();
-	}
-
-	// Token: 0x060000CC RID: 204 RVA: 0x00009A9C File Offset: 0x00007C9C
-	public TField(int x, int y, int w, int h)
-	{
-		this.text = string.Empty;
-		this.init();
-		this.x = x;
-		this.y = y;
-		this.width = w;
-		this.height = h;
-	}
-
-	// Token: 0x060000CD RID: 205 RVA: 0x00009B54 File Offset: 0x00007D54
-	public TField(string text, int maxLen, int inputType)
-	{
-		this.text = text;
-		this.maxTextLenght = maxLen;
-		this.inputType = inputType;
-		this.init();
-		this.isTfield = true;
-	}
-
-	// Token: 0x060000CF RID: 207 RVA: 0x00003DB4 File Offset: 0x00001FB4
-	public static bool setNormal(char ch)
-	{
-		return (ch >= '0' && ch <= '9') || (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z');
-	}
-
-	// Token: 0x060000D0 RID: 208 RVA: 0x00003584 File Offset: 0x00001784
-	public void doChangeToTextBox()
-	{
-	}
-
-	// Token: 0x060000D1 RID: 209 RVA: 0x00009FC0 File Offset: 0x000081C0
-	public static void setVendorTypeMode(int mode)
-	{
-		if (mode == TField.MOTO)
-		{
-			TField.print[0] = "0";
-			TField.print[10] = " *";
-			TField.print[11] = "#";
-			TField.changeModeKey = 35;
-		}
-		else if (mode == TField.NOKIA)
-		{
-			TField.print[0] = " 0";
-			TField.print[10] = "*";
-			TField.print[11] = "#";
-			TField.changeModeKey = 35;
-		}
-		else if (mode == TField.ORTHER)
-		{
-			TField.print[0] = "0";
-			TField.print[10] = "*";
-			TField.print[11] = " #";
-			TField.changeModeKey = 42;
-		}
-	}
-
-	// Token: 0x060000D2 RID: 210 RVA: 0x0000A080 File Offset: 0x00008280
-	public void init()
-	{
-		TField.CARET_HEIGHT = mScreen.ITEM_HEIGHT + 1;
-		this.cmdClear = new Command(mResources.DELETE, this, 1000, null);
-		if (Main.isPC)
-		{
-			TField.typeXpeed = 0;
-		}
-		if (TField.imgTf == null)
-		{
-			TField.imgTf = GameCanvas.loadImage("/mainImage/myTexture2dtf.png");
-		}
-	}
-
-	// Token: 0x060000D3 RID: 211 RVA: 0x00003DE9 File Offset: 0x00001FE9
-	public void clearKeyWhenPutText(int keyCode)
-	{
-		if (keyCode != -8)
-		{
-			return;
-		}
-		if (this.timeDelayKyCode > 0)
-		{
-			return;
-		}
-		if (this.timeDelayKyCode <= 0)
-		{
-			this.timeDelayKyCode = 1;
-		}
-		this.clear();
-	}
-
-	// Token: 0x060000D4 RID: 212 RVA: 0x00003E1A File Offset: 0x0000201A
-	public void clearAllText()
-	{
-		this.text = string.Empty;
-		if (TField.kb != null)
-		{
-			TField.kb.text = string.Empty;
-		}
-		this.caretPos = 0;
-		this.setOffset(0);
-		this.setPasswordTest();
-	}
-
-	// Token: 0x060000D5 RID: 213 RVA: 0x0000A0DC File Offset: 0x000082DC
-	public void clear()
-	{
-		if (this.caretPos > 0 && this.text.Length > 0)
-		{
-			this.text = this.text.Substring(0, this.caretPos - 1);
-			this.caretPos--;
-			this.setOffset(0);
-			this.setPasswordTest();
-			if (TField.kb != null)
-			{
-				TField.kb.text = this.text;
-			}
-		}
-	}
-
-	// Token: 0x060000D6 RID: 214 RVA: 0x0000A158 File Offset: 0x00008358
-	public void clearAll()
-	{
-		if (this.caretPos > 0 && this.text.Length > 0)
-		{
-			this.text = this.text.Substring(0, this.text.Length - 1);
-			this.caretPos--;
-			this.setOffset();
-			this.setPasswordTest();
-			this.setFocusWithKb(true);
-			if (TField.kb != null)
-			{
-				TField.kb.text = string.Empty;
-			}
-		}
-	}
-
-	// Token: 0x060000D7 RID: 215 RVA: 0x0000A1DC File Offset: 0x000083DC
-	public void setOffset()
-	{
-		if (this.paintedText == null || mFont.tahoma_8b == null)
-		{
-			return;
-		}
-		if (this.inputType == TField.INPUT_TYPE_PASSWORD)
-		{
-			this.paintedText = this.passwordText;
-		}
-		else
-		{
-			this.paintedText = this.text;
-		}
-		if (this.offsetX < 0 && mFont.tahoma_8b.getWidth(this.paintedText) + this.offsetX < this.width - TField.TEXT_GAP_X - 13 - TField.typingModeAreaWidth)
-		{
-			this.offsetX = this.width - 10 - TField.typingModeAreaWidth - mFont.tahoma_8b.getWidth(this.paintedText);
-		}
-		if (this.offsetX + mFont.tahoma_8b.getWidth(this.paintedText.Substring(0, this.caretPos)) <= 0)
-		{
-			this.offsetX = -mFont.tahoma_8b.getWidth(this.paintedText.Substring(0, this.caretPos));
-			this.offsetX += 40;
-		}
-		else if (this.offsetX + mFont.tahoma_8b.getWidth(this.paintedText.Substring(0, this.caretPos)) >= this.width - 12 - TField.typingModeAreaWidth)
-		{
-			this.offsetX = this.width - 10 - TField.typingModeAreaWidth - mFont.tahoma_8b.getWidth(this.paintedText.Substring(0, this.caretPos)) - 2 * TField.TEXT_GAP_X;
-		}
-		if (this.offsetX > 0)
-		{
-			this.offsetX = 0;
-		}
-	}
-
-	// Token: 0x060000D8 RID: 216 RVA: 0x0000A374 File Offset: 0x00008574
-	private void keyPressedAny(int keyCode)
-	{
-		string[] array;
-		if (this.inputType == TField.INPUT_TYPE_PASSWORD || this.inputType == TField.INPUT_ALPHA_NUMBER_ONLY)
-		{
-			array = TField.printA;
-		}
-		else
-		{
-			array = TField.print;
-		}
-		if (keyCode == TField.lastKey)
-		{
-			this.indexOfActiveChar = (this.indexOfActiveChar + 1) % array[keyCode - 48].Length;
-			char c = array[keyCode - 48][this.indexOfActiveChar];
-			if (TField.mode == 0)
-			{
-				c = char.ToLower(c);
-			}
-			else if (TField.mode == 1)
-			{
-				c = char.ToUpper(c);
-			}
-			else if (TField.mode == 2)
-			{
-				c = char.ToUpper(c);
-			}
-			else
-			{
-				c = array[keyCode - 48][array[keyCode - 48].Length - 1];
-			}
-			string str = this.text.Substring(0, this.caretPos - 1) + c;
-			if (this.caretPos < this.text.Length)
-			{
-				str += this.text.Substring(this.caretPos, this.text.Length);
-			}
-			this.text = str;
-			this.keyInActiveState = TField.MAX_TIME_TO_CONFIRM_KEY[TField.typeXpeed];
-			this.setPasswordTest();
-		}
-		else if (this.text.Length < this.maxTextLenght)
-		{
-			if (TField.mode == 1 && TField.lastKey != -1984)
-			{
-				TField.mode = 0;
-			}
-			this.indexOfActiveChar = 0;
-			char c2 = array[keyCode - 48][this.indexOfActiveChar];
-			if (TField.mode == 0)
-			{
-				c2 = char.ToLower(c2);
-			}
-			else if (TField.mode == 1)
-			{
-				c2 = char.ToUpper(c2);
-			}
-			else if (TField.mode == 2)
-			{
-				c2 = char.ToUpper(c2);
-			}
-			else
-			{
-				c2 = array[keyCode - 48][array[keyCode - 48].Length - 1];
-			}
-			string str2 = this.text.Substring(0, this.caretPos) + c2;
-			if (this.caretPos < this.text.Length)
-			{
-				str2 += this.text.Substring(this.caretPos, this.text.Length);
-			}
-			this.text = str2;
-			this.keyInActiveState = TField.MAX_TIME_TO_CONFIRM_KEY[TField.typeXpeed];
-			this.caretPos++;
-			this.setPasswordTest();
-			this.setOffset();
-		}
-		TField.lastKey = keyCode;
-	}
-
-	// Token: 0x060000D9 RID: 217 RVA: 0x0000A604 File Offset: 0x00008804
-	private void keyPressedAscii(int keyCode)
-	{
-		if ((this.inputType == TField.INPUT_TYPE_PASSWORD || this.inputType == TField.INPUT_ALPHA_NUMBER_ONLY) && (keyCode < 48 || keyCode > 57) && (keyCode < 65 || keyCode > 90) && (keyCode < 97 || keyCode > 122))
-		{
-			return;
-		}
-		if (this.text.Length < this.maxTextLenght)
-		{
-			string str = this.text.Substring(0, this.caretPos) + (char)keyCode;
-			if (this.caretPos < this.text.Length)
-			{
-				str += this.text.Substring(this.caretPos, this.text.Length - this.caretPos);
-			}
-			this.text = str;
-			this.caretPos++;
-			this.setPasswordTest();
-			this.setOffset(0);
-		}
-		if (TField.kb != null)
-		{
-			TField.kb.text = this.text;
-		}
-	}
-
-	// Token: 0x060000DA RID: 218 RVA: 0x00003E54 File Offset: 0x00002054
-	public static void setMode()
-	{
-		TField.mode++;
-		if (TField.mode > 3)
-		{
-			TField.mode = 0;
-		}
-		TField.lastKey = TField.changeModeKey;
-		TField.timeChangeMode = (long)(Environment.TickCount / 1000);
-	}
-
-	// Token: 0x060000DB RID: 219 RVA: 0x0000A714 File Offset: 0x00008914
-	private void setDau()
-	{
-		this.timeDau = (long)(Environment.TickCount / 100);
-		if (this.indexDau == -1)
-		{
-			for (int i = this.caretPos; i > 0; i--)
-			{
-				char c = this.text[i - 1];
-				for (int j = 0; j < TField.printDau.Length; j++)
-				{
-					char c2 = TField.printDau[j];
-					if (c == c2)
-					{
-						this.indexTemplate = j;
-						this.indexCong = 0;
-						this.indexDau = i - 1;
-						return;
-					}
-				}
-			}
-			this.indexDau = -1;
-		}
-		else
-		{
-			this.indexCong++;
-			if (this.indexCong >= 6)
-			{
-				this.indexCong = 0;
-			}
-			string str = this.text.Substring(0, this.indexDau);
-			string str2 = this.text.Substring(this.indexDau + 1);
-			string str3 = TField.printDau.Substring(this.indexTemplate + this.indexCong, 1);
-			this.text = str + str3 + str2;
-		}
-	}
-
-	// Token: 0x060000DC RID: 220 RVA: 0x0000A82C File Offset: 0x00008A2C
-	public bool keyPressed(int keyCode)
-	{
-		if (Main.isPC && keyCode == -8)
-		{
-			this.clearKeyWhenPutText(-8);
-			return true;
-		}
-		if (keyCode == 8 || keyCode == -8 || keyCode == 204)
-		{
-			this.clear();
-			return true;
-		}
-		if (TField.isQwerty && keyCode >= 32)
-		{
-			this.keyPressedAscii(keyCode);
-			return false;
-		}
-		if (keyCode == TField.changeDau && this.inputType == TField.INPUT_TYPE_ANY)
-		{
-			this.setDau();
-			return false;
-		}
-		if (keyCode == 42)
-		{
-			keyCode = 58;
-		}
-		if (keyCode == 35)
-		{
-			keyCode = 59;
-		}
-		if (keyCode >= 48 && keyCode <= 59)
-		{
-			if (this.inputType == TField.INPUT_TYPE_ANY || this.inputType == TField.INPUT_TYPE_PASSWORD || this.inputType == TField.INPUT_ALPHA_NUMBER_ONLY)
-			{
-				this.keyPressedAny(keyCode);
-			}
-			else if (this.inputType == TField.INPUT_TYPE_NUMERIC)
-			{
-				this.keyPressedAscii(keyCode);
-				this.keyInActiveState = 1;
-			}
-		}
-		else
-		{
-			this.indexOfActiveChar = 0;
-			TField.lastKey = -1984;
-			if (keyCode == 14 && !this.lockArrow)
-			{
-				if (this.caretPos > 0)
-				{
-					this.caretPos--;
-					this.setOffset(0);
-					this.showCaretCounter = TField.MAX_SHOW_CARET_COUNER;
-					return false;
-				}
-			}
-			else if (keyCode == 15 && !this.lockArrow)
-			{
-				if (this.caretPos < this.text.Length)
-				{
-					this.caretPos++;
-					this.setOffset(0);
-					this.showCaretCounter = TField.MAX_SHOW_CARET_COUNER;
-					return false;
-				}
-			}
-			else
-			{
-				if (keyCode == 19)
-				{
-					this.clear();
-					return false;
-				}
-				TField.lastKey = keyCode;
-			}
-		}
-		return true;
-	}
-
-	// Token: 0x060000DD RID: 221 RVA: 0x0000A9FC File Offset: 0x00008BFC
-	public void setOffset(int index)
-	{
-		if (this.inputType == TField.INPUT_TYPE_PASSWORD)
-		{
-			this.paintedText = this.passwordText;
-		}
-		else
-		{
-			this.paintedText = this.text;
-		}
-		int num = mFont.tahoma_8b.getWidth(this.paintedText.Substring(0, this.caretPos));
-		if (index == -1)
-		{
-			if (num + this.offsetX < 15 && this.caretPos > 0 && this.caretPos < this.paintedText.Length)
-			{
-				this.offsetX += mFont.tahoma_8b.getWidth(this.paintedText.Substring(this.caretPos, 1));
-			}
-		}
-		else if (index == 1)
-		{
-			if (num + this.offsetX > this.width - 25 && this.caretPos < this.paintedText.Length && this.caretPos > 0)
-			{
-				this.offsetX -= mFont.tahoma_8b.getWidth(this.paintedText.Substring(this.caretPos - 1, 1));
-			}
-		}
-		else
-		{
-			this.offsetX = -(num - (this.width - 12));
-		}
-		if (this.offsetX > 0)
-		{
-			this.offsetX = 0;
-		}
-		else if (this.offsetX < 0)
-		{
-			int num2 = mFont.tahoma_8b.getWidth(this.paintedText) - (this.width - 12);
-			if (this.offsetX < -num2)
-			{
-				this.offsetX = -num2;
-			}
-		}
-	}
-
-	// Token: 0x060000DE RID: 222 RVA: 0x0000AB90 File Offset: 0x00008D90
-	public void paintInputTf(mGraphics g, bool iss, int x, int y, int w, int h, int xText, int yText, string text, string info)
-	{
-		g.setColor(0);
-		if (iss)
-		{
-			g.drawRegion(TField.imgTf, 0, 81, 29, 27, 0, x, y, 0);
-			g.drawRegion(TField.imgTf, 0, 135, 29, 27, 0, x + w - 29, y, 0);
-			g.drawRegion(TField.imgTf, 0, 108, 29, 27, 0, x + w - 58, y, 0);
-			for (int i = 0; i < (w - 58) / 29; i++)
-			{
-				g.drawRegion(TField.imgTf, 0, 108, 29, 27, 0, x + 29 + i * 29, y, 0);
-			}
-		}
-		else
-		{
-			g.drawRegion(TField.imgTf, 0, 0, 29, 27, 0, x, y, 0);
-			g.drawRegion(TField.imgTf, 0, 54, 29, 27, 0, x + w - 29, y, 0);
-			g.drawRegion(TField.imgTf, 0, 27, 29, 27, 0, x + w - 58, y, 0);
-			for (int j = 0; j < (w - 58) / 29; j++)
-			{
-				g.drawRegion(TField.imgTf, 0, 27, 29, 27, 0, x + 29 + j * 29, y, 0);
-			}
-		}
-		g.setClip(x + 3, y + 1, w - 4, h);
-		if (text != null && !text.Equals(string.Empty))
-		{
-			mFont.tahoma_8b.drawString(g, text, xText, yText, 0);
-		}
-		else if (info != null)
-		{
-			if (iss)
-			{
-				mFont.tahoma_7b_focus.drawString(g, info, xText, yText, 0);
-			}
-			else
-			{
-				mFont.tahoma_7b_unfocus.drawString(g, info, xText, yText, 0);
-			}
-		}
-	}
-
-	// Token: 0x060000DF RID: 223 RVA: 0x0000AD3C File Offset: 0x00008F3C
-	public void paint(mGraphics g)
-	{
-		g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
-		bool flag = this.isFocused();
-		if (this.inputType == TField.INPUT_TYPE_PASSWORD)
-		{
-			this.paintedText = this.passwordText;
-		}
-		else
-		{
-			this.paintedText = this.text;
-		}
-		this.paintInputTf(g, flag, this.x, this.y - 1, this.width, this.height + 5, TField.TEXT_GAP_X + this.offsetX + this.x + 1, this.y + (this.height - mFont.tahoma_8b.getHeight()) / 2 + 2, this.paintedText, this.name);
-		g.setClip(this.x + 3, this.y + 1, this.width - 4, this.height - 2);
-		g.setColor(0);
-		if (flag && this.isPaintMouse && this.isPaintCarret)
-		{
-			if (this.keyInActiveState == 0 && (this.showCaretCounter > 0 || this.counter / TField.CARET_SHOWING_TIME % 4 == 0))
-			{
-				g.setColor(7999781);
-				g.fillRect(TField.TEXT_GAP_X + 1 + this.offsetX + this.x + mFont.tahoma_8b.getWidth(this.paintedText.Substring(0, this.caretPos) + "a") - TField.CARET_WIDTH - mFont.tahoma_8b.getWidth("a"), this.y + (this.height - TField.CARET_HEIGHT) / 2 + 5, TField.CARET_WIDTH, TField.CARET_HEIGHT);
-			}
-			GameCanvas.resetTrans(g);
-			if (this.text != null && this.text.Length > 0 && GameCanvas.isTouch)
-			{
-				g.drawImage(GameCanvas.imgClear, this.x + this.width - 13, this.y + this.height / 2 + 3, mGraphics.VCENTER | mGraphics.HCENTER);
-			}
-		}
-	}
-
-	// Token: 0x060000E0 RID: 224 RVA: 0x00003E8E File Offset: 0x0000208E
-	private bool isFocused()
-	{
-		return this.isFocus;
-	}
-
-	// Token: 0x060000E1 RID: 225 RVA: 0x0000AF4C File Offset: 0x0000914C
-	public string subString(string str, int index, int indexTo)
-	{
-		if (index >= 0 && indexTo > str.Length - 1)
-		{
-			return str.Substring(index);
-		}
-		if (index < 0 || index > str.Length - 1 || indexTo < 0 || indexTo > str.Length - 1)
-		{
-			return string.Empty;
-		}
-		string text = string.Empty;
-		for (int i = index; i < indexTo; i++)
-		{
-			text += str[i];
-		}
-		return text;
-	}
-
-	// Token: 0x060000E2 RID: 226 RVA: 0x0000AFD4 File Offset: 0x000091D4
-	private void setPasswordTest()
-	{
-		if (this.inputType == TField.INPUT_TYPE_PASSWORD)
-		{
-			this.passwordText = string.Empty;
-			for (int i = 0; i < this.text.Length; i++)
-			{
-				this.passwordText += "*";
-			}
-			if (this.keyInActiveState > 0 && this.caretPos > 0)
-			{
-				this.passwordText = this.passwordText.Substring(0, this.caretPos - 1) + this.text[this.caretPos - 1] + this.passwordText.Substring(this.caretPos, this.passwordText.Length);
-			}
-		}
-	}
-
-	// Token: 0x060000E3 RID: 227 RVA: 0x0000B09C File Offset: 0x0000929C
-	public void update()
-	{
-		this.isPaintCarret = true;
-		if (Main.isPC)
-		{
-			if (this.timeDelayKyCode > 0)
-			{
-				this.timeDelayKyCode--;
-			}
-			if (this.timeDelayKyCode <= 0)
-			{
-				this.timeDelayKyCode = 0;
-			}
-		}
-		if (TField.kb != null && TField.currentTField == this)
-		{
-			if (TField.kb.text.Length < 40 && this.isFocus)
-			{
-				this.setText(TField.kb.text);
-			}
-			if (TField.kb.done && this.cmdDoneAction != null)
-			{
-				this.cmdDoneAction.performAction();
-			}
-		}
-		this.counter++;
-		if (this.keyInActiveState > 0)
-		{
-			this.keyInActiveState--;
-			if (this.keyInActiveState == 0)
-			{
-				this.indexOfActiveChar = 0;
-				if (TField.mode == 1 && TField.lastKey != TField.changeModeKey && this.isFocus)
-				{
-					TField.mode = 0;
-				}
-				TField.lastKey = -1984;
-				this.setPasswordTest();
-			}
-		}
-		if (this.showCaretCounter > 0)
-		{
-			this.showCaretCounter--;
-		}
-		if (GameCanvas.isPointerJustRelease)
-		{
-			this.setTextBox();
-		}
-		if (this.indexDau != -1 && (long)(Environment.TickCount / 100) - this.timeDau > 5L)
-		{
-			this.indexDau = -1;
-		}
-	}
-
-	// Token: 0x060000E4 RID: 228 RVA: 0x0000B21C File Offset: 0x0000941C
-	public void setTextBox()
-	{
-		if (GameCanvas.isPointerHoldIn(this.x + this.width - 20, this.y, 40, this.height))
-		{
-			this.clearAllText();
-			this.isFocus = true;
-		}
-		else if (GameCanvas.isPointerHoldIn(this.x, this.y, this.width - 20, this.height))
-		{
-			this.setFocusWithKb(true);
-		}
-		else
-		{
-			this.setFocus(false);
-		}
-	}
-
-	// Token: 0x060000E5 RID: 229 RVA: 0x0000B29C File Offset: 0x0000949C
-	public void setFocus(bool isFocus)
-	{
-		if (this.isFocus != isFocus)
-		{
-			TField.mode = 0;
-		}
-		TField.lastKey = -1984;
-		TField.timeChangeMode = (long)((int)(DateTime.Now.Ticks / 1000L));
-		this.isFocus = isFocus;
-		if (isFocus)
-		{
-			TField.currentTField = this;
-			if (TField.kb != null)
-			{
-				TField.kb.text = TField.currentTField.text;
-			}
-		}
-	}
-
-	// Token: 0x060000E6 RID: 230 RVA: 0x0000B314 File Offset: 0x00009514
-	public void setFocusWithKb(bool isFocus)
-	{
-		if (this.isFocus != isFocus)
-		{
-			TField.mode = 0;
-		}
-		TField.lastKey = -1984;
-		TField.timeChangeMode = (long)((int)(DateTime.Now.Ticks / 1000L));
-		this.isFocus = isFocus;
-		if (isFocus)
-		{
-			TField.currentTField = this;
-		}
-		else if (TField.currentTField == this)
-		{
-			TField.currentTField = null;
-		}
-		if (Thread.CurrentThread.Name == Main.mainThreadName && TField.currentTField != null)
-		{
-			isFocus = true;
-			TouchScreenKeyboard.hideInput = !TField.currentTField.showSubTextField;
-			TouchScreenKeyboardType t = TouchScreenKeyboardType.ASCIICapable;
-			if (this.inputType == TField.INPUT_TYPE_NUMERIC)
-			{
-				t = TouchScreenKeyboardType.NumberPad;
-			}
-			bool type = false;
-			if (this.inputType == TField.INPUT_TYPE_PASSWORD)
-			{
-				type = true;
-			}
-			TField.kb = TouchScreenKeyboard.Open(TField.currentTField.text, t, false, false, type, false, TField.currentTField.name);
-			if (TField.kb != null)
-			{
-				TField.kb.text = TField.currentTField.text;
-			}
-			Cout.LogWarning("SHOW KEYBOARD FOR " + TField.currentTField.text);
-		}
-	}
-
-	// Token: 0x060000E7 RID: 231 RVA: 0x00003E96 File Offset: 0x00002096
-	public string getText()
-	{
-		return this.text;
-	}
-
-	// Token: 0x060000E8 RID: 232 RVA: 0x00003E9E File Offset: 0x0000209E
-	public void clearKb()
-	{
-		if (TField.kb != null)
-		{
-			TField.kb.text = string.Empty;
-		}
-	}
-
-	// Token: 0x060000E9 RID: 233 RVA: 0x0000B43C File Offset: 0x0000963C
-	public void setText(string text)
-	{
-		if (text == null)
-		{
-			return;
-		}
-		TField.lastKey = -1984;
-		this.keyInActiveState = 0;
-		this.indexOfActiveChar = 0;
-		this.text = text;
-		this.paintedText = text;
-		if (text == string.Empty)
-		{
-			TouchScreenKeyboard.Clear();
-		}
-		this.setPasswordTest();
-		this.caretPos = text.Length;
-		this.setOffset();
-	}
-
-	// Token: 0x060000EA RID: 234 RVA: 0x0000B4A4 File Offset: 0x000096A4
-	public void insertText(string text)
-	{
-		this.text = this.text.Substring(0, this.caretPos) + text + this.text.Substring(this.caretPos);
-		this.setPasswordTest();
-		this.caretPos += text.Length;
-		this.setOffset();
-	}
-
-	// Token: 0x060000EB RID: 235 RVA: 0x00003EB9 File Offset: 0x000020B9
-	public int getMaxTextLenght()
-	{
-		return this.maxTextLenght;
-	}
-
-	// Token: 0x060000EC RID: 236 RVA: 0x00003EC1 File Offset: 0x000020C1
-	public void setMaxTextLenght(int maxTextLenght)
-	{
-		this.maxTextLenght = maxTextLenght;
-	}
-
-	// Token: 0x060000ED RID: 237 RVA: 0x00003ECA File Offset: 0x000020CA
-	public int getIputType()
-	{
-		return this.inputType;
-	}
-
-	// Token: 0x060000EE RID: 238 RVA: 0x00003ED2 File Offset: 0x000020D2
-	public void setIputType(int iputType)
-	{
-		this.inputType = iputType;
-		this.setMaxTextLenght(500);
-	}
-
-	// Token: 0x060000EF RID: 239 RVA: 0x0000B500 File Offset: 0x00009700
-	public void perform(int idAction, object p)
-	{
-		if (idAction == 1000)
-		{
-			this.clear();
-		}
-	}
-
-	// Token: 0x04000094 RID: 148
-	public const sbyte KEY_LEFT = 14;
-
-	// Token: 0x04000095 RID: 149
-	public const sbyte KEY_RIGHT = 15;
-
-	// Token: 0x04000096 RID: 150
-	public const sbyte KEY_CLEAR = 19;
-
-	// Token: 0x04000097 RID: 151
 	public bool isFocus;
 
-	// Token: 0x04000098 RID: 152
 	public int x;
 
-	// Token: 0x04000099 RID: 153
 	public int y;
 
-	// Token: 0x0400009A RID: 154
 	public int width;
 
-	// Token: 0x0400009B RID: 155
 	public int height;
 
-	// Token: 0x0400009C RID: 156
 	public bool lockArrow;
 
-	// Token: 0x0400009D RID: 157
 	public bool justReturnFromTextBox;
 
-	// Token: 0x0400009E RID: 158
 	public bool paintFocus = true;
 
-	// Token: 0x0400009F RID: 159
+	public const sbyte KEY_LEFT = 14;
+
+	public const sbyte KEY_RIGHT = 15;
+
+	public const sbyte KEY_CLEAR = 19;
+
 	public static int typeXpeed = 2;
 
-	// Token: 0x040000A0 RID: 160
-	private static readonly int[] MAX_TIME_TO_CONFIRM_KEY = new int[]
+	private static readonly int[] MAX_TIME_TO_CONFIRM_KEY = new int[7]
 	{
 		30,
 		14,
@@ -843,35 +38,25 @@ public class TField : IActionListener
 		2
 	};
 
-	// Token: 0x040000A1 RID: 161
 	private static int CARET_HEIGHT = 0;
 
-	// Token: 0x040000A2 RID: 162
 	private static readonly int CARET_WIDTH = 1;
 
-	// Token: 0x040000A3 RID: 163
 	private static readonly int CARET_SHOWING_TIME = 5;
 
-	// Token: 0x040000A4 RID: 164
 	private static readonly int TEXT_GAP_X = 4;
 
-	// Token: 0x040000A5 RID: 165
 	private static readonly int MAX_SHOW_CARET_COUNER = 10;
 
-	// Token: 0x040000A6 RID: 166
 	public static readonly int INPUT_TYPE_ANY = 0;
 
-	// Token: 0x040000A7 RID: 167
 	public static readonly int INPUT_TYPE_NUMERIC = 1;
 
-	// Token: 0x040000A8 RID: 168
 	public static readonly int INPUT_TYPE_PASSWORD = 2;
 
-	// Token: 0x040000A9 RID: 169
 	public static readonly int INPUT_ALPHA_NUMBER_ONLY = 3;
 
-	// Token: 0x040000AA RID: 170
-	private static string[] print = new string[]
+	private static string[] print = new string[12]
 	{
 		" 0",
 		".,@?!_1\"/$-():*+<=>;%&~#%^&*{}[];'/1",
@@ -887,8 +72,7 @@ public class TField : IActionListener
 		"#"
 	};
 
-	// Token: 0x040000AB RID: 171
-	private static string[] printA = new string[]
+	private static string[] printA = new string[12]
 	{
 		"0",
 		"1",
@@ -904,8 +88,7 @@ public class TField : IActionListener
 		"0"
 	};
 
-	// Token: 0x040000AC RID: 172
-	private static string[] printBB = new string[]
+	private static string[] printBB = new string[17]
 	{
 		" 0",
 		"er1",
@@ -926,56 +109,39 @@ public class TField : IActionListener
 		"l,"
 	};
 
-	// Token: 0x040000AD RID: 173
 	private string text = string.Empty;
 
-	// Token: 0x040000AE RID: 174
 	private string passwordText = string.Empty;
 
-	// Token: 0x040000AF RID: 175
 	private string paintedText = string.Empty;
 
-	// Token: 0x040000B0 RID: 176
 	private int caretPos;
 
-	// Token: 0x040000B1 RID: 177
 	private int counter;
 
-	// Token: 0x040000B2 RID: 178
 	private int maxTextLenght = 500;
 
-	// Token: 0x040000B3 RID: 179
 	private int offsetX;
 
-	// Token: 0x040000B4 RID: 180
 	private static int lastKey = -1984;
 
-	// Token: 0x040000B5 RID: 181
 	private int keyInActiveState;
 
-	// Token: 0x040000B6 RID: 182
 	private int indexOfActiveChar;
 
-	// Token: 0x040000B7 RID: 183
-	private int showCaretCounter = TField.MAX_SHOW_CARET_COUNER;
+	private int showCaretCounter = MAX_SHOW_CARET_COUNER;
 
-	// Token: 0x040000B8 RID: 184
-	private int inputType = TField.INPUT_TYPE_ANY;
+	private int inputType = INPUT_TYPE_ANY;
 
-	// Token: 0x040000B9 RID: 185
 	public static bool isQwerty = true;
 
-	// Token: 0x040000BA RID: 186
 	public static int typingModeAreaWidth;
 
-	// Token: 0x040000BB RID: 187
 	public static int mode = 0;
 
-	// Token: 0x040000BC RID: 188
 	public static long timeChangeMode;
 
-	// Token: 0x040000BD RID: 189
-	public static readonly string[] modeNotify = new string[]
+	public static readonly string[] modeNotify = new string[4]
 	{
 		"abc",
 		"Abc",
@@ -983,190 +149,868 @@ public class TField : IActionListener
 		"123"
 	};
 
-	// Token: 0x040000BE RID: 190
 	public static readonly int NOKIA = 0;
 
-	// Token: 0x040000BF RID: 191
 	public static readonly int MOTO = 1;
 
-	// Token: 0x040000C0 RID: 192
 	public static readonly int ORTHER = 2;
 
-	// Token: 0x040000C1 RID: 193
 	public static readonly int BB = 3;
 
-	// Token: 0x040000C2 RID: 194
 	public static int changeModeKey = 11;
 
-	// Token: 0x040000C3 RID: 195
 	public static readonly sbyte abc = 0;
 
-	// Token: 0x040000C4 RID: 196
 	public static readonly sbyte Abc = 1;
 
-	// Token: 0x040000C5 RID: 197
 	public static readonly sbyte ABC = 2;
 
-	// Token: 0x040000C6 RID: 198
 	public static readonly sbyte number123 = 3;
 
-	// Token: 0x040000C7 RID: 199
 	public static TField currentTField;
 
-	// Token: 0x040000C8 RID: 200
 	public bool isTfield;
 
-	// Token: 0x040000C9 RID: 201
 	public bool isPaintMouse = true;
 
-	// Token: 0x040000CA RID: 202
 	public string name = string.Empty;
 
-	// Token: 0x040000CB RID: 203
 	public string title = string.Empty;
 
-	// Token: 0x040000CC RID: 204
 	public string strInfo;
 
-	// Token: 0x040000CD RID: 205
 	public Command cmdClear;
 
-	// Token: 0x040000CE RID: 206
 	public Command cmdDoneAction;
 
-	// Token: 0x040000CF RID: 207
 	private mScreen parentScr;
 
-	// Token: 0x040000D0 RID: 208
 	private int timeDelayKyCode;
 
-	// Token: 0x040000D1 RID: 209
 	private int holdCount;
 
-	// Token: 0x040000D2 RID: 210
 	public static int changeDau;
 
-	// Token: 0x040000D3 RID: 211
 	private int indexDau = -1;
 
-	// Token: 0x040000D4 RID: 212
 	private int indexTemplate;
 
-	// Token: 0x040000D5 RID: 213
 	private int indexCong;
 
-	// Token: 0x040000D6 RID: 214
 	private long timeDau;
 
-	// Token: 0x040000D7 RID: 215
 	private static string printDau = "aáàảãạâấầẩẫậăắằẳẵặeéèẻẽẹêếềểễệiíìỉĩịoóòỏõọôốồổỗộơớờởỡợuúùủũụưứừửữựyýỳỷỹỵ";
 
-	// Token: 0x040000D8 RID: 216
 	public static Image imgTf;
 
-	// Token: 0x040000D9 RID: 217
 	public int timePutKeyClearAll;
 
-	// Token: 0x040000DA RID: 218
 	public int timeClearFirt;
 
-	// Token: 0x040000DB RID: 219
 	public bool isPaintCarret;
 
-	// Token: 0x040000DC RID: 220
 	public bool showSubTextField = true;
 
-	// Token: 0x040000DD RID: 221
 	public static TouchScreenKeyboard kb;
 
-	// Token: 0x040000DE RID: 222
-	public static int[][] BBKEY = new int[][]
+	public static int[][] BBKEY = new int[17][]
 	{
-		new int[]
+		new int[2]
 		{
 			32,
 			48
 		},
-		new int[]
+		new int[2]
 		{
 			49,
 			69
 		},
-		new int[]
+		new int[2]
 		{
 			50,
 			84
 		},
-		new int[]
+		new int[2]
 		{
 			51,
 			85
 		},
-		new int[]
+		new int[2]
 		{
 			52,
 			68
 		},
-		new int[]
+		new int[2]
 		{
 			53,
 			71
 		},
-		new int[]
+		new int[2]
 		{
 			54,
 			74
 		},
-		new int[]
+		new int[2]
 		{
 			55,
 			67
 		},
-		new int[]
+		new int[2]
 		{
 			56,
 			66
 		},
-		new int[]
+		new int[2]
 		{
 			57,
 			77
 		},
-		new int[]
+		new int[2]
 		{
 			42,
 			128
 		},
-		new int[]
+		new int[2]
 		{
 			35,
 			137
 		},
-		new int[]
+		new int[2]
 		{
 			33,
 			113
 		},
-		new int[]
+		new int[2]
 		{
 			63,
 			97
 		},
-		new int[]
+		new int[3]
 		{
 			64,
 			121,
 			122
 		},
-		new int[]
+		new int[2]
 		{
 			46,
 			111
 		},
-		new int[]
+		new int[2]
 		{
 			44,
 			108
 		}
 	};
+
+	public TField(mScreen parentScr)
+	{
+		text = string.Empty;
+		this.parentScr = parentScr;
+		init();
+	}
+
+	public TField()
+	{
+		text = string.Empty;
+		init();
+	}
+
+	public TField(int x, int y, int w, int h)
+	{
+		text = string.Empty;
+		init();
+		this.x = x;
+		this.y = y;
+		width = w;
+		height = h;
+	}
+
+	public TField(string text, int maxLen, int inputType)
+	{
+		this.text = text;
+		maxTextLenght = maxLen;
+		this.inputType = inputType;
+		init();
+		isTfield = true;
+	}
+
+	public static bool setNormal(char ch)
+	{
+		if ((ch < '0' || ch > '9') && (ch < 'A' || ch > 'Z') && (ch < 'a' || ch > 'z'))
+		{
+			return false;
+		}
+		return true;
+	}
+
+	public void doChangeToTextBox()
+	{
+	}
+
+	public static void setVendorTypeMode(int mode)
+	{
+		if (mode == MOTO)
+		{
+			print[0] = "0";
+			print[10] = " *";
+			print[11] = "#";
+			changeModeKey = 35;
+		}
+		else if (mode == NOKIA)
+		{
+			print[0] = " 0";
+			print[10] = "*";
+			print[11] = "#";
+			changeModeKey = 35;
+		}
+		else if (mode == ORTHER)
+		{
+			print[0] = "0";
+			print[10] = "*";
+			print[11] = " #";
+			changeModeKey = 42;
+		}
+	}
+
+	public void init()
+	{
+		CARET_HEIGHT = mScreen.ITEM_HEIGHT + 1;
+		cmdClear = new Command(mResources.DELETE, this, 1000, null);
+		if (Main.isPC)
+		{
+			typeXpeed = 0;
+		}
+		if (imgTf == null)
+		{
+			imgTf = GameCanvas.loadImage("/mainImage/myTexture2dtf.png");
+		}
+	}
+
+	public void clearKeyWhenPutText(int keyCode)
+	{
+		if (keyCode == -8 && timeDelayKyCode <= 0)
+		{
+			if (timeDelayKyCode <= 0)
+			{
+				timeDelayKyCode = 1;
+			}
+			clear();
+		}
+	}
+
+	public void clearAllText()
+	{
+		text = string.Empty;
+		if (kb != null)
+		{
+			kb.text = string.Empty;
+		}
+		caretPos = 0;
+		setOffset(0);
+		setPasswordTest();
+	}
+
+	public void clear()
+	{
+		if (caretPos > 0 && text.Length > 0)
+		{
+			text = text.Substring(0, caretPos - 1);
+			caretPos--;
+			setOffset(0);
+			setPasswordTest();
+			if (kb != null)
+			{
+				kb.text = text;
+			}
+		}
+	}
+
+	public void clearAll()
+	{
+		if (caretPos > 0 && text.Length > 0)
+		{
+			text = text.Substring(0, text.Length - 1);
+			caretPos--;
+			setOffset();
+			setPasswordTest();
+			setFocusWithKb(isFocus: true);
+			if (kb != null)
+			{
+				kb.text = string.Empty;
+			}
+		}
+	}
+
+	public void setOffset()
+	{
+		if (paintedText != null && mFont.tahoma_8b != null)
+		{
+			if (inputType == INPUT_TYPE_PASSWORD)
+			{
+				paintedText = passwordText;
+			}
+			else
+			{
+				paintedText = text;
+			}
+			if (offsetX < 0 && mFont.tahoma_8b.getWidth(paintedText) + offsetX < width - TEXT_GAP_X - 13 - typingModeAreaWidth)
+			{
+				offsetX = width - 10 - typingModeAreaWidth - mFont.tahoma_8b.getWidth(paintedText);
+			}
+			if (offsetX + mFont.tahoma_8b.getWidth(paintedText.Substring(0, caretPos)) <= 0)
+			{
+				offsetX = -mFont.tahoma_8b.getWidth(paintedText.Substring(0, caretPos));
+				offsetX += 40;
+			}
+			else if (offsetX + mFont.tahoma_8b.getWidth(paintedText.Substring(0, caretPos)) >= width - 12 - typingModeAreaWidth)
+			{
+				offsetX = width - 10 - typingModeAreaWidth - mFont.tahoma_8b.getWidth(paintedText.Substring(0, caretPos)) - 2 * TEXT_GAP_X;
+			}
+			if (offsetX > 0)
+			{
+				offsetX = 0;
+			}
+		}
+	}
+
+	private void keyPressedAny(int keyCode)
+	{
+		string[] array = (inputType != INPUT_TYPE_PASSWORD && inputType != INPUT_ALPHA_NUMBER_ONLY) ? print : printA;
+		if (keyCode == lastKey)
+		{
+			indexOfActiveChar = (indexOfActiveChar + 1) % array[keyCode - 48].Length;
+			char c = array[keyCode - 48][indexOfActiveChar];
+			string str = string.Concat(arg1: (mode == 0) ? char.ToLower(c) : ((mode == 1) ? char.ToUpper(c) : ((mode != 2) ? array[keyCode - 48][array[keyCode - 48].Length - 1] : char.ToUpper(c))), arg0: text.Substring(0, caretPos - 1));
+			if (caretPos < text.Length)
+			{
+				str += text.Substring(caretPos, text.Length);
+			}
+			text = str;
+			keyInActiveState = MAX_TIME_TO_CONFIRM_KEY[typeXpeed];
+			setPasswordTest();
+		}
+		else if (text.Length < maxTextLenght)
+		{
+			if (mode == 1 && lastKey != -1984)
+			{
+				mode = 0;
+			}
+			indexOfActiveChar = 0;
+			char c2 = array[keyCode - 48][indexOfActiveChar];
+			string str2 = string.Concat(arg1: (mode == 0) ? char.ToLower(c2) : ((mode == 1) ? char.ToUpper(c2) : ((mode != 2) ? array[keyCode - 48][array[keyCode - 48].Length - 1] : char.ToUpper(c2))), arg0: text.Substring(0, caretPos));
+			if (caretPos < text.Length)
+			{
+				str2 += text.Substring(caretPos, text.Length);
+			}
+			text = str2;
+			keyInActiveState = MAX_TIME_TO_CONFIRM_KEY[typeXpeed];
+			caretPos++;
+			setPasswordTest();
+			setOffset();
+		}
+		lastKey = keyCode;
+	}
+
+	private void keyPressedAscii(int keyCode)
+	{
+		if ((inputType == INPUT_TYPE_PASSWORD || inputType == INPUT_ALPHA_NUMBER_ONLY) && (keyCode < 48 || keyCode > 57) && (keyCode < 65 || keyCode > 90) && (keyCode < 97 || keyCode > 122))
+		{
+			return;
+		}
+		if (text.Length < maxTextLenght)
+		{
+			string str = text.Substring(0, caretPos) + (char)keyCode;
+			if (caretPos < text.Length)
+			{
+				str += text.Substring(caretPos, text.Length - caretPos);
+			}
+			text = str;
+			caretPos++;
+			setPasswordTest();
+			setOffset(0);
+		}
+		if (kb != null)
+		{
+			kb.text = text;
+		}
+	}
+
+	public static void setMode()
+	{
+		mode++;
+		if (mode > 3)
+		{
+			mode = 0;
+		}
+		lastKey = changeModeKey;
+		timeChangeMode = Environment.TickCount / 1000;
+	}
+
+	private void setDau()
+	{
+		timeDau = Environment.TickCount / 100;
+		if (indexDau == -1)
+		{
+			for (int num = caretPos; num > 0; num--)
+			{
+				char c = text[num - 1];
+				for (int i = 0; i < printDau.Length; i++)
+				{
+					char c2 = printDau[i];
+					if (c == c2)
+					{
+						indexTemplate = i;
+						indexCong = 0;
+						indexDau = num - 1;
+						return;
+					}
+				}
+			}
+			indexDau = -1;
+		}
+		else
+		{
+			indexCong++;
+			if (indexCong >= 6)
+			{
+				indexCong = 0;
+			}
+			string str = text.Substring(0, indexDau);
+			string str2 = text.Substring(indexDau + 1);
+			string str3 = printDau.Substring(indexTemplate + indexCong, 1);
+			text = str + str3 + str2;
+		}
+	}
+
+	public bool keyPressed(int keyCode)
+	{
+		if (Main.isPC && keyCode == -8)
+		{
+			clearKeyWhenPutText(-8);
+			return true;
+		}
+		if (keyCode == 8 || keyCode == -8 || keyCode == 204)
+		{
+			clear();
+			return true;
+		}
+		if (isQwerty && keyCode >= 32)
+		{
+			keyPressedAscii(keyCode);
+			return false;
+		}
+		if (keyCode == changeDau && inputType == INPUT_TYPE_ANY)
+		{
+			setDau();
+			return false;
+		}
+		if (keyCode == 42)
+		{
+			keyCode = 58;
+		}
+		if (keyCode == 35)
+		{
+			keyCode = 59;
+		}
+		if (keyCode >= 48 && keyCode <= 59)
+		{
+			if (inputType == INPUT_TYPE_ANY || inputType == INPUT_TYPE_PASSWORD || inputType == INPUT_ALPHA_NUMBER_ONLY)
+			{
+				keyPressedAny(keyCode);
+			}
+			else if (inputType == INPUT_TYPE_NUMERIC)
+			{
+				keyPressedAscii(keyCode);
+				keyInActiveState = 1;
+			}
+		}
+		else
+		{
+			indexOfActiveChar = 0;
+			lastKey = -1984;
+			if (keyCode == 14 && !lockArrow)
+			{
+				if (caretPos > 0)
+				{
+					caretPos--;
+					setOffset(0);
+					showCaretCounter = MAX_SHOW_CARET_COUNER;
+					return false;
+				}
+			}
+			else if (keyCode == 15 && !lockArrow)
+			{
+				if (caretPos < text.Length)
+				{
+					caretPos++;
+					setOffset(0);
+					showCaretCounter = MAX_SHOW_CARET_COUNER;
+					return false;
+				}
+			}
+			else
+			{
+				if (keyCode == 19)
+				{
+					clear();
+					return false;
+				}
+				lastKey = keyCode;
+			}
+		}
+		return true;
+	}
+
+	public void setOffset(int index)
+	{
+		if (inputType == INPUT_TYPE_PASSWORD)
+		{
+			paintedText = passwordText;
+		}
+		else
+		{
+			paintedText = text;
+		}
+		int num = mFont.tahoma_8b.getWidth(paintedText.Substring(0, caretPos));
+		switch (index)
+		{
+		case -1:
+			if (num + offsetX < 15 && caretPos > 0 && caretPos < paintedText.Length)
+			{
+				offsetX += mFont.tahoma_8b.getWidth(paintedText.Substring(caretPos, 1));
+			}
+			break;
+		case 1:
+			if (num + offsetX > width - 25 && caretPos < paintedText.Length && caretPos > 0)
+			{
+				offsetX -= mFont.tahoma_8b.getWidth(paintedText.Substring(caretPos - 1, 1));
+			}
+			break;
+		default:
+			offsetX = -(num - (width - 12));
+			break;
+		}
+		if (offsetX > 0)
+		{
+			offsetX = 0;
+		}
+		else if (offsetX < 0)
+		{
+			int num2 = mFont.tahoma_8b.getWidth(paintedText) - (width - 12);
+			if (offsetX < -num2)
+			{
+				offsetX = -num2;
+			}
+		}
+	}
+
+	public void paintInputTf(mGraphics g, bool iss, int x, int y, int w, int h, int xText, int yText, string text, string info)
+	{
+		g.setColor(0);
+		if (iss)
+		{
+			g.drawRegion(imgTf, 0, 81, 29, 27, 0, x, y, 0);
+			g.drawRegion(imgTf, 0, 135, 29, 27, 0, x + w - 29, y, 0);
+			g.drawRegion(imgTf, 0, 108, 29, 27, 0, x + w - 58, y, 0);
+			for (int i = 0; i < (w - 58) / 29; i++)
+			{
+				g.drawRegion(imgTf, 0, 108, 29, 27, 0, x + 29 + i * 29, y, 0);
+			}
+		}
+		else
+		{
+			g.drawRegion(imgTf, 0, 0, 29, 27, 0, x, y, 0);
+			g.drawRegion(imgTf, 0, 54, 29, 27, 0, x + w - 29, y, 0);
+			g.drawRegion(imgTf, 0, 27, 29, 27, 0, x + w - 58, y, 0);
+			for (int j = 0; j < (w - 58) / 29; j++)
+			{
+				g.drawRegion(imgTf, 0, 27, 29, 27, 0, x + 29 + j * 29, y, 0);
+			}
+		}
+		g.setClip(x + 3, y + 1, w - 4, h);
+		if (text != null && !text.Equals(string.Empty))
+		{
+			mFont.tahoma_8b.drawString(g, text, xText, yText, 0);
+		}
+		else if (info != null)
+		{
+			if (iss)
+			{
+				mFont.tahoma_7b_focus.drawString(g, info, xText, yText, 0);
+			}
+			else
+			{
+				mFont.tahoma_7b_unfocus.drawString(g, info, xText, yText, 0);
+			}
+		}
+	}
+
+	public void paint(mGraphics g)
+	{
+		g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
+		bool flag = isFocused();
+		if (inputType == INPUT_TYPE_PASSWORD)
+		{
+			paintedText = passwordText;
+		}
+		else
+		{
+			paintedText = text;
+		}
+		paintInputTf(g, flag, x, y - 1, width, height + 5, TEXT_GAP_X + offsetX + x + 1, y + (height - mFont.tahoma_8b.getHeight()) / 2 + 2, paintedText, name);
+		g.setClip(x + 3, y + 1, width - 4, height - 2);
+		g.setColor(0);
+		if (flag && isPaintMouse && isPaintCarret)
+		{
+			if (keyInActiveState == 0 && (showCaretCounter > 0 || counter / CARET_SHOWING_TIME % 4 == 0))
+			{
+				g.setColor(7999781);
+				g.fillRect(TEXT_GAP_X + 1 + offsetX + x + mFont.tahoma_8b.getWidth(paintedText.Substring(0, caretPos) + "a") - CARET_WIDTH - mFont.tahoma_8b.getWidth("a"), y + (height - CARET_HEIGHT) / 2 + 5, CARET_WIDTH, CARET_HEIGHT);
+			}
+			GameCanvas.resetTrans(g);
+			if (text != null && text.Length > 0 && GameCanvas.isTouch)
+			{
+				g.drawImage(GameCanvas.imgClear, x + width - 13, y + height / 2 + 3, mGraphics.VCENTER | mGraphics.HCENTER);
+			}
+		}
+	}
+
+	private bool isFocused()
+	{
+		return isFocus;
+	}
+
+	public string subString(string str, int index, int indexTo)
+	{
+		if (index >= 0 && indexTo > str.Length - 1)
+		{
+			return str.Substring(index);
+		}
+		if (index < 0 || index > str.Length - 1 || indexTo < 0 || indexTo > str.Length - 1)
+		{
+			return string.Empty;
+		}
+		string text = string.Empty;
+		for (int i = index; i < indexTo; i++)
+		{
+			text += str[i];
+		}
+		return text;
+	}
+
+	private void setPasswordTest()
+	{
+		if (inputType == INPUT_TYPE_PASSWORD)
+		{
+			passwordText = string.Empty;
+			for (int i = 0; i < text.Length; i++)
+			{
+				passwordText += "*";
+			}
+			if (keyInActiveState > 0 && caretPos > 0)
+			{
+				passwordText = passwordText.Substring(0, caretPos - 1) + text[caretPos - 1] + passwordText.Substring(caretPos, passwordText.Length);
+			}
+		}
+	}
+
+	public void update()
+	{
+		isPaintCarret = true;
+		if (Main.isPC)
+		{
+			if (timeDelayKyCode > 0)
+			{
+				timeDelayKyCode--;
+			}
+			if (timeDelayKyCode <= 0)
+			{
+				timeDelayKyCode = 0;
+			}
+		}
+		if (kb != null && currentTField == this)
+		{
+			if (kb.text.Length < 40 && isFocus)
+			{
+				setText(kb.text);
+			}
+			if (kb.done && cmdDoneAction != null)
+			{
+				cmdDoneAction.performAction();
+			}
+		}
+		counter++;
+		if (keyInActiveState > 0)
+		{
+			keyInActiveState--;
+			if (keyInActiveState == 0)
+			{
+				indexOfActiveChar = 0;
+				if (mode == 1 && lastKey != changeModeKey && isFocus)
+				{
+					mode = 0;
+				}
+				lastKey = -1984;
+				setPasswordTest();
+			}
+		}
+		if (showCaretCounter > 0)
+		{
+			showCaretCounter--;
+		}
+		if (GameCanvas.isPointerJustRelease)
+		{
+			setTextBox();
+		}
+		if (indexDau != -1 && Environment.TickCount / 100 - timeDau > 5)
+		{
+			indexDau = -1;
+		}
+	}
+
+	public void setTextBox()
+	{
+		if (GameCanvas.isPointerHoldIn(x + width - 20, y, 40, height))
+		{
+			clearAllText();
+			isFocus = true;
+		}
+		else if (GameCanvas.isPointerHoldIn(x, y, width - 20, height))
+		{
+			setFocusWithKb(isFocus: true);
+		}
+		else
+		{
+			setFocus(isFocus: false);
+		}
+	}
+
+	public void setFocus(bool isFocus)
+	{
+		if (this.isFocus != isFocus)
+		{
+			mode = 0;
+		}
+		lastKey = -1984;
+		timeChangeMode = (int)(DateTime.Now.Ticks / 1000);
+		this.isFocus = isFocus;
+		if (isFocus)
+		{
+			currentTField = this;
+			if (kb != null)
+			{
+				kb.text = currentTField.text;
+			}
+		}
+	}
+
+	public void setFocusWithKb(bool isFocus)
+	{
+		if (this.isFocus != isFocus)
+		{
+			mode = 0;
+		}
+		lastKey = -1984;
+		timeChangeMode = (int)(DateTime.Now.Ticks / 1000);
+		this.isFocus = isFocus;
+		if (isFocus)
+		{
+			currentTField = this;
+		}
+		else if (currentTField == this)
+		{
+			currentTField = null;
+		}
+		if (Thread.CurrentThread.Name == Main.mainThreadName && currentTField != null)
+		{
+			isFocus = true;
+			TouchScreenKeyboard.hideInput = !currentTField.showSubTextField;
+			TouchScreenKeyboardType t = TouchScreenKeyboardType.ASCIICapable;
+			if (inputType == INPUT_TYPE_NUMERIC)
+			{
+				t = TouchScreenKeyboardType.NumberPad;
+			}
+			bool type = false;
+			if (inputType == INPUT_TYPE_PASSWORD)
+			{
+				type = true;
+			}
+			kb = TouchScreenKeyboard.Open(currentTField.text, t, b1: false, b2: false, type, b3: false, currentTField.name);
+			if (kb != null)
+			{
+				kb.text = currentTField.text;
+			}
+			Cout.LogWarning("SHOW KEYBOARD FOR " + currentTField.text);
+		}
+	}
+
+	public string getText()
+	{
+		return text;
+	}
+
+	public void clearKb()
+	{
+		if (kb != null)
+		{
+			kb.text = string.Empty;
+		}
+	}
+
+	public void setText(string text)
+	{
+		if (text != null)
+		{
+			lastKey = -1984;
+			keyInActiveState = 0;
+			indexOfActiveChar = 0;
+			this.text = text;
+			paintedText = text;
+			if (text == string.Empty)
+			{
+				TouchScreenKeyboard.Clear();
+			}
+			setPasswordTest();
+			caretPos = text.Length;
+			setOffset();
+		}
+	}
+
+	public void insertText(string text)
+	{
+		this.text = this.text.Substring(0, caretPos) + text + this.text.Substring(caretPos);
+		setPasswordTest();
+		caretPos += text.Length;
+		setOffset();
+	}
+
+	public int getMaxTextLenght()
+	{
+		return maxTextLenght;
+	}
+
+	public void setMaxTextLenght(int maxTextLenght)
+	{
+		this.maxTextLenght = maxTextLenght;
+	}
+
+	public int getIputType()
+	{
+		return inputType;
+	}
+
+	public void setIputType(int iputType)
+	{
+		inputType = iputType;
+		setMaxTextLenght(500);
+	}
+
+	public void perform(int idAction, object p)
+	{
+		if (idAction == 1000)
+		{
+			clear();
+		}
+	}
 }

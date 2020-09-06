@@ -1,377 +1,402 @@
-﻿using System;
-
-// Token: 0x02000088 RID: 136
 public class Teleport
 {
-	// Token: 0x06000423 RID: 1059 RVA: 0x00022F24 File Offset: 0x00021124
+	public static MyVector vTeleport = new MyVector();
+
+	public int x;
+
+	public int y;
+
+	public int headId;
+
+	public int type;
+
+	public bool isMe;
+
+	public int y2;
+
+	public int id;
+
+	public int dir;
+
+	public int planet;
+
+	public static Image[] maybay = new Image[5];
+
+	public static Image hole;
+
+	public bool isUp;
+
+	public bool isDown;
+
+	private bool createShip;
+
+	public bool paintFire;
+
+	private bool painHead;
+
+	private int tPrepare;
+
+	private int vy = 1;
+
+	private int tFire;
+
+	private int tDelayHole;
+
+	private bool tHole;
+
+	private bool isShock;
+
 	public Teleport(int x, int y, int headId, int dir, int type, bool isMe, int planet)
 	{
 		this.x = x;
 		this.y = 5;
-		this.y2 = y;
+		y2 = y;
 		this.headId = headId;
 		this.type = type;
 		this.isMe = isMe;
 		this.dir = dir;
 		this.planet = planet;
-		this.tPrepare = 0;
-		int i = 0;
-		while (i < 100)
+		tPrepare = 0;
+		int num = 0;
+		while (num < 100)
 		{
-			i++;
-			this.y2 += 12;
-			if (TileMap.tileTypeAt(x, this.y2, 2))
+			num++;
+			y2 += 12;
+			if (TileMap.tileTypeAt(x, y2, 2))
 			{
-				if (this.y2 % 24 != 0)
+				if (y2 % 24 != 0)
 				{
-					this.y2 -= this.y2 % 24;
-					break;
+					y2 -= y2 % 24;
 				}
 				break;
 			}
 		}
-		this.isDown = true;
+		isDown = true;
 		if (this.planet > 2)
 		{
-			this.y2 += 4;
+			y2 += 4;
+			if (maybay[3] == null)
+			{
+				maybay[3] = GameCanvas.loadImage("/mainImage/myTexture2dmaybay4a.png");
+			}
+			if (maybay[4] == null)
+			{
+				maybay[4] = GameCanvas.loadImage("/mainImage/myTexture2dmaybay4b.png");
+			}
+			if (hole == null)
+			{
+				hole = GameCanvas.loadImage("/mainImage/hole.png");
+			}
 		}
-		if (x > GameScr.cmx && x < GameScr.cmx + GameCanvas.w && this.y2 > 100 && !SoundMn.gI().isPlayAirShip() && !SoundMn.gI().isPlayRain())
+		else if (maybay[planet] == null)
 		{
-			this.createShip = true;
+			maybay[planet] = GameCanvas.loadImage("/mainImage/myTexture2dmaybay" + (planet + 1) + ".png");
+		}
+		if (x > GameScr.cmx && x < GameScr.cmx + GameCanvas.w && y2 > 100 && !SoundMn.gI().isPlayAirShip() && !SoundMn.gI().isPlayRain())
+		{
+			createShip = true;
 			SoundMn.gI().airShip();
 		}
 	}
 
-	// Token: 0x06000425 RID: 1061 RVA: 0x000059D2 File Offset: 0x00003BD2
 	public static void addTeleport(Teleport p)
 	{
-		Teleport.vTeleport.addElement(p);
+		vTeleport.addElement(p);
 	}
 
-	// Token: 0x06000426 RID: 1062 RVA: 0x00003584 File Offset: 0x00001784
 	public void paintHole(mGraphics g)
 	{
+		if (planet > 2 && tHole)
+		{
+			g.drawImage(hole, x, y2 + 20, StaticObj.BOTTOM_HCENTER);
+		}
 	}
 
-	// Token: 0x06000427 RID: 1063 RVA: 0x00003584 File Offset: 0x00001784
 	public void paint(mGraphics g)
 	{
-	}
-
-	// Token: 0x06000428 RID: 1064 RVA: 0x00023038 File Offset: 0x00021238
-	public void update()
-	{
-		if (this.isMe)
+		if (Char.isLoadingMap || x < GameScr.cmx || x > GameScr.cmx + GameCanvas.w)
 		{
-			if (this.isMe && this.type == 1 && global::Char.myCharz().isTeleport)
-			{
-				global::Char.myCharz().cx = this.x;
-				global::Char.myCharz().cy = this.y2;
-				global::Char.myCharz().statusMe = 4;
-				GameScr.cmtoX = this.x - GameScr.gW2;
-				GameScr.cmtoY = this.y - GameScr.gH23;
-				GameScr.info1.isUpdate = false;
-				global::Char.myCharz().isTeleport = false;
-				Teleport.vTeleport.removeElement(this);
-			}
-			if (this.isMe && this.type == 0)
-			{
-				global::Char.myCharz().isTeleport = true;
-			}
-			if (this.isMe)
-			{
-				if (this.type == 0)
-				{
-					GameScr.cmtoX = this.x - GameScr.gW2;
-					GameScr.cmtoY = this.y - GameScr.gH23;
-				}
-				if (this.type == 1)
-				{
-					GameScr.info1.isUpdate = true;
-				}
-			}
-			if (this.isMe && this.type == 0)
-			{
-				Controller.isStopReadMessage = false;
-				global::Char.ischangingMap = true;
-				Teleport.vTeleport.removeElement(this);
-			}
 			return;
 		}
-		this.tFire++;
-		if (this.tFire > 3)
+		Part part = GameScr.parts[headId];
+		int num = 0;
+		int num2 = 0;
+		int num3 = 0;
+		if (planet == 0)
 		{
-			this.tFire = 0;
+			num = 15;
+			num2 = 40;
+			num3 = 5;
 		}
-		if (this.isDown)
+		if (planet == 1)
 		{
-			this.paintFire = true;
-			this.painHead = (this.type != 0);
-			if (this.planet < 3)
+			num = 7;
+			num2 = 55;
+			num3 = 20;
+		}
+		if (planet == 2)
+		{
+			num = 18;
+			num2 = 52;
+			num3 = 10;
+		}
+		if (painHead && planet < 3)
+		{
+			SmallImage.drawSmallImage(g, part.pi[Char.CharInfo[0][0][0]].id, x + ((dir != 1) ? (-num) : num), y - num2, (dir != 1) ? 2 : 0, StaticObj.TOP_CENTER);
+		}
+		if (planet < 3)
+		{
+			g.drawRegion(maybay[planet], 0, 0, mGraphics.getImageWidth(maybay[planet]), mGraphics.getImageHeight(maybay[planet]), (dir == 1) ? 2 : 0, x, y, StaticObj.BOTTOM_HCENTER);
+		}
+		else if (isDown)
+		{
+			if (tPrepare > 10)
 			{
-				int num = this.y2 - this.y >> 3;
+				g.drawRegion(maybay[4], 0, 0, mGraphics.getImageWidth(maybay[4]), mGraphics.getImageHeight(maybay[4]), (dir == 1) ? 2 : 0, (dir != 1) ? (x + 11) : (x - 11), y + 2, StaticObj.BOTTOM_HCENTER);
+			}
+			else
+			{
+				g.drawRegion(maybay[3], 0, 0, mGraphics.getImageWidth(maybay[3]), mGraphics.getImageHeight(maybay[3]), (dir == 1) ? 2 : 0, x, y, StaticObj.BOTTOM_HCENTER);
+			}
+		}
+		else if (tPrepare < 20)
+		{
+			g.drawRegion(maybay[4], 0, 0, mGraphics.getImageWidth(maybay[4]), mGraphics.getImageHeight(maybay[4]), (dir == 1) ? 2 : 0, (dir != 1) ? (x + 11) : (x - 11), y + 2, StaticObj.BOTTOM_HCENTER);
+		}
+		else
+		{
+			g.drawRegion(maybay[3], 0, 0, mGraphics.getImageWidth(maybay[3]), mGraphics.getImageHeight(maybay[3]), (dir == 1) ? 2 : 0, x, y, StaticObj.BOTTOM_HCENTER);
+		}
+	}
+
+	public void update()
+	{
+		if (planet > 2 && paintFire && y != -80)
+		{
+			if (isDown && tPrepare == 0)
+			{
+				if (GameCanvas.gameTick % 3 == 0)
+				{
+					ServerEffect.addServerEffect(1, x, y, 1, 0);
+				}
+			}
+			else if (isUp && GameCanvas.gameTick % 3 == 0)
+			{
+				ServerEffect.addServerEffect(1, x, y + 16, 1, 1);
+			}
+		}
+		tFire++;
+		if (tFire > 3)
+		{
+			tFire = 0;
+		}
+		if (isDown)
+		{
+			paintFire = true;
+			painHead = ((type != 0) ? true : false);
+			if (planet < 3)
+			{
+				int num = y2 - y >> 3;
 				if (num < 1)
 				{
 					num = 1;
-					this.paintFire = false;
+					paintFire = false;
 				}
-				this.y += num;
+				y += num;
 			}
 			else
 			{
 				if (GameCanvas.gameTick % 2 == 0)
 				{
-					this.vy++;
+					vy++;
 				}
-				if (this.y2 - this.y < this.vy)
+				if (y2 - y < vy)
 				{
-					this.y = this.y2;
-					this.paintFire = false;
+					y = y2;
+					paintFire = false;
 				}
 				else
 				{
-					this.y += this.vy;
+					y += vy;
 				}
 			}
-			if (this.isMe && this.type == 1 && global::Char.myCharz().isTeleport)
+			if (isMe && type == 1 && Char.myCharz().isTeleport)
 			{
-				global::Char.myCharz().cx = this.x;
-				global::Char.myCharz().cy = this.y - 30;
-				global::Char.myCharz().statusMe = 4;
-				GameScr.cmtoX = this.x - GameScr.gW2;
-				GameScr.cmtoY = this.y - GameScr.gH23;
+				Char.myCharz().cx = x;
+				Char.myCharz().cy = y - 30;
+				Char.myCharz().statusMe = 4;
+				GameScr.cmtoX = x - GameScr.gW2;
+				GameScr.cmtoY = y - GameScr.gH23;
 				GameScr.info1.isUpdate = false;
 			}
-			if (GameScr.findCharInMap(this.id) != null && !this.isMe && this.type == 1 && GameScr.findCharInMap(this.id).isTeleport)
+			if (GameScr.findCharInMap(id) != null && !isMe && type == 1 && GameScr.findCharInMap(id).isTeleport)
 			{
-				GameScr.findCharInMap(this.id).cx = this.x;
-				GameScr.findCharInMap(this.id).cy = this.y - 30;
-				GameScr.findCharInMap(this.id).statusMe = 4;
+				GameScr.findCharInMap(id).cx = x;
+				GameScr.findCharInMap(id).cy = y - 30;
+				GameScr.findCharInMap(id).statusMe = 4;
 			}
-			if (Res.abs(this.y - this.y2) < 50 && TileMap.tileTypeAt(this.x, this.y, 2))
+			if (Res.abs(y - y2) < 50 && TileMap.tileTypeAt(x, y, 2))
 			{
-				this.tHole = true;
-				if (this.planet < 3)
+				tHole = true;
+				if (planet < 3)
 				{
-					if (this.y % 24 != 0)
+					SoundMn.gI().pauseAirShip();
+					if (y % 24 != 0)
 					{
-						this.y -= this.y % 24;
+						y -= y % 24;
 					}
-					this.tPrepare++;
-					if (this.tPrepare > 10)
+					tPrepare++;
+					if (tPrepare > 10)
 					{
-						this.tPrepare = 0;
-						this.isDown = false;
-						this.isUp = true;
-						this.paintFire = false;
+						tPrepare = 0;
+						isDown = false;
+						isUp = true;
+						paintFire = false;
 					}
-					if (this.type == 1)
+					if (type == 1)
 					{
-						if (this.isMe)
+						if (isMe)
 						{
-							global::Char.myCharz().isTeleport = false;
+							Char.myCharz().isTeleport = false;
 						}
-						else if (GameScr.findCharInMap(this.id) != null)
+						else if (GameScr.findCharInMap(id) != null)
 						{
-							GameScr.findCharInMap(this.id).isTeleport = false;
+							GameScr.findCharInMap(id).isTeleport = false;
 						}
-						this.painHead = false;
-						return;
+						painHead = false;
 					}
 				}
 				else
 				{
-					this.y = this.y2;
-					if (!this.isShock)
+					y = y2;
+					if (!isShock)
 					{
+						ServerEffect.addServerEffect(92, x + 4, y + 14, 1, 0);
 						GameScr.shock_scr = 10;
-						this.isShock = true;
+						isShock = true;
 					}
-					this.tPrepare++;
-					if (this.tPrepare > 30)
+					tPrepare++;
+					if (tPrepare > 30)
 					{
-						this.tPrepare = 0;
-						this.isDown = false;
-						this.isUp = true;
-						this.paintFire = false;
+						tPrepare = 0;
+						isDown = false;
+						isUp = true;
+						paintFire = false;
 					}
-					if (this.type == 1)
+					if (type == 1)
 					{
-						if (this.isMe)
+						if (isMe)
 						{
-							global::Char.myCharz().isTeleport = false;
+							Char.myCharz().isTeleport = false;
 						}
-						else if (GameScr.findCharInMap(this.id) != null)
+						else if (GameScr.findCharInMap(id) != null)
 						{
-							GameScr.findCharInMap(this.id).isTeleport = false;
+							GameScr.findCharInMap(id).isTeleport = false;
 						}
-						this.painHead = false;
-						return;
+						painHead = false;
 					}
 				}
 			}
 		}
-		else if (this.isUp)
+		else if (isUp)
 		{
-			this.tPrepare++;
-			if (this.tPrepare > 30)
+			tPrepare++;
+			if (tPrepare > 30)
 			{
-				int num2 = this.y2 + 24 - this.y >> 3;
+				int num2 = y2 + 24 - y >> 3;
 				if (num2 > 30)
 				{
 					num2 = 30;
 				}
-				this.y -= num2;
-				this.paintFire = true;
+				y -= num2;
+				paintFire = true;
 			}
 			else
 			{
-				if (this.tPrepare == 14 && this.createShip)
+				if (tPrepare == 14 && createShip)
 				{
 					SoundMn.gI().resumeAirShip();
 				}
-				if (this.tPrepare > 0 && this.type == 0)
+				if (tPrepare > 0 && type == 0)
 				{
-					if (this.isMe)
+					if (isMe)
 					{
-						global::Char.myCharz().isTeleport = false;
-						if (global::Char.myCharz().statusMe != 14)
+						Char.myCharz().isTeleport = false;
+						if (Char.myCharz().statusMe != 14)
 						{
-							global::Char.myCharz().statusMe = 3;
+							Char.myCharz().statusMe = 3;
 						}
-						global::Char.myCharz().cvy = -3;
+						Char.myCharz().cvy = -3;
 					}
-					else if (GameScr.findCharInMap(this.id) != null)
+					else if (GameScr.findCharInMap(id) != null)
 					{
-						GameScr.findCharInMap(this.id).isTeleport = false;
-						if (GameScr.findCharInMap(this.id).statusMe != 14)
+						GameScr.findCharInMap(id).isTeleport = false;
+						if (GameScr.findCharInMap(id).statusMe != 14)
 						{
-							GameScr.findCharInMap(this.id).statusMe = 3;
+							GameScr.findCharInMap(id).statusMe = 3;
 						}
-						GameScr.findCharInMap(this.id).cvy = -3;
+						GameScr.findCharInMap(id).cvy = -3;
 					}
-					this.painHead = false;
+					painHead = false;
 				}
-				if (this.tPrepare > 12 && this.type == 0)
+				if (tPrepare > 12 && type == 0)
 				{
-					if (this.isMe)
+					if (isMe)
 					{
-						global::Char.myCharz().isTeleport = true;
+						Char.myCharz().isTeleport = true;
 					}
-					else if (GameScr.findCharInMap(this.id) != null)
+					else if (GameScr.findCharInMap(id) != null)
 					{
-						GameScr.findCharInMap(this.id).cx = this.x;
-						GameScr.findCharInMap(this.id).cy = this.y;
-						GameScr.findCharInMap(this.id).isTeleport = true;
+						GameScr.findCharInMap(id).cx = x;
+						GameScr.findCharInMap(id).cy = y;
+						GameScr.findCharInMap(id).isTeleport = true;
 					}
-					this.painHead = true;
+					painHead = true;
 				}
 			}
-			if (this.isMe)
+			if (isMe)
 			{
-				if (this.type == 0)
+				if (type == 0)
 				{
-					GameScr.cmtoX = this.x - GameScr.gW2;
-					GameScr.cmtoY = this.y - GameScr.gH23;
+					GameScr.cmtoX = x - GameScr.gW2;
+					GameScr.cmtoY = y - GameScr.gH23;
 				}
-				if (this.type == 1)
+				if (type == 1)
 				{
 					GameScr.info1.isUpdate = true;
 				}
 			}
-			if (this.y <= -80)
+			if (y <= -80)
 			{
-				if (this.isMe && this.type == 0)
+				if (isMe && type == 0)
 				{
 					Controller.isStopReadMessage = false;
-					global::Char.ischangingMap = true;
+					Char.ischangingMap = true;
 				}
-				if (!this.isMe && GameScr.findCharInMap(this.id) != null && this.type == 0)
+				if (!isMe && GameScr.findCharInMap(id) != null && type == 0)
 				{
-					GameScr.vCharInMap.removeElement(GameScr.findCharInMap(this.id));
+					GameScr.vCharInMap.removeElement(GameScr.findCharInMap(id));
 				}
-				if (this.planet < 3)
+				if (planet < 3)
 				{
-					Teleport.vTeleport.removeElement(this);
-					return;
+					vTeleport.removeElement(this);
 				}
-				this.y = -80;
-				this.tDelayHole++;
-				if (this.tDelayHole > 80)
+				else
 				{
-					this.tDelayHole = 0;
-					Teleport.vTeleport.removeElement(this);
+					y = -80;
+					tDelayHole++;
+					if (tDelayHole > 80)
+					{
+						tDelayHole = 0;
+						vTeleport.removeElement(this);
+					}
 				}
 			}
 		}
+		if (paintFire && planet < 3 && Res.abs(y - y2) <= 50 && GameCanvas.gameTick % 5 == 0)
+		{
+			Effect me = new Effect(19, x, y2 + 20, 2, 1, -1);
+			EffecMn.addEff(me);
+		}
 	}
-
-	// Token: 0x040006EF RID: 1775
-	public static MyVector vTeleport = new MyVector();
-
-	// Token: 0x040006F0 RID: 1776
-	public int x;
-
-	// Token: 0x040006F1 RID: 1777
-	public int y;
-
-	// Token: 0x040006F2 RID: 1778
-	public int headId;
-
-	// Token: 0x040006F3 RID: 1779
-	public int type;
-
-	// Token: 0x040006F4 RID: 1780
-	public bool isMe;
-
-	// Token: 0x040006F5 RID: 1781
-	public int y2;
-
-	// Token: 0x040006F6 RID: 1782
-	public int id;
-
-	// Token: 0x040006F7 RID: 1783
-	public int dir;
-
-	// Token: 0x040006F8 RID: 1784
-	public int planet;
-
-	// Token: 0x040006F9 RID: 1785
-	public static Image[] maybay = new Image[5];
-
-	// Token: 0x040006FA RID: 1786
-	public static Image hole;
-
-	// Token: 0x040006FB RID: 1787
-	public bool isUp;
-
-	// Token: 0x040006FC RID: 1788
-	public bool isDown;
-
-	// Token: 0x040006FD RID: 1789
-	private bool createShip;
-
-	// Token: 0x040006FE RID: 1790
-	public bool paintFire;
-
-	// Token: 0x040006FF RID: 1791
-	private bool painHead;
-
-	// Token: 0x04000700 RID: 1792
-	private int tPrepare;
-
-	// Token: 0x04000701 RID: 1793
-	private int vy = 1;
-
-	// Token: 0x04000702 RID: 1794
-	private int tFire;
-
-	// Token: 0x04000703 RID: 1795
-	private int tDelayHole;
-
-	// Token: 0x04000704 RID: 1796
-	private bool tHole;
-
-	// Token: 0x04000705 RID: 1797
-	private bool isShock;
 }

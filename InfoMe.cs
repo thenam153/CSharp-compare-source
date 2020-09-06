@@ -1,109 +1,159 @@
-﻿using System;
-
-// Token: 0x020000A0 RID: 160
 public class InfoMe
 {
-	// Token: 0x060006EE RID: 1774 RVA: 0x0005C654 File Offset: 0x0005A854
+	public static InfoMe me;
+
+	public int[][] charId = new int[3][];
+
+	public Info info = new Info();
+
+	public int dir;
+
+	public int f;
+
+	public int tF;
+
+	public int cmtoY;
+
+	public int cmy;
+
+	public int cmdy;
+
+	public int cmvy;
+
+	public int cmyLim;
+
+	public int cmtoX;
+
+	public int cmx;
+
+	public int cmdx;
+
+	public int cmvx;
+
+	public int cmxLim;
+
+	public bool isDone;
+
+	public bool isUpdate = true;
+
+	public int timeDelay;
+
+	public int playerID;
+
+	public int timeCount;
+
+	public Command cmdChat;
+
+	public bool isShow;
+
 	public InfoMe()
 	{
-		for (int i = 0; i < this.charId.Length; i++)
+		for (int i = 0; i < charId.Length; i++)
 		{
-			this.charId[i] = new int[3];
+			charId[i] = new int[3];
 		}
 	}
 
-	// Token: 0x060006EF RID: 1775 RVA: 0x000067BE File Offset: 0x000049BE
 	public static InfoMe gI()
 	{
-		if (InfoMe.me == null)
+		if (me == null)
 		{
-			InfoMe.me = new InfoMe();
+			me = new InfoMe();
 		}
-		return InfoMe.me;
+		return me;
 	}
 
-	// Token: 0x060006F0 RID: 1776 RVA: 0x0005C6A8 File Offset: 0x0005A8A8
 	public void loadCharId()
 	{
-		for (int i = 0; i < this.charId.Length; i++)
+		for (int i = 0; i < charId.Length; i++)
 		{
-			this.charId[i] = new int[3];
+			charId[i] = new int[3];
 		}
 	}
 
-	// Token: 0x060006F1 RID: 1777 RVA: 0x00003584 File Offset: 0x00001784
 	public void paint(mGraphics g)
 	{
+		if ((Equals(GameScr.info2) && GameScr.gI().isVS()) || (Equals(GameScr.info2) && GameScr.gI().popUpYesNo != null) || !GameScr.isPaint || GameCanvas.currentScreen != GameScr.gI() || ChatPopup.serverChatPopUp != null || !isUpdate || Char.ischangingMap || (GameCanvas.panel.isShow && Equals(GameScr.info2)))
+		{
+			return;
+		}
+		g.translate(-g.getTranslateX(), -g.getTranslateY());
+		g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
+		if (info != null)
+		{
+			info.paint(g, cmx, cmy, dir);
+			if (info.info == null || info.info.charInfo == null || cmdChat != null || !GameCanvas.isTouch)
+			{
+			}
+			if (info.info != null && info.info.charInfo != null && cmdChat == null)
+			{
+			}
+		}
+		if (info.info != null && info.info.charInfo == null && charId != null)
+		{
+			SmallImage.drawSmallImage(g, charId[Char.myCharz().cgender][f], cmx, cmy + 3 + ((GameCanvas.gameTick % 10 > 5) ? 1 : 0), (dir != 1) ? 2 : 0, StaticObj.VCENTER_HCENTER);
+		}
+		g.translate(-g.getTranslateX(), -g.getTranslateY());
 	}
 
-	// Token: 0x060006F2 RID: 1778 RVA: 0x000067D6 File Offset: 0x000049D6
 	public void hide()
 	{
-		this.info.hide();
+		info.hide();
 	}
 
-	// Token: 0x060006F3 RID: 1779 RVA: 0x0005C6D8 File Offset: 0x0005A8D8
 	public void moveCamera()
 	{
-		if (this.cmy != this.cmtoY)
+		if (cmy != cmtoY)
 		{
-			this.cmvy = this.cmtoY - this.cmy << 2;
-			this.cmdy += this.cmvy;
-			this.cmy += this.cmdy >> 4;
-			this.cmdy &= 15;
+			cmvy = cmtoY - cmy << 2;
+			cmdy += cmvy;
+			cmy += cmdy >> 4;
+			cmdy &= 15;
 		}
-		if (this.cmx != this.cmtoX)
+		if (cmx != cmtoX)
 		{
-			this.cmvx = this.cmtoX - this.cmx << 2;
-			this.cmdx += this.cmvx;
-			this.cmx += this.cmdx >> 4;
-			this.cmdx &= 15;
+			cmvx = cmtoX - cmx << 2;
+			cmdx += cmvx;
+			cmx += cmdx >> 4;
+			cmdx &= 15;
 		}
-		this.tF++;
-		if (this.tF == 5)
+		tF++;
+		if (tF == 5)
 		{
-			this.tF = 0;
-			if (this.f == 0)
+			tF = 0;
+			if (f == 0)
 			{
-				this.f = 1;
-				return;
+				f = 1;
 			}
-			this.f = 0;
+			else
+			{
+				f = 0;
+			}
 		}
 	}
 
-	// Token: 0x060006F4 RID: 1780 RVA: 0x000067E3 File Offset: 0x000049E3
 	public void doClick(int t)
 	{
-		this.timeDelay = t;
+		timeDelay = t;
 	}
 
-	// Token: 0x060006F5 RID: 1781 RVA: 0x0005C7D0 File Offset: 0x0005A9D0
 	public void update()
 	{
-		if (this.Equals(GameScr.info2) && GameScr.gI().popUpYesNo != null)
+		if ((Equals(GameScr.info2) && GameScr.gI().popUpYesNo != null) || !isUpdate)
 		{
 			return;
 		}
-		if (!this.isUpdate)
+		moveCamera();
+		if (info == null || (info != null && info.info == null))
 		{
 			return;
 		}
-		this.moveCamera();
-		if (this.info == null)
+		if (!isDone)
 		{
-			return;
-		}
-		if (this.info != null && this.info.info == null)
-		{
-			return;
-		}
-		if (!this.isDone)
-		{
-			if (this.timeDelay > 0)
+			if (timeDelay > 0)
 			{
-				this.timeDelay--;
-				if (this.timeDelay == 0)
+				timeDelay--;
+				if (timeDelay == 0)
 				{
 					GameCanvas.panel.setTypeMessage();
 					GameCanvas.panel.show();
@@ -111,215 +161,164 @@ public class InfoMe
 			}
 			if (GameCanvas.gameTick % 3 == 0)
 			{
-				if (global::Char.myCharz().cdir == 1)
+				if (Char.myCharz().cdir == 1)
 				{
-					this.cmtoX = global::Char.myCharz().cx - 20 - GameScr.cmx;
+					cmtoX = Char.myCharz().cx - 20 - GameScr.cmx;
 				}
-				if (global::Char.myCharz().cdir == -1)
+				if (Char.myCharz().cdir == -1)
 				{
-					this.cmtoX = global::Char.myCharz().cx + 20 - GameScr.cmx;
+					cmtoX = Char.myCharz().cx + 20 - GameScr.cmx;
 				}
-				if (this.cmtoX <= 24)
+				if (cmtoX <= 24)
 				{
-					this.cmtoX += this.info.sayWidth / 2;
+					cmtoX += info.sayWidth / 2;
 				}
-				if (this.cmtoX >= GameCanvas.w - 24)
+				if (cmtoX >= GameCanvas.w - 24)
 				{
-					this.cmtoX -= this.info.sayWidth / 2;
+					cmtoX -= info.sayWidth / 2;
 				}
-				this.cmtoY = global::Char.myCharz().cy - 40 - GameScr.cmy;
-				if (this.info.says != null && this.cmtoY < (this.info.says.Length + 1) * 12 + 10)
+				cmtoY = Char.myCharz().cy - 40 - GameScr.cmy;
+				if (info.says != null && cmtoY < (info.says.Length + 1) * 12 + 10)
 				{
-					this.cmtoY = (this.info.says.Length + 1) * 12 + 10;
+					cmtoY = (info.says.Length + 1) * 12 + 10;
 				}
-				if (this.info.info.charInfo != null)
+				if (info.info.charInfo != null)
 				{
-					if (GameCanvas.w - 50 > 155 + this.info.W)
+					if (GameCanvas.w - 50 > 155 + info.W)
 					{
-						this.cmtoX = GameCanvas.w - 60 - this.info.W / 2;
-						this.cmtoY = this.info.H + 10;
+						cmtoX = GameCanvas.w - 60 - info.W / 2;
+						cmtoY = info.H + 10;
 					}
 					else
 					{
-						this.cmtoX = GameCanvas.w - 20 - this.info.W / 2;
-						this.cmtoY = 45 + this.info.H;
+						cmtoX = GameCanvas.w - 20 - info.W / 2;
+						cmtoY = 45 + info.H;
 						if (GameCanvas.w > GameCanvas.h || GameCanvas.w < 220)
 						{
-							this.cmtoX = GameCanvas.w - 20 - this.info.W / 2;
-							this.cmtoY = this.info.H + 10;
+							cmtoX = GameCanvas.w - 20 - info.W / 2;
+							cmtoY = info.H + 10;
 						}
 					}
 				}
 			}
-			if (this.cmx > global::Char.myCharz().cx - GameScr.cmx)
+			if (cmx > Char.myCharz().cx - GameScr.cmx)
 			{
-				this.dir = -1;
+				dir = -1;
 			}
 			else
 			{
-				this.dir = 1;
+				dir = 1;
 			}
 		}
-		if (this.info.info != null)
+		if (info.info == null)
 		{
-			if (this.info.infoWaitToShow.size() > 1)
+			return;
+		}
+		if (info.infoWaitToShow.size() > 1)
+		{
+			if (info.info.timeCount == 0)
 			{
-				if (this.info.info.timeCount == 0)
+				info.time++;
+				if (info.time >= info.info.speed)
 				{
-					this.info.time++;
-					if (this.info.time >= this.info.info.speed)
-					{
-						this.info.time = 0;
-						this.info.infoWaitToShow.removeElementAt(0);
-						InfoItem infoItem = (InfoItem)this.info.infoWaitToShow.firstElement();
-						this.info.info = infoItem;
-						this.info.getInfo();
-						return;
-					}
+					info.time = 0;
+					info.infoWaitToShow.removeElementAt(0);
+					InfoItem infoItem = (InfoItem)info.infoWaitToShow.firstElement();
+					info.info = infoItem;
+					info.getInfo();
 				}
-				else
+				return;
+			}
+			info.info.curr = mSystem.currentTimeMillis();
+			if (info.info.curr - info.info.last >= 100)
+			{
+				info.info.last = mSystem.currentTimeMillis();
+				info.info.timeCount--;
+			}
+			if (info.info.timeCount == 0)
+			{
+				info.infoWaitToShow.removeElementAt(0);
+				if (info.infoWaitToShow.size() != 0)
 				{
-					this.info.info.curr = mSystem.currentTimeMillis();
-					if (this.info.info.curr - this.info.info.last >= 100L)
-					{
-						this.info.info.last = mSystem.currentTimeMillis();
-						this.info.info.timeCount--;
-					}
-					if (this.info.info.timeCount == 0)
-					{
-						this.info.infoWaitToShow.removeElementAt(0);
-						if (this.info.infoWaitToShow.size() == 0)
-						{
-							return;
-						}
-						InfoItem infoItem2 = (InfoItem)this.info.infoWaitToShow.firstElement();
-						this.info.info = infoItem2;
-						this.info.getInfo();
-						return;
-					}
+					InfoItem infoItem2 = (InfoItem)info.infoWaitToShow.firstElement();
+					info.info = infoItem2;
+					info.getInfo();
 				}
 			}
-			else if (this.info.infoWaitToShow.size() == 1)
+		}
+		else
+		{
+			if (info.infoWaitToShow.size() != 1)
 			{
-				if (this.info.info.timeCount == 0)
+				return;
+			}
+			if (info.info.timeCount == 0)
+			{
+				info.time++;
+				if (info.time >= info.info.speed)
 				{
-					this.info.time++;
-					if (this.info.time >= this.info.info.speed)
-					{
-						this.isDone = true;
-					}
-					if (this.info.time == this.info.info.speed)
-					{
-						this.cmtoY = -40;
-						this.cmtoX = global::Char.myCharz().cx - GameScr.cmx + ((global::Char.myCharz().cdir != 1) ? 20 : -20);
-					}
-					if (this.info.time >= this.info.info.speed + 20)
-					{
-						this.info.time = 0;
-						this.info.infoWaitToShow.removeAllElements();
-						this.info.says = null;
-						return;
-					}
+					isDone = true;
 				}
-				else
+				if (info.time == info.info.speed)
 				{
-					this.info.info.curr = mSystem.currentTimeMillis();
-					if (this.info.info.curr - this.info.info.last >= 100L)
-					{
-						this.info.info.last = mSystem.currentTimeMillis();
-						this.info.info.timeCount--;
-					}
-					if (this.info.info.timeCount == 0)
-					{
-						this.isDone = true;
-						this.cmtoY = -40;
-						this.cmtoX = global::Char.myCharz().cx - GameScr.cmx + ((global::Char.myCharz().cdir != 1) ? 20 : -20);
-						this.info.time = 0;
-						this.info.infoWaitToShow.removeAllElements();
-						this.info.says = null;
-						this.cmdChat = null;
-					}
+					cmtoY = -40;
+					cmtoX = Char.myCharz().cx - GameScr.cmx + ((Char.myCharz().cdir != 1) ? 20 : (-20));
 				}
+				if (info.time >= info.info.speed + 20)
+				{
+					info.time = 0;
+					info.infoWaitToShow.removeAllElements();
+					info.says = null;
+				}
+				return;
+			}
+			info.info.curr = mSystem.currentTimeMillis();
+			if (info.info.curr - info.info.last >= 100)
+			{
+				info.info.last = mSystem.currentTimeMillis();
+				info.info.timeCount--;
+			}
+			if (info.info.timeCount == 0)
+			{
+				isDone = true;
+				cmtoY = -40;
+				cmtoX = Char.myCharz().cx - GameScr.cmx + ((Char.myCharz().cdir != 1) ? 20 : (-20));
+				info.time = 0;
+				info.infoWaitToShow.removeAllElements();
+				info.says = null;
+				cmdChat = null;
 			}
 		}
 	}
 
-	// Token: 0x060006F6 RID: 1782 RVA: 0x00003584 File Offset: 0x00001784
-	public void addInfoWithChar(string s, global::Char c, bool isChatServer)
+	public void addInfoWithChar(string s, Char c, bool isChatServer)
 	{
+		playerID = c.charID;
+		info.addInfo(s, 3, c, isChatServer);
+		isDone = false;
 	}
 
-	// Token: 0x060006F7 RID: 1783 RVA: 0x00003584 File Offset: 0x00001784
 	public void addInfo(string s, int Type)
 	{
+		s = Res.changeString(s);
+		if (info.infoWaitToShow.size() > 0 && s.Equals(((InfoItem)info.infoWaitToShow.lastElement()).s))
+		{
+			return;
+		}
+		if (info.infoWaitToShow.size() > 10)
+		{
+			for (int i = 0; i < 5; i++)
+			{
+				info.infoWaitToShow.removeElementAt(0);
+			}
+		}
+		Char cInfo = null;
+		info.addInfo(s, Type, cInfo, isChatServer: false);
+		if (info.infoWaitToShow.size() == 1)
+		{
+			cmy = 0;
+			cmx = Char.myCharz().cx - GameScr.cmx + ((Char.myCharz().cdir != 1) ? 20 : (-20));
+		}
+		isDone = false;
 	}
-
-	// Token: 0x04000CF5 RID: 3317
-	public static InfoMe me;
-
-	// Token: 0x04000CF6 RID: 3318
-	public int[][] charId = new int[3][];
-
-	// Token: 0x04000CF7 RID: 3319
-	public Info info = new Info();
-
-	// Token: 0x04000CF8 RID: 3320
-	public int dir;
-
-	// Token: 0x04000CF9 RID: 3321
-	public int f;
-
-	// Token: 0x04000CFA RID: 3322
-	public int tF;
-
-	// Token: 0x04000CFB RID: 3323
-	public int cmtoY;
-
-	// Token: 0x04000CFC RID: 3324
-	public int cmy;
-
-	// Token: 0x04000CFD RID: 3325
-	public int cmdy;
-
-	// Token: 0x04000CFE RID: 3326
-	public int cmvy;
-
-	// Token: 0x04000CFF RID: 3327
-	public int cmyLim;
-
-	// Token: 0x04000D00 RID: 3328
-	public int cmtoX;
-
-	// Token: 0x04000D01 RID: 3329
-	public int cmx;
-
-	// Token: 0x04000D02 RID: 3330
-	public int cmdx;
-
-	// Token: 0x04000D03 RID: 3331
-	public int cmvx;
-
-	// Token: 0x04000D04 RID: 3332
-	public int cmxLim;
-
-	// Token: 0x04000D05 RID: 3333
-	public bool isDone;
-
-	// Token: 0x04000D06 RID: 3334
-	public bool isUpdate = true;
-
-	// Token: 0x04000D07 RID: 3335
-	public int timeDelay;
-
-	// Token: 0x04000D08 RID: 3336
-	public int playerID;
-
-	// Token: 0x04000D09 RID: 3337
-	public int timeCount;
-
-	// Token: 0x04000D0A RID: 3338
-	public Command cmdChat;
-
-	// Token: 0x04000D0B RID: 3339
-	public bool isShow;
 }

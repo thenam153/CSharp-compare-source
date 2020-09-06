@@ -1,78 +1,403 @@
-﻿using System;
-using System.IO;
-using System.Threading;
 using Assets.src.g;
+using System;
+using System.Threading;
 using UnityEngine;
 
-// Token: 0x020000B7 RID: 183
 public class GameCanvas : IActionListener
 {
-	// Token: 0x060008DD RID: 2269 RVA: 0x0008022C File Offset: 0x0007E42C
+	public static long timeNow;
+
+	public static bool open3Hour;
+
+	public static bool lowGraphic;
+
+	public static bool isMoveNumberPad;
+
+	public static bool isLoading;
+
+	public static bool isTouch;
+
+	public static bool isTouchControl;
+
+	public static bool isTouchControlSmallScreen;
+
+	public static bool isTouchControlLargeScreen;
+
+	public static bool isConnectFail;
+
+	public static GameCanvas instance;
+
+	public static bool bRun;
+
+	public static bool[] keyPressed;
+
+	public static bool[] keyReleased;
+
+	public static bool[] keyHold;
+
+	public static bool isPointerDown;
+
+	public static bool isPointerClick;
+
+	public static bool isPointerJustRelease;
+
+	public static int px;
+
+	public static int py;
+
+	public static int pxFirst;
+
+	public static int pyFirst;
+
+	public static int pxLast;
+
+	public static int pyLast;
+
+	public static int pxMouse;
+
+	public static int pyMouse;
+
+	public static Position[] arrPos;
+
+	public static int gameTick;
+
+	public static int taskTick;
+
+	public static bool isEff1;
+
+	public static bool isEff2;
+
+	public static long timeTickEff1;
+
+	public static long timeTickEff2;
+
+	public static int w;
+
+	public static int h;
+
+	public static int hw;
+
+	public static int hh;
+
+	public static int wd3;
+
+	public static int hd3;
+
+	public static int w2d3;
+
+	public static int h2d3;
+
+	public static int w3d4;
+
+	public static int h3d4;
+
+	public static int wd6;
+
+	public static int hd6;
+
+	public static mScreen currentScreen;
+
+	public static Menu menu;
+
+	public static Panel panel;
+
+	public static Panel panel2;
+
+	public static LoginScr loginScr;
+
+	public static RegisterScreen registerScr;
+
+	public static Dialog currentDialog;
+
+	public static MsgDlg msgdlg;
+
+	public static InputDlg inputDlg;
+
+	public static MyVector currentPopup;
+
+	public static int requestLoseCount;
+
+	public static MyVector listPoint;
+
+	public static Paint paintz;
+
+	public static bool isGetResFromServer;
+
+	public static Image[] imgBG;
+
+	public static int skyColor;
+
+	public static int curPos;
+
+	public static int[] bgW;
+
+	public static int[] bgH;
+
+	public static int planet;
+
+	private mGraphics g = new mGraphics();
+
+	public static Image img12;
+
+	public static Image[] imgBlue;
+
+	public static Image[] imgViolet;
+
+	public static bool isPlaySound;
+
+	private static int clearOldData;
+
+	public static int timeOpenKeyBoard;
+
+	public static bool isFocusPanel2;
+
+	public bool isPaintCarret;
+
+	public static MyVector debugUpdate;
+
+	public static MyVector debugPaint;
+
+	public static MyVector debugSession;
+
+	private static bool isShowErrorForm;
+
+	public static bool paintBG;
+
+	public static int gsskyHeight;
+
+	public static int gsgreenField1Y;
+
+	public static int gsgreenField2Y;
+
+	public static int gshouseY;
+
+	public static int gsmountainY;
+
+	public static int bgLayer0y;
+
+	public static int bgLayer1y;
+
+	public static Image imgCloud;
+
+	public static Image imgSun;
+
+	public static Image imgSun2;
+
+	public static Image imgClear;
+
+	public static Image[] imgBorder;
+
+	public static int borderConnerW;
+
+	public static int borderConnerH;
+
+	public static int borderCenterW;
+
+	public static int borderCenterH;
+
+	public static int[] cloudX;
+
+	public static int[] cloudY;
+
+	public static int sunX;
+
+	public static int sunY;
+
+	public static int sunX2;
+
+	public static int sunY2;
+
+	public static int[] layerSpeed;
+
+	public static int[] moveX;
+
+	public static int[] moveXSpeed;
+
+	public static bool isBoltEff;
+
+	public static bool boltActive;
+
+	public static int tBolt;
+
+	public static int typeBg;
+
+	public static int transY;
+
+	public static int[] yb;
+
+	public static int[] colorTop;
+
+	public static int[] colorBotton;
+
+	public static int yb1;
+
+	public static int yb2;
+
+	public static int yb3;
+
+	public static int nBg;
+
+	public static int lastBg;
+
+	public static int[] bgRain;
+
+	public static int[] bgRainFont;
+
+	public static Image imgCaycot;
+
+	public static Image tam;
+
+	public static int typeBackGround;
+
+	public static int saveIDBg;
+
+	public static bool isLoadBGok;
+
+	private static long lastTimePress;
+
+	public static int keyAsciiPress;
+
+	public static int pXYScrollMouse;
+
+	private static Image imgSignal;
+
+	public static MyVector flyTexts;
+
+	public int longTime;
+
+	public static bool isPointerJustDown;
+
+	private int count = 1;
+
+	public static bool csWait;
+
+	public static MyRandom r;
+
+	public static bool isBlackScreen;
+
+	public static int[] bgSpeed;
+
+	public static int cmdBarX;
+
+	public static int cmdBarY;
+
+	public static int cmdBarW;
+
+	public static int cmdBarH;
+
+	public static int cmdBarLeftW;
+
+	public static int cmdBarRightW;
+
+	public static int cmdBarCenterW;
+
+	public static int hpBarX;
+
+	public static int hpBarY;
+
+	public static int hpBarW;
+
+	public static int expBarW;
+
+	public static int lvPosX;
+
+	public static int moneyPosX;
+
+	public static int hpBarH;
+
+	public static int girlHPBarY;
+
+	public int timeOut;
+
+	public int[] dustX;
+
+	public int[] dustY;
+
+	public int[] dustState;
+
+	public static int[] wsX;
+
+	public static int[] wsY;
+
+	public static int[] wsState;
+
+	public static int[] wsF;
+
+	public static Image[] imgWS;
+
+	public static Image imgShuriken;
+
+	public static Image[][] imgDust;
+
+	public static bool isResume;
+
+	public static ServerListScreen serverScreen;
+
+	public bool resetToLoginScr;
+
 	public GameCanvas()
 	{
-		this.g = new mGraphics();
-		this.count = 1;
-		int num = Rms.loadRMSInt("languageVersion");
-		if (num == -1)
+		switch (Rms.loadRMSInt("languageVersion"))
 		{
+		case -1:
 			Rms.saveRMSInt("languageVersion", 2);
-		}
-		else if (num != 2)
-		{
+			break;
+		default:
 			Main.main.doClearRMS();
 			Rms.saveRMSInt("languageVersion", 2);
+			break;
+		case 2:
+			break;
 		}
-		GameCanvas.clearOldData = Rms.loadRMSInt(GameMidlet.VERSION);
-		if (GameCanvas.clearOldData != 1)
+		clearOldData = Rms.loadRMSInt(GameMidlet.VERSION);
+		if (clearOldData != 1)
 		{
 			Main.main.doClearRMS();
 			Rms.saveRMSInt(GameMidlet.VERSION, 1);
 		}
-		this.initGame();
+		initGame();
 	}
 
-	// Token: 0x060008DF RID: 2271 RVA: 0x00007360 File Offset: 0x00005560
 	public static string getPlatformName()
 	{
-		return "iphone platform xxx";
+		return "Pc platform xxx";
 	}
 
-	// Token: 0x060008E0 RID: 2272 RVA: 0x000803C4 File Offset: 0x0007E5C4
 	public void initGame()
 	{
 		MotherCanvas.instance.setChildCanvas(this);
-		GameCanvas.w = MotherCanvas.instance.getWidthz();
-		GameCanvas.h = MotherCanvas.instance.getHeightz();
-		GameCanvas.hw = GameCanvas.w / 2;
-		GameCanvas.hh = GameCanvas.h / 2;
-		GameCanvas.isTouch = true;
-		if (GameCanvas.w >= 240)
+		w = MotherCanvas.instance.getWidthz();
+		h = MotherCanvas.instance.getHeightz();
+		hw = w / 2;
+		hh = h / 2;
+		isTouch = true;
+		if (w >= 240)
 		{
-			GameCanvas.isTouchControl = true;
+			isTouchControl = true;
 		}
-		if (GameCanvas.w < 320)
+		if (w < 320)
 		{
-			GameCanvas.isTouchControlSmallScreen = true;
+			isTouchControlSmallScreen = true;
 		}
-		if (GameCanvas.w >= 320)
+		if (w >= 320)
 		{
-			GameCanvas.isTouchControlLargeScreen = true;
+			isTouchControlLargeScreen = true;
 		}
-		GameCanvas.msgdlg = new MsgDlg();
-		if (GameCanvas.h <= 160)
+		msgdlg = new MsgDlg();
+		if (h <= 160)
 		{
 			Paint.hTab = 15;
 			mScreen.cmdH = 17;
 		}
-		GameScr.d = ((GameCanvas.w <= GameCanvas.h) ? GameCanvas.h : GameCanvas.w) + 20;
-		GameCanvas.instance = this;
+		GameScr.d = ((w <= h) ? h : w) + 20;
+		instance = this;
 		mFont.init();
 		mScreen.ITEM_HEIGHT = mFont.tahoma_8b.getHeight() + 8;
-		this.initPaint();
-		this.loadDust();
-		this.loadWaterSplash();
-		GameCanvas.panel = new Panel();
-		GameCanvas.imgShuriken = GameCanvas.loadImage("/mainImage/myTexture2df.png");
+		initPaint();
+		loadDust();
+		loadWaterSplash();
+		panel = new Panel();
+		imgShuriken = loadImage("/mainImage/myTexture2df.png");
 		int num = Rms.loadRMSInt("clienttype");
 		if (num != -1)
 		{
@@ -87,82 +412,78 @@ public class GameCanvas : IActionListener
 		}
 		if (mSystem.clientType == 7 && (Rms.loadRMSString("fake") == null || Rms.loadRMSString("fake") == string.Empty))
 		{
-			GameCanvas.imgShuriken = GameCanvas.loadImage("/mainImage/wait.png");
+			imgShuriken = loadImage("/mainImage/wait.png");
 		}
-		GameCanvas.imgClear = GameCanvas.loadImage("/mainImage/myTexture2der.png");
-		GameCanvas.img12 = GameCanvas.loadImage("/mainImage/12+.png");
-		GameCanvas.debugUpdate = new MyVector();
-		GameCanvas.debugPaint = new MyVector();
-		GameCanvas.debugSession = new MyVector();
+		imgClear = loadImage("/mainImage/myTexture2der.png");
+		img12 = loadImage("/mainImage/12+.png");
+		debugUpdate = new MyVector();
+		debugPaint = new MyVector();
+		debugSession = new MyVector();
 		for (int i = 0; i < 3; i++)
 		{
-			GameCanvas.imgBorder[i] = GameCanvas.loadImage("/mainImage/myTexture2dbd" + i + ".png");
+			imgBorder[i] = loadImage("/mainImage/myTexture2dbd" + i + ".png");
 		}
-		GameCanvas.borderConnerW = mGraphics.getImageWidth(GameCanvas.imgBorder[0]);
-		GameCanvas.borderConnerH = mGraphics.getImageHeight(GameCanvas.imgBorder[0]);
-		GameCanvas.borderCenterW = mGraphics.getImageWidth(GameCanvas.imgBorder[1]);
-		GameCanvas.borderCenterH = mGraphics.getImageHeight(GameCanvas.imgBorder[1]);
-		Panel.graphics = 1;
-		GameCanvas.lowGraphic = true;
-		GameScr.isPaintChatVip = (Rms.loadRMSInt("serverchat") != 1);
+		borderConnerW = mGraphics.getImageWidth(imgBorder[0]);
+		borderConnerH = mGraphics.getImageHeight(imgBorder[0]);
+		borderCenterW = mGraphics.getImageWidth(imgBorder[1]);
+		borderCenterH = mGraphics.getImageHeight(imgBorder[1]);
+		Panel.graphics = Rms.loadRMSInt("lowGraphic");
+		lowGraphic = ((Rms.loadRMSInt("lowGraphic") == 1) ? true : false);
+		GameScr.isPaintChatVip = ((Rms.loadRMSInt("serverchat") != 1) ? true : false);
 		Res.init();
 		SmallImage.loadBigImage();
 		Panel.WIDTH_PANEL = 176;
-		if (Panel.WIDTH_PANEL > GameCanvas.w)
+		if (Panel.WIDTH_PANEL > w)
 		{
-			Panel.WIDTH_PANEL = GameCanvas.w;
+			Panel.WIDTH_PANEL = w;
 		}
 		InfoMe.gI().loadCharId();
-		Command.btn0left = GameCanvas.loadImage("/mainImage/btn0left.png");
-		Command.btn0mid = GameCanvas.loadImage("/mainImage/btn0mid.png");
-		Command.btn0right = GameCanvas.loadImage("/mainImage/btn0right.png");
-		Command.btn1left = GameCanvas.loadImage("/mainImage/btn1left.png");
-		Command.btn1mid = GameCanvas.loadImage("/mainImage/btn1mid.png");
-		Command.btn1right = GameCanvas.loadImage("/mainImage/btn1right.png");
-		GameCanvas.serverScreen = new ServerListScreen();
-		GameCanvas.img12 = GameCanvas.loadImage("/mainImage/12+.png");
+		Command.btn0left = loadImage("/mainImage/btn0left.png");
+		Command.btn0mid = loadImage("/mainImage/btn0mid.png");
+		Command.btn0right = loadImage("/mainImage/btn0right.png");
+		Command.btn1left = loadImage("/mainImage/btn1left.png");
+		Command.btn1mid = loadImage("/mainImage/btn1mid.png");
+		Command.btn1right = loadImage("/mainImage/btn1right.png");
+		serverScreen = new ServerListScreen();
+		img12 = loadImage("/mainImage/12+.png");
 		for (int j = 0; j < 7; j++)
 		{
-			GameCanvas.imgBlue[j] = GameCanvas.loadImage("/effectdata/blue/" + j + ".png");
-			GameCanvas.imgViolet[j] = GameCanvas.loadImage("/effectdata/violet/" + j + ".png");
+			imgBlue[j] = loadImage("/effectdata/blue/" + j + ".png");
+			imgViolet[j] = loadImage("/effectdata/violet/" + j + ".png");
 		}
 		ServerListScreen.createDeleteRMS();
 	}
 
-	// Token: 0x060008E1 RID: 2273 RVA: 0x00007367 File Offset: 0x00005567
 	public static GameCanvas gI()
 	{
-		return GameCanvas.instance;
+		return instance;
 	}
 
-	// Token: 0x060008E2 RID: 2274 RVA: 0x0000736E File Offset: 0x0000556E
 	public void initPaint()
 	{
-		GameCanvas.paintz = new Paint();
+		paintz = new Paint();
 	}
 
-	// Token: 0x060008E3 RID: 2275 RVA: 0x0000737A File Offset: 0x0000557A
 	public static void closeKeyBoard()
 	{
 		mGraphics.addYWhenOpenKeyBoard = 0;
-		GameCanvas.timeOpenKeyBoard = 0;
+		timeOpenKeyBoard = 0;
 		Main.closeKeyBoard();
 	}
 
-	// Token: 0x060008E4 RID: 2276 RVA: 0x00080704 File Offset: 0x0007E904
 	public void update()
 	{
-		if (GameCanvas.gameTick % 5 == 0)
+		if (gameTick % 5 == 0)
 		{
-			GameCanvas.timeNow = mSystem.currentTimeMillis();
+			timeNow = mSystem.currentTimeMillis();
 		}
 		Res.updateOnScreenDebug();
 		try
 		{
-			if (global::TouchScreenKeyboard.visible)
+			if (TouchScreenKeyboard.visible)
 			{
-				GameCanvas.timeOpenKeyBoard++;
-				if (GameCanvas.timeOpenKeyBoard > ((!Main.isWindowsPhone) ? 10 : 5))
+				timeOpenKeyBoard++;
+				if (timeOpenKeyBoard > ((!Main.isWindowsPhone) ? 10 : 5))
 				{
 					mGraphics.addYWhenOpenKeyBoard = 94;
 				}
@@ -170,99 +491,43 @@ public class GameCanvas : IActionListener
 			else
 			{
 				mGraphics.addYWhenOpenKeyBoard = 0;
-				GameCanvas.timeOpenKeyBoard = 0;
+				timeOpenKeyBoard = 0;
 			}
-			GameCanvas.debugUpdate.removeAllElements();
+			debugUpdate.removeAllElements();
 			long num = mSystem.currentTimeMillis();
-			if (num - GameCanvas.timeTickEff1 >= 780L && !GameCanvas.isEff1)
+			if (num - timeTickEff1 >= 780 && !isEff1)
 			{
-				GameCanvas.timeTickEff1 = num;
-				GameCanvas.isEff1 = true;
+				timeTickEff1 = num;
+				isEff1 = true;
 			}
 			else
 			{
-				GameCanvas.isEff1 = false;
+				isEff1 = false;
 			}
-			if (num - GameCanvas.timeTickEff2 >= 7800L && !GameCanvas.isEff2)
+			if (num - timeTickEff2 >= 7800 && !isEff2)
 			{
-				GameCanvas.timeTickEff2 = num;
-				GameCanvas.isEff2 = true;
+				timeTickEff2 = num;
+				isEff2 = true;
 			}
 			else
 			{
-				GameCanvas.isEff2 = false;
+				isEff2 = false;
 			}
-			if (GameCanvas.taskTick > 0)
+			if (taskTick > 0)
 			{
-				GameCanvas.taskTick--;
+				taskTick--;
 			}
-			GameCanvas.gameTick++;
-			if (GameCanvas.gameTick > 10000)
+			gameTick++;
+			if (gameTick > 10000)
 			{
-				GameCanvas.gameTick = 0;
+				if (mSystem.currentTimeMillis() - lastTimePress > 20000 && currentScreen == loginScr)
+				{
+					GameMidlet.instance.exit();
+				}
+				gameTick = 0;
 			}
-			if (GameCanvas.currentScreen != null)
+			if (currentScreen != null)
 			{
-				if (!this.isLoadData)
-				{
-					this.data = this.loadData();
-					Rms.saveRMSString("acc", this.data[1]);
-					Rms.saveRMSString("pass", this.data[2]);
-					Rms.saveRMSInt("svselect", int.Parse(this.data[3]) - 1);
-					if (this.data[5] == "creat")
-					{
-						this.isCreat = true;
-					}
-					this.isLoadData = true;
-				}
-				if (GameCanvas.currentScreen == GameCanvas.serverScreen && GameCanvas.gameTick % 20 == 0)
-				{
-					if (GameCanvas.loginScr == null)
-					{
-						GameCanvas.loginScr = new LoginScr();
-					}
-					GameCanvas.currentScreen = GameCanvas.loginScr;
-				}
-				if (GameCanvas.currentScreen == GameCanvas.loginScr && !this.isLogin)
-				{
-					if (!this.isCreat)
-					{
-						Rms.saveRMSString("acc", this.data[1]);
-						Rms.saveRMSString("pass", this.data[2]);
-						Rms.saveRMSInt("svselect", int.Parse(this.data[3]) - 1);
-						GameCanvas.loginScr.doLogin();
-					}
-					else
-					{
-						Service.gI().login2(string.Empty);
-					}
-					this.isLogin = true;
-				}
-				if (GameCanvas.currentScreen == CreateCharScr.instance && this.isCreat)
-				{
-					Service.gI().createChar(GameCanvas.GetRandomString(), int.Parse(this.data[4]), 0);
-					this.userAo = Rms.loadRMSString("userAo" + ServerListScreen.ipSelect);
-					this.passAo = Rms.loadRMSString("passAo" + ServerListScreen.ipSelect);
-					this.isCreat = false;
-				}
-				if (GameCanvas.currentScreen == GameCanvas.loginScr && GameCanvas.loginScr.isRes && !this.isRegis)
-				{
-					GameCanvas.loginScr.isFAQ = false;
-					GameCanvas.startWaitDlg(mResources.CONNECTING);
-					GameCanvas.connect();
-					GameCanvas.startWaitDlg(mResources.REGISTERING);
-					Service.gI().requestRegister(this.data[1], this.data[2], this.userAo, this.passAo, GameMidlet.VERSION);
-					Rms.saveRMSString("acc", this.data[1]);
-					Rms.saveRMSString("pass", this.data[2]);
-					Rms.saveRMSInt("svselect", int.Parse(this.data[3]) - 1);
-					this.timeRegis = mSystem.currentTimeMillis() + 30000L;
-					this.isRegis = true;
-				}
-				if (GameCanvas.currentScreen == GameCanvas.loginScr && this.timeRegis != 0L && this.timeRegis - mSystem.currentTimeMillis() < 1000L)
-				{
-					this.isLogin = false;
-					this.timeRegis = 0L;
-				}
 				if (ChatPopup.serverChatPopUp != null)
 				{
 					ChatPopup.serverChatPopUp.update();
@@ -273,90 +538,90 @@ public class GameCanvas : IActionListener
 					ChatPopup.currChatPopup.update();
 					ChatPopup.currChatPopup.updateKey();
 				}
-				else if (GameCanvas.currentDialog != null)
+				else if (currentDialog != null)
 				{
-					GameCanvas.debug("B", 0);
-					GameCanvas.currentDialog.update();
+					debug("B", 0);
+					currentDialog.update();
 				}
-				else if (GameCanvas.menu.showMenu)
+				else if (menu.showMenu)
 				{
-					GameCanvas.debug("C", 0);
-					GameCanvas.menu.updateMenu();
-					GameCanvas.debug("D", 0);
-					GameCanvas.menu.updateMenuKey();
+					debug("C", 0);
+					menu.updateMenu();
+					debug("D", 0);
+					menu.updateMenuKey();
 				}
-				else if (GameCanvas.panel.isShow)
+				else if (panel.isShow)
 				{
-					GameCanvas.panel.update();
-					if (GameCanvas.panel2 != null)
+					panel.update();
+					if (panel2 != null)
 					{
-						if (GameCanvas.isFocusPanel2)
+						if (isFocusPanel2)
 						{
-							GameCanvas.panel2.updateKey();
+							panel2.updateKey();
 						}
 						else
 						{
-							GameCanvas.panel.updateKey();
+							panel.updateKey();
 						}
-						if (GameCanvas.panel2.isShow)
+						if (panel2.isShow)
 						{
-							GameCanvas.panel2.update();
-							if (GameCanvas.isPointer(GameCanvas.panel2.X, GameCanvas.panel2.Y, GameCanvas.panel2.W, GameCanvas.panel2.H))
+							panel2.update();
+							if (isPointer(panel2.X, panel2.Y, panel2.W, panel2.H))
 							{
-								GameCanvas.panel2.updateKey();
+								panel2.updateKey();
 							}
 						}
 					}
 					else
 					{
-						GameCanvas.panel.updateKey();
+						panel.updateKey();
 					}
-					if (GameCanvas.panel.chatTField != null && GameCanvas.panel.chatTField.isShow)
+					if (panel.chatTField != null && panel.chatTField.isShow)
 					{
-						GameCanvas.panel.chatTFUpdateKey();
+						panel.chatTFUpdateKey();
 					}
-					else if (GameCanvas.panel2 != null && GameCanvas.panel2.chatTField != null && GameCanvas.panel2.chatTField.isShow)
+					else if (panel2 != null && panel2.chatTField != null && panel2.chatTField.isShow)
 					{
-						GameCanvas.panel2.chatTFUpdateKey();
+						panel2.chatTFUpdateKey();
 					}
-					if (GameCanvas.isPointer(GameCanvas.panel.X + GameCanvas.panel.W, GameCanvas.panel.Y, GameCanvas.w - GameCanvas.panel.W * 2, GameCanvas.panel.H) && GameCanvas.isPointerJustRelease && GameCanvas.panel.isDoneCombine)
+					if (isPointer(panel.X + panel.W, panel.Y, w - panel.W * 2, panel.H) && isPointerJustRelease && panel.isDoneCombine)
 					{
-						GameCanvas.panel.hide();
+						panel.hide();
 					}
 				}
-				GameCanvas.debug("E", 0);
-				if (!GameCanvas.isLoading)
+				debug("E", 0);
+				if (!isLoading)
 				{
-					GameCanvas.currentScreen.update();
+					currentScreen.update();
 				}
-				GameCanvas.debug("F", 0);
-				if (!GameCanvas.panel.isShow && ChatPopup.serverChatPopUp == null)
+				debug("F", 0);
+				if (!panel.isShow && ChatPopup.serverChatPopUp == null)
 				{
-					GameCanvas.currentScreen.updateKey();
+					currentScreen.updateKey();
 				}
 				Hint.update();
 				SoundMn.gI().update();
 			}
-			GameCanvas.debug("Ix", 0);
-			global::Timer.update();
-			GameCanvas.debug("Hx", 0);
+			debug("Ix", 0);
+			Timer.update();
+			debug("Hx", 0);
 			InfoDlg.update();
-			GameCanvas.debug("G", 0);
-			if (this.resetToLoginScr)
+			debug("G", 0);
+			if (resetToLoginScr)
 			{
-				this.resetToLoginScr = false;
-				this.doResetToLoginScr(GameCanvas.serverScreen);
+				resetToLoginScr = false;
+				doResetToLoginScr(serverScreen);
 			}
-			GameCanvas.debug("Zzz", 0);
+			debug("Zzz", 0);
 			if (Controller.isConnectOK)
 			{
 				if (Controller.isMain)
 				{
-					GameMidlet.IP = ServerListScreen.address[ServerListScreen.ipSelect];
-					GameMidlet.PORT = (int)ServerListScreen.port[ServerListScreen.ipSelect];
+					GameMidlet.IP = ServerListScreen.address[A0.server];
+					GameMidlet.PORT = ServerListScreen.port[A0.server];
 					Cout.println("Connect ok");
 					ServerListScreen.testConnect = 2;
-					Rms.saveRMSInt("svselect", ServerListScreen.ipSelect);
+					Rms.saveRMSInt("svselect", A0.server);
 					Rms.saveIP(GameMidlet.IP + ":" + GameMidlet.PORT);
 					Service.gI().setClientType();
 					Service.gI().androidPack();
@@ -373,18 +638,18 @@ public class GameCanvas : IActionListener
 				Debug.Log("disconnect");
 				if (!Controller.isMain)
 				{
-					if (GameCanvas.currentScreen == GameCanvas.serverScreen && !Service.reciveFromMainSession)
+					if (currentScreen == serverScreen && !Service.reciveFromMainSession)
 					{
-						GameCanvas.serverScreen.cancel();
+						serverScreen.cancel();
 					}
-					if (GameCanvas.currentScreen == GameCanvas.loginScr && !Service.reciveFromMainSession)
+					if (currentScreen == loginScr && !Service.reciveFromMainSession)
 					{
-						this.onDisconnected();
+						onDisconnected();
 					}
 				}
 				else
 				{
-					this.onDisconnected();
+					onDisconnected();
 				}
 				Controller.isDisconnected = false;
 			}
@@ -393,27 +658,27 @@ public class GameCanvas : IActionListener
 				Debug.Log("connect fail");
 				if (!Controller.isMain)
 				{
-					if (GameCanvas.currentScreen == GameCanvas.serverScreen && ServerListScreen.isGetData && !Service.reciveFromMainSession)
+					if (currentScreen == serverScreen && ServerListScreen.isGetData && !Service.reciveFromMainSession)
 					{
-						GameCanvas.serverScreen.cancel();
+						serverScreen.cancel();
 					}
-					if (GameCanvas.currentScreen == GameCanvas.loginScr && !Service.reciveFromMainSession)
+					if (currentScreen == loginScr && !Service.reciveFromMainSession)
 					{
-						this.onConnectionFail();
+						onConnectionFail();
 					}
 				}
 				else
 				{
-					this.onConnectionFail();
+					onConnectionFail();
 				}
 				Controller.isConnectionFail = false;
 			}
 			if (Main.isResume)
 			{
 				Main.isResume = false;
-				if (GameCanvas.currentDialog != null && GameCanvas.currentDialog.left != null && GameCanvas.currentDialog.left.actionListener != null)
+				if (currentDialog != null && currentDialog.left != null && currentDialog.left.actionListener != null)
 				{
-					GameCanvas.currentDialog.left.performAction();
+					currentDialog.left.performAction();
 				}
 			}
 		}
@@ -422,123 +687,117 @@ public class GameCanvas : IActionListener
 		}
 	}
 
-	// Token: 0x060008E5 RID: 2277 RVA: 0x00080EEC File Offset: 0x0007F0EC
 	public void onDisconnected()
 	{
 		if (Controller.isConnectionFail)
 		{
 			Controller.isConnectionFail = false;
 		}
-		GameCanvas.isResume = true;
+		isResume = true;
 		Session_ME.gI().clearSendingMessage();
 		Session_ME2.gI().clearSendingMessage();
 		if (Controller.isLoadingData)
 		{
-			GameCanvas.instance.resetToLoginScrz();
-			GameCanvas.startOK(mResources.pls_restart_game_error, 8885, null);
+			instance.resetToLoginScrz();
+			startOK(mResources.pls_restart_game_error, 8885, null);
 			Controller.isDisconnected = false;
 			return;
 		}
-		global::Char.isLoadingMap = false;
+		Char.isLoadingMap = false;
 		if (Controller.isMain)
 		{
 			ServerListScreen.testConnect = 0;
 		}
-		GameCanvas.instance.resetToLoginScrz();
+		instance.resetToLoginScrz();
 		if (Main.typeClient == 6)
 		{
-			if (GameCanvas.currentScreen != GameCanvas.serverScreen && GameCanvas.currentScreen != GameCanvas.loginScr)
+			if (currentScreen != serverScreen && currentScreen != loginScr)
 			{
-				GameCanvas.startOKDlg(mResources.maychutathoacmatsong);
-				new Thread(new ThreadStart(this.loginAgain)).Start();
+				new Thread(autoLogin).Start();
 			}
 		}
 		else
 		{
-			GameCanvas.startOKDlg(mResources.maychutathoacmatsong);
-			new Thread(new ThreadStart(this.loginAgain)).Start();
+			new Thread(autoLogin).Start();
 		}
 		mSystem.endKey();
 	}
 
-	// Token: 0x060008E6 RID: 2278 RVA: 0x00080FCC File Offset: 0x0007F1CC
 	public void onConnectionFail()
 	{
-		if (GameCanvas.currentScreen.Equals(SplashScr.instance))
+		if (currentScreen.Equals(SplashScr.instance))
 		{
 			if (ServerListScreen.hasConnected == null)
 			{
-				GameCanvas.startOK(mResources.pls_restart_game_error, 8885, null);
-				return;
+				startOK(mResources.pls_restart_game_error, 8885, null);
 			}
-			if (!ServerListScreen.hasConnected[0])
+			else if (!ServerListScreen.hasConnected[0])
 			{
 				ServerListScreen.hasConnected[0] = true;
 				ServerListScreen.ipSelect = 0;
-				GameMidlet.IP = ServerListScreen.address[ServerListScreen.ipSelect];
-				Rms.saveRMSInt("svselect", ServerListScreen.ipSelect);
-				GameCanvas.connect();
-				return;
+				GameMidlet.IP = ServerListScreen.address[A0.server];
+				Rms.saveRMSInt("svselect", A0.server);
+				connect();
 			}
-			if (!ServerListScreen.hasConnected[2])
+			else if (!ServerListScreen.hasConnected[2])
 			{
 				ServerListScreen.hasConnected[2] = true;
 				ServerListScreen.ipSelect = 2;
-				GameMidlet.IP = ServerListScreen.address[ServerListScreen.ipSelect];
-				Rms.saveRMSInt("svselect", ServerListScreen.ipSelect);
-				GameCanvas.connect();
-				return;
+				GameMidlet.IP = ServerListScreen.address[A0.server];
+				Rms.saveRMSInt("svselect", A0.server);
+				connect();
 			}
-			GameCanvas.startOK(mResources.pls_restart_game_error, 8885, null);
+			else
+			{
+				startOK(mResources.pls_restart_game_error, 8885, null);
+			}
 			return;
+		}
+		Session_ME.gI().clearSendingMessage();
+		Session_ME2.gI().clearSendingMessage();
+		ServerListScreen.isWait = false;
+		if (Controller.isLoadingData)
+		{
+			startOK(mResources.pls_restart_game_error, 8885, null);
+			Controller.isConnectionFail = false;
+			return;
+		}
+		isResume = true;
+		LoginScr.isContinueToLogin = false;
+		if (loginScr != null)
+		{
+			instance.resetToLoginScrz();
 		}
 		else
 		{
-			Session_ME.gI().clearSendingMessage();
-			Session_ME2.gI().clearSendingMessage();
-			ServerListScreen.isWait = false;
-			if (Controller.isLoadingData)
-			{
-				GameCanvas.startOK(mResources.pls_restart_game_error, 8885, null);
-				Controller.isConnectionFail = false;
-				return;
-			}
-			GameCanvas.isResume = true;
-			LoginScr.isContinueToLogin = false;
-			if (GameCanvas.loginScr != null)
-			{
-				GameCanvas.instance.resetToLoginScrz();
-			}
-			else
-			{
-				GameCanvas.loginScr = new LoginScr();
-			}
-			LoginScr.serverName = ServerListScreen.nameServer[ServerListScreen.ipSelect];
-			if (GameCanvas.currentScreen != GameCanvas.serverScreen)
-			{
-				GameCanvas.startOK(mResources.lost_connection + LoginScr.serverName, 888395, null);
-			}
-			else
-			{
-				GameCanvas.endDlg();
-			}
-			global::Char.isLoadingMap = false;
-			if (Controller.isMain)
-			{
-				ServerListScreen.testConnect = 0;
-			}
-			mSystem.endKey();
-			return;
+			loginScr = new LoginScr();
 		}
+		LoginScr.serverName = ServerListScreen.nameServer[A0.server];
+		if (currentScreen != serverScreen)
+		{
+			startOK(mResources.lost_connection + LoginScr.serverName, 888395, null);
+		}
+		else
+		{
+			endDlg();
+		}
+		Char.isLoadingMap = false;
+		if (Controller.isMain)
+		{
+			ServerListScreen.testConnect = 0;
+		}
+		mSystem.endKey();
 	}
 
-	// Token: 0x060008E7 RID: 2279 RVA: 0x0000738D File Offset: 0x0000558D
 	public static bool isWaiting()
 	{
-		return InfoDlg.isShow || (GameCanvas.msgdlg != null && GameCanvas.msgdlg.info.Equals(mResources.PLEASEWAIT)) || global::Char.isLoadingMap || LoginScr.isContinueToLogin;
+		if (InfoDlg.isShow || (msgdlg != null && msgdlg.info.Equals(mResources.PLEASEWAIT)) || Char.isLoadingMap || LoginScr.isContinueToLogin)
+		{
+			return true;
+		}
+		return false;
 	}
 
-	// Token: 0x060008E8 RID: 2280 RVA: 0x000073C1 File Offset: 0x000055C1
 	public static void connect()
 	{
 		if (!Session_ME.gI().isConnected())
@@ -547,79 +806,65 @@ public class GameCanvas : IActionListener
 		}
 	}
 
-	// Token: 0x060008E9 RID: 2281 RVA: 0x00081144 File Offset: 0x0007F344
 	public static void connect2()
 	{
 		if (!Session_ME2.gI().isConnected())
 		{
-			Res.outz(string.Concat(new object[]
-			{
-				"IP2= ",
-				GameMidlet.IP2,
-				" PORT 2= ",
-				GameMidlet.PORT2
-			}));
+			Res.outz("IP2= " + GameMidlet.IP2 + " PORT 2= " + GameMidlet.PORT2);
 			Session_ME2.gI().connect(GameMidlet.IP2, GameMidlet.PORT2);
 		}
 	}
 
-	// Token: 0x060008EA RID: 2282 RVA: 0x000073E3 File Offset: 0x000055E3
 	public static void resetTrans(mGraphics g)
 	{
 		g.translate(-g.getTranslateX(), -g.getTranslateY());
-		g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
+		g.setClip(0, 0, w, h);
 	}
 
-	// Token: 0x060008EB RID: 2283 RVA: 0x000811A8 File Offset: 0x0007F3A8
 	public void initGameCanvas()
 	{
-		GameCanvas.debug("SP2i1", 0);
-		GameCanvas.w = MotherCanvas.instance.getWidthz();
-		GameCanvas.h = MotherCanvas.instance.getHeightz();
-		GameCanvas.debug("SP2i2", 0);
-		GameCanvas.hw = GameCanvas.w / 2;
-		GameCanvas.hh = GameCanvas.h / 2;
-		GameCanvas.wd3 = GameCanvas.w / 3;
-		GameCanvas.hd3 = GameCanvas.h / 3;
-		GameCanvas.w2d3 = 2 * GameCanvas.w / 3;
-		GameCanvas.h2d3 = 2 * GameCanvas.h / 3;
-		GameCanvas.w3d4 = 3 * GameCanvas.w / 4;
-		GameCanvas.h3d4 = 3 * GameCanvas.h / 4;
-		GameCanvas.wd6 = GameCanvas.w / 6;
-		GameCanvas.hd6 = GameCanvas.h / 6;
-		GameCanvas.debug("SP2i3", 0);
+		debug("SP2i1", 0);
+		w = MotherCanvas.instance.getWidthz();
+		h = MotherCanvas.instance.getHeightz();
+		debug("SP2i2", 0);
+		hw = w / 2;
+		hh = h / 2;
+		wd3 = w / 3;
+		hd3 = h / 3;
+		w2d3 = 2 * w / 3;
+		h2d3 = 2 * h / 3;
+		w3d4 = 3 * w / 4;
+		h3d4 = 3 * h / 4;
+		wd6 = w / 6;
+		hd6 = h / 6;
+		debug("SP2i3", 0);
 		mScreen.initPos();
-		GameCanvas.debug("SP2i4", 0);
-		GameCanvas.debug("SP2i5", 0);
-		GameCanvas.inputDlg = new InputDlg();
-		GameCanvas.debug("SP2i6", 0);
-		GameCanvas.listPoint = new MyVector();
-		GameCanvas.debug("SP2i7", 0);
+		debug("SP2i4", 0);
+		debug("SP2i5", 0);
+		inputDlg = new InputDlg();
+		debug("SP2i6", 0);
+		listPoint = new MyVector();
+		debug("SP2i7", 0);
 	}
 
-	// Token: 0x060008EC RID: 2284 RVA: 0x00003584 File Offset: 0x00001784
 	public void start()
 	{
 	}
 
-	// Token: 0x060008ED RID: 2285 RVA: 0x0000740B File Offset: 0x0000560B
 	public int getWidth()
 	{
 		return (int)ScaleGUI.WIDTH;
 	}
 
-	// Token: 0x060008EE RID: 2286 RVA: 0x00007413 File Offset: 0x00005613
 	public int getHeight()
 	{
 		return (int)ScaleGUI.HEIGHT;
 	}
 
-	// Token: 0x060008EF RID: 2287 RVA: 0x00003584 File Offset: 0x00001784
 	public static void debug(string s, int type)
 	{
 	}
 
-	// Token: 0x060008F0 RID: 2288 RVA: 0x000812BC File Offset: 0x0007F4BC
 	public void doResetToLoginScr(mScreen screen)
 	{
 		try
@@ -627,7 +872,7 @@ public class GameCanvas : IActionListener
 			SoundMn.gI().stopAll();
 			LoginScr.isContinueToLogin = false;
 			TileMap.lastType = (TileMap.bgType = 0);
-			global::Char.clearMyChar();
+			Char.clearMyChar();
 			GameScr.clearGameScr();
 			GameScr.resetAllvector();
 			InfoDlg.hide();
@@ -637,12 +882,12 @@ public class GameCanvas : IActionListener
 			Hint.isShow = false;
 			ChatPopup.currChatPopup = null;
 			Controller.isStopReadMessage = false;
-			GameScr.loadCamera(true, -1, -1);
+			GameScr.loadCamera(fullmScreen: true, -1, -1);
 			GameScr.cmx = 100;
-			GameCanvas.panel.currentTabIndex = 0;
-			GameCanvas.panel.selected = ((!GameCanvas.isTouch) ? 0 : -1);
-			GameCanvas.panel.init();
-			GameCanvas.panel2 = null;
+			panel.currentTabIndex = 0;
+			panel.selected = (isTouch ? (-1) : 0);
+			panel.init();
+			panel2 = null;
 			GameScr.isPaint = true;
 			ClanMessage.vMessage.removeAllElements();
 			GameScr.textTime.removeAllElements();
@@ -653,12 +898,12 @@ public class GameCanvas : IActionListener
 			BackgroudEffect.vBgEffect.removeAllElements();
 			EffecMn.vEff.removeAllElements();
 			Effect.newEff.removeAllElements();
-			GameCanvas.menu.showMenu = false;
-			GameCanvas.panel.vItemCombine.removeAllElements();
-			GameCanvas.panel.isShow = false;
-			if (GameCanvas.panel.tabIcon != null)
+			menu.showMenu = false;
+			panel.vItemCombine.removeAllElements();
+			panel.isShow = false;
+			if (panel.tabIcon != null)
 			{
-				GameCanvas.panel.tabIcon.isShow = false;
+				panel.tabIcon.isShow = false;
 			}
 			if (mGraphics.zoomLevel == 1)
 			{
@@ -674,22 +919,18 @@ public class GameCanvas : IActionListener
 		}
 	}
 
-	// Token: 0x060008F1 RID: 2289 RVA: 0x00003584 File Offset: 0x00001784
 	public static void showErrorForm(int type, string moreInfo)
 	{
 	}
 
-	// Token: 0x060008F2 RID: 2290 RVA: 0x00003584 File Offset: 0x00001784
 	public static void paintCloud(mGraphics g)
 	{
 	}
 
-	// Token: 0x060008F3 RID: 2291 RVA: 0x00003584 File Offset: 0x00001784
 	public static void updateBG()
 	{
 	}
 
-	// Token: 0x060008F4 RID: 2292 RVA: 0x00081468 File Offset: 0x0007F668
 	public static void fillRect(mGraphics g, int color, int x, int y, int w, int h, int detalY)
 	{
 		g.setColor(color);
@@ -698,97 +939,96 @@ public class GameCanvas : IActionListener
 		{
 			cmy = GameCanvas.h;
 		}
-		g.fillRect(x, y - ((detalY == 0) ? 0 : (cmy >> detalY)), w, h + ((detalY == 0) ? 0 : (cmy >> detalY)));
+		g.fillRect(x, y - ((detalY != 0) ? (cmy >> detalY) : 0), w, h + ((detalY != 0) ? (cmy >> detalY) : 0));
 	}
 
-	// Token: 0x060008F5 RID: 2293 RVA: 0x000814BC File Offset: 0x0007F6BC
 	public static void paintBackgroundtLayer(mGraphics g, int layer, int deltaY, int color1, int color2)
 	{
 		try
 		{
 			int num = layer - 1;
-			if (num == GameCanvas.imgBG.Length - 1 && (GameScr.gI().isRongThanXuatHien || GameScr.gI().isFireWorks))
+			if (num == imgBG.Length - 1 && (GameScr.gI().isRongThanXuatHien || GameScr.gI().isFireWorks))
 			{
 				g.setColor(GameScr.gI().mautroi);
-				g.fillRect(0, 0, GameCanvas.w, GameCanvas.h);
-				if (GameCanvas.typeBg == 2 || GameCanvas.typeBg == 4 || GameCanvas.typeBg == 7)
+				g.fillRect(0, 0, w, h);
+				if (typeBg == 2 || typeBg == 4 || typeBg == 7)
 				{
-					GameCanvas.drawSun1(g);
-					GameCanvas.drawSun2(g);
+					drawSun1(g);
+					drawSun2(g);
 				}
-				if (GameScr.gI().isFireWorks && !GameCanvas.lowGraphic)
+				if (GameScr.gI().isFireWorks && !lowGraphic)
 				{
 					FireWorkEff.paint(g);
 				}
 			}
-			else if (GameCanvas.imgBG != null && GameCanvas.imgBG[num] != null)
+			else if (imgBG != null && imgBG[num] != null)
 			{
-				if (GameCanvas.moveX[num] != 0)
+				if (moveX[num] != 0)
 				{
-					GameCanvas.moveX[num] += GameCanvas.moveXSpeed[num];
+					moveX[num] += moveXSpeed[num];
 				}
 				int cmy = GameScr.cmy;
-				if (cmy > GameCanvas.h)
+				if (cmy > h)
 				{
-					cmy = GameCanvas.h;
+					cmy = h;
 				}
-				if (GameCanvas.layerSpeed[num] != 0)
+				if (layerSpeed[num] != 0)
 				{
-					for (int i = -((GameScr.cmx + GameCanvas.moveX[num] >> GameCanvas.layerSpeed[num]) % GameCanvas.bgW[num]); i < GameScr.gW; i += GameCanvas.bgW[num])
+					for (int i = -((GameScr.cmx + moveX[num] >> layerSpeed[num]) % bgW[num]); i < GameScr.gW; i += bgW[num])
 					{
-						g.drawImage(GameCanvas.imgBG[num], i, GameCanvas.yb[num] - ((deltaY <= 0) ? 0 : (cmy >> deltaY)), 0);
+						g.drawImage(imgBG[num], i, yb[num] - ((deltaY > 0) ? (cmy >> deltaY) : 0), 0);
 					}
 				}
 				else
 				{
-					for (int j = 0; j < GameScr.gW; j += GameCanvas.bgW[num])
+					for (int j = 0; j < GameScr.gW; j += bgW[num])
 					{
-						g.drawImage(GameCanvas.imgBG[num], j, GameCanvas.yb[num] - ((deltaY <= 0) ? 0 : (cmy >> deltaY)), 0);
+						g.drawImage(imgBG[num], j, yb[num] - ((deltaY > 0) ? (cmy >> deltaY) : 0), 0);
 					}
 				}
 				if (color1 != -1)
 				{
-					if (num == GameCanvas.nBg - 1)
+					if (num == nBg - 1)
 					{
-						GameCanvas.fillRect(g, color1, 0, -(cmy >> deltaY), GameScr.gW, GameCanvas.yb[num], deltaY);
+						fillRect(g, color1, 0, -(cmy >> deltaY), GameScr.gW, yb[num], deltaY);
 					}
 					else
 					{
-						GameCanvas.fillRect(g, color1, 0, GameCanvas.yb[num - 1] + GameCanvas.bgH[num - 1], GameScr.gW, GameCanvas.yb[num] - (GameCanvas.yb[num - 1] + GameCanvas.bgH[num - 1]), deltaY);
+						fillRect(g, color1, 0, yb[num - 1] + bgH[num - 1], GameScr.gW, yb[num] - (yb[num - 1] + bgH[num - 1]), deltaY);
 					}
 				}
 				if (color2 != -1)
 				{
 					if (num == 0)
 					{
-						GameCanvas.fillRect(g, color2, 0, GameCanvas.yb[num] + GameCanvas.bgH[num], GameScr.gW, GameScr.gH - (GameCanvas.yb[num] + GameCanvas.bgH[num]), deltaY);
+						fillRect(g, color2, 0, yb[num] + bgH[num], GameScr.gW, GameScr.gH - (yb[num] + bgH[num]), deltaY);
 					}
 					else
 					{
-						GameCanvas.fillRect(g, color2, 0, GameCanvas.yb[num] + GameCanvas.bgH[num], GameScr.gW, GameCanvas.yb[num - 1] - (GameCanvas.yb[num] + GameCanvas.bgH[num]) + 80, deltaY);
+						fillRect(g, color2, 0, yb[num] + bgH[num], GameScr.gW, yb[num - 1] - (yb[num] + bgH[num]) + 80, deltaY);
 					}
 				}
-				if (GameCanvas.currentScreen == GameScr.instance)
+				if (currentScreen == GameScr.instance)
 				{
-					if (layer == 1 && GameCanvas.typeBg == 11)
+					if (layer == 1 && typeBg == 11)
 					{
-						g.drawImage(GameCanvas.imgSun2, -(GameScr.cmx >> GameCanvas.layerSpeed[0]) + 400, GameCanvas.yb[0] + 30 - (cmy >> 2), StaticObj.BOTTOM_HCENTER);
+						g.drawImage(imgSun2, -(GameScr.cmx >> layerSpeed[0]) + 400, yb[0] + 30 - (cmy >> 2), StaticObj.BOTTOM_HCENTER);
 					}
-					if (layer == 1 && GameCanvas.typeBg == 13)
+					if (layer == 1 && typeBg == 13)
 					{
-						g.drawImage(GameCanvas.imgBG[1], -(GameScr.cmx >> GameCanvas.layerSpeed[0]) + 200, GameCanvas.yb[0] - (cmy >> 3) + 30, 0);
-						g.drawRegion(GameCanvas.imgBG[1], 0, 0, GameCanvas.bgW[1], GameCanvas.bgH[1], 2, -(GameScr.cmx >> GameCanvas.layerSpeed[0]) + 200 + GameCanvas.bgW[1], GameCanvas.yb[0] - (cmy >> 3) + 30, 0);
+						g.drawImage(imgBG[1], -(GameScr.cmx >> layerSpeed[0]) + 200, yb[0] - (cmy >> 3) + 30, 0);
+						g.drawRegion(imgBG[1], 0, 0, bgW[1], bgH[1], 2, -(GameScr.cmx >> layerSpeed[0]) + 200 + bgW[1], yb[0] - (cmy >> 3) + 30, 0);
 					}
 					if (layer == 3 && TileMap.mapID == 1)
 					{
-						for (int k = 0; k < TileMap.pxh / mGraphics.getImageHeight(GameCanvas.imgCaycot); k++)
+						for (int k = 0; k < TileMap.pxh / mGraphics.getImageHeight(imgCaycot); k++)
 						{
-							g.drawImage(GameCanvas.imgCaycot, -(GameScr.cmx >> GameCanvas.layerSpeed[2]) + 300, k * mGraphics.getImageHeight(GameCanvas.imgCaycot) - (cmy >> 3), 0);
+							g.drawImage(imgCaycot, -(GameScr.cmx >> layerSpeed[2]) + 300, k * mGraphics.getImageHeight(imgCaycot) - (cmy >> 3), 0);
 						}
 					}
 				}
-				int x = -(GameScr.cmx + GameCanvas.moveX[num] >> GameCanvas.layerSpeed[num]);
-				EffecMn.paintBackGroundUnderLayer(g, x, GameCanvas.yb[num] + GameCanvas.bgH[num] - (cmy >> deltaY), num);
+				int x = -(GameScr.cmx + moveX[num] >> layerSpeed[num]);
+				EffecMn.paintBackGroundUnderLayer(g, x, yb[num] + bgH[num] - (cmy >> deltaY), num);
 			}
 		}
 		catch (Exception ex)
@@ -797,758 +1037,1227 @@ public class GameCanvas : IActionListener
 		}
 	}
 
-	// Token: 0x060008F6 RID: 2294 RVA: 0x000818DC File Offset: 0x0007FADC
 	public static void drawSun1(mGraphics g)
 	{
-		if (GameCanvas.imgSun != null)
+		if (imgSun != null)
 		{
-			g.drawImage(GameCanvas.imgSun, GameCanvas.sunX, GameCanvas.sunY, 0);
+			g.drawImage(imgSun, sunX, sunY, 0);
 		}
-		if (GameCanvas.isBoltEff)
+		if (!isBoltEff)
 		{
-			if (GameCanvas.gameTick % 200 == 0)
+			return;
+		}
+		if (gameTick % 200 == 0)
+		{
+			boltActive = true;
+		}
+		if (boltActive)
+		{
+			tBolt++;
+			if (tBolt == 10)
 			{
-				GameCanvas.boltActive = true;
+				tBolt = 0;
+				boltActive = false;
 			}
-			if (GameCanvas.boltActive)
+			if (tBolt % 2 == 0)
 			{
-				GameCanvas.tBolt++;
-				if (GameCanvas.tBolt == 10)
-				{
-					GameCanvas.tBolt = 0;
-					GameCanvas.boltActive = false;
-				}
-				if (GameCanvas.tBolt % 2 == 0)
-				{
-					g.setColor(16777215);
-					g.fillRect(0, 0, GameCanvas.w, GameCanvas.h);
-				}
+				g.setColor(16777215);
+				g.fillRect(0, 0, w, h);
 			}
 		}
 	}
 
-	// Token: 0x060008F7 RID: 2295 RVA: 0x00003584 File Offset: 0x00001784
 	public static void drawSun2(mGraphics g)
 	{
 	}
 
-	// Token: 0x060008F8 RID: 2296 RVA: 0x0000741B File Offset: 0x0000561B
 	public static bool isHDVersion()
 	{
-		return mGraphics.zoomLevel > 1;
+		if (mGraphics.zoomLevel > 1)
+		{
+			return true;
+		}
+		return false;
 	}
 
-	// Token: 0x060008F9 RID: 2297 RVA: 0x00081970 File Offset: 0x0007FB70
 	public static void paintBGGameScr(mGraphics g)
 	{
-		if (!GameCanvas.isLoadBGok)
+		if (!isLoadBGok)
 		{
 			g.setColor(0);
-			g.fillRect(0, 0, GameCanvas.w, GameCanvas.h);
+			g.fillRect(0, 0, w, h);
 		}
-		if (global::Char.isLoadingMap)
+		if (Char.isLoadingMap)
 		{
 			return;
 		}
 		int gW = GameScr.gW;
 		int gH = GameScr.gH;
 		g.translate(-g.getTranslateX(), -g.getTranslateY());
-		g.setColor(13238271);
-		g.fillRect(0, 0, GameCanvas.w, GameCanvas.h);
+		if (paintBG)
+		{
+			if (currentScreen == GameScr.gI())
+			{
+				if (TileMap.mapID == 137 || TileMap.mapID == 115 || TileMap.mapID == 117 || TileMap.mapID == 118 || TileMap.mapID == 120 || TileMap.isMapDouble)
+				{
+					g.setColor(0);
+					g.fillRect(0, 0, w, h);
+					return;
+				}
+				if (TileMap.mapID == 138)
+				{
+					g.setColor(6776679);
+					g.fillRect(0, 0, w, h);
+					return;
+				}
+			}
+			if (typeBg == 0)
+			{
+				paintBackgroundtLayer(g, 4, 6, colorTop[3], colorBotton[3]);
+				paintBackgroundtLayer(g, 3, 4, -1, colorBotton[2]);
+				paintBackgroundtLayer(g, 2, 3, -1, colorBotton[1]);
+				paintBackgroundtLayer(g, 1, 2, -1, colorBotton[0]);
+			}
+			if (typeBg == 1)
+			{
+				paintBackgroundtLayer(g, 4, 6, -1, -1);
+				paintBackgroundtLayer(g, 3, 3, -1, -1);
+				fillRect(g, colorTop[2], 0, -(GameScr.cmy >> 5), gW, yb[2], 5);
+				fillRect(g, colorBotton[2], 0, yb[2] + bgH[2] - (GameScr.cmy >> 3), gW, 70, 3);
+				paintBackgroundtLayer(g, 2, 2, -1, -1);
+				paintBackgroundtLayer(g, 1, 1, -1, colorBotton[0]);
+			}
+			if (typeBg == 2)
+			{
+				paintBackgroundtLayer(g, 5, 10, colorTop[4], colorBotton[4]);
+				paintBackgroundtLayer(g, 4, 8, -1, colorTop[2]);
+				paintBackgroundtLayer(g, 3, 5, -1, colorBotton[2]);
+				paintBackgroundtLayer(g, 2, 2, -1, colorBotton[1]);
+				paintBackgroundtLayer(g, 1, 1, -1, colorBotton[0]);
+				paintCloud(g);
+			}
+			if (typeBg == 3)
+			{
+				int num = GameScr.cmy - (325 - GameScr.gH23);
+				g.translate(0, -num);
+				fillRect(g, (!GameScr.gI().isRongThanXuatHien && !GameScr.gI().isFireWorks) ? colorTop[2] : GameScr.gI().mautroi, 0, num - (GameScr.cmy >> 3), gW, yb[2] - num + (GameScr.cmy >> 3) + 100, 2);
+				paintBackgroundtLayer(g, 3, 2, -1, colorBotton[2]);
+				paintBackgroundtLayer(g, 2, 0, -1, -1);
+				paintBackgroundtLayer(g, 1, 0, -1, colorBotton[0]);
+				g.translate(0, -g.getTranslateY());
+			}
+			if (typeBg == 4)
+			{
+				paintBackgroundtLayer(g, 4, 7, colorTop[3], -1);
+				paintBackgroundtLayer(g, 3, 3, -1, (!isHDVersion()) ? colorTop[1] : colorBotton[2]);
+				paintBackgroundtLayer(g, 2, 2, colorTop[1], colorBotton[1]);
+				paintBackgroundtLayer(g, 1, 1, -1, colorBotton[0]);
+			}
+			if (typeBg == 5)
+			{
+				paintBackgroundtLayer(g, 4, 15, colorTop[3], -1);
+				drawSun1(g);
+				g.translate(100, 10);
+				drawSun1(g);
+				g.translate(-100, -10);
+				drawSun2(g);
+				paintBackgroundtLayer(g, 3, 10, -1, -1);
+				paintBackgroundtLayer(g, 2, 6, -1, -1);
+				paintBackgroundtLayer(g, 1, 4, -1, -1);
+				g.translate(0, 27);
+				paintBackgroundtLayer(g, 1, 2, -1, -1);
+				g.translate(0, 20);
+				paintBackgroundtLayer(g, 1, 2, -1, colorBotton[0]);
+				g.translate(-g.getTranslateX(), -g.getTranslateY());
+			}
+			if (typeBg == 6)
+			{
+				paintBackgroundtLayer(g, 5, 10, colorTop[4], colorBotton[4]);
+				drawSun1(g);
+				drawSun2(g);
+				g.translate(60, 40);
+				drawSun2(g);
+				g.translate(-60, -40);
+				paintBackgroundtLayer(g, 4, 7, -1, colorBotton[3]);
+				BackgroudEffect.paintFarAll(g);
+				paintBackgroundtLayer(g, 3, 4, -1, -1);
+				paintBackgroundtLayer(g, 2, 3, -1, colorBotton[1]);
+				paintBackgroundtLayer(g, 1, 2, -1, colorBotton[0]);
+			}
+			if (typeBg == 7)
+			{
+				paintBackgroundtLayer(g, 4, 6, colorTop[3], colorBotton[3]);
+				paintBackgroundtLayer(g, 3, 5, -1, -1);
+				paintBackgroundtLayer(g, 2, 4, -1, -1);
+				paintBackgroundtLayer(g, 1, 3, -1, colorBotton[0]);
+			}
+			if (typeBg == 8)
+			{
+				paintBackgroundtLayer(g, 4, 8, colorTop[3], colorBotton[3]);
+				drawSun1(g);
+				drawSun2(g);
+				paintBackgroundtLayer(g, 3, 4, -1, colorBotton[2]);
+				paintBackgroundtLayer(g, 2, 2, -1, colorBotton[1]);
+				if (((TileMap.mapID < 92 || TileMap.mapID > 96) && TileMap.mapID != 51 && TileMap.mapID != 52) || currentScreen == loginScr)
+				{
+					paintBackgroundtLayer(g, 1, 1, -1, colorBotton[0]);
+				}
+			}
+			if (typeBg == 9)
+			{
+				paintBackgroundtLayer(g, 4, 8, colorTop[3], colorBotton[3]);
+				drawSun1(g);
+				drawSun2(g);
+				g.translate(-80, 20);
+				drawSun2(g);
+				g.translate(80, -20);
+				BackgroudEffect.paintFarAll(g);
+				paintBackgroundtLayer(g, 3, 5, -1, -1);
+				paintBackgroundtLayer(g, 2, 3, -1, -1);
+				paintBackgroundtLayer(g, 1, 2, -1, colorBotton[0]);
+			}
+			if (typeBg == 10)
+			{
+				int num2 = GameScr.cmy - (380 - GameScr.gH23);
+				g.translate(0, -num2);
+				fillRect(g, (!GameScr.gI().isRongThanXuatHien) ? colorTop[1] : GameScr.gI().mautroi, 0, num2 - (GameScr.cmy >> 2), gW, yb[1] - num2 + (GameScr.cmy >> 2) + 100, 2);
+				paintBackgroundtLayer(g, 2, 2, -1, colorBotton[1]);
+				drawSun1(g);
+				drawSun2(g);
+				paintBackgroundtLayer(g, 1, 0, -1, -1);
+				g.translate(0, -g.getTranslateY());
+			}
+			if (typeBg == 11)
+			{
+				paintBackgroundtLayer(g, 3, 6, colorTop[2], colorBotton[2]);
+				drawSun1(g);
+				paintBackgroundtLayer(g, 2, 3, -1, colorBotton[1]);
+				paintBackgroundtLayer(g, 1, 2, -1, colorBotton[0]);
+			}
+			if (typeBg == 12)
+			{
+				g.setColor(9161471);
+				g.fillRect(0, 0, w, h);
+				paintBackgroundtLayer(g, 3, 4, -1, 14417919);
+				paintBackgroundtLayer(g, 2, 3, -1, 14417919);
+				paintBackgroundtLayer(g, 1, 2, -1, 14417919);
+				paintCloud(g);
+			}
+			if (typeBg == 13)
+			{
+				g.setColor(15268088);
+				g.fillRect(0, 0, w, h);
+				paintBackgroundtLayer(g, 1, 5, -1, 15268088);
+			}
+			if (typeBg == 15)
+			{
+				g.setColor(2631752);
+				g.fillRect(0, 0, w, h);
+				paintBackgroundtLayer(g, 2, 3, -1, colorBotton[1]);
+				paintBackgroundtLayer(g, 1, 2, -1, colorBotton[0]);
+			}
+			return;
+		}
+		g.setColor(2315859);
+		g.fillRect(0, 0, w, h);
+		if (tam != null)
+		{
+			for (int i = -((GameScr.cmx >> 2) % mGraphics.getImageWidth(tam)); i < GameScr.gW; i += mGraphics.getImageWidth(tam))
+			{
+				g.drawImage(tam, i, (GameScr.cmy >> 3) + h / 2 - 50, 0);
+			}
+		}
+		g.setColor(5084791);
+		g.fillRect(0, (GameScr.cmy >> 3) + h / 2 - 50 + mGraphics.getImageHeight(tam), gW, h);
 	}
 
-	// Token: 0x060008FA RID: 2298 RVA: 0x00003584 File Offset: 0x00001784
 	public static void resetBg()
 	{
 	}
 
-	// Token: 0x060008FB RID: 2299 RVA: 0x000819E4 File Offset: 0x0007FBE4
 	public static void getYBackground(int typeBg)
 	{
 		int gH = GameScr.gH23;
 		switch (typeBg)
 		{
+		case 14:
+			break;
 		case 0:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] + 70;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1] + 20;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - GameCanvas.bgH[2] + 30;
-			GameCanvas.yb[3] = GameCanvas.yb[2] - GameCanvas.bgH[3] + 50;
-			return;
+			yb[0] = gH - bgH[0] + 70;
+			yb[1] = yb[0] - bgH[1] + 20;
+			yb[2] = yb[1] - bgH[2] + 30;
+			yb[3] = yb[2] - bgH[3] + 50;
+			break;
 		case 1:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] + 120;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1] + 40;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - 90;
-			GameCanvas.yb[3] = GameCanvas.yb[2] - 25;
-			return;
+			yb[0] = gH - bgH[0] + 120;
+			yb[1] = yb[0] - bgH[1] + 40;
+			yb[2] = yb[1] - 90;
+			yb[3] = yb[2] - 25;
+			break;
 		case 2:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] + 150;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1] - 60;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - GameCanvas.bgH[2] - 40;
-			GameCanvas.yb[3] = GameCanvas.yb[2] - GameCanvas.bgH[3] - 10;
-			GameCanvas.yb[4] = GameCanvas.yb[3] - GameCanvas.bgH[4];
-			return;
+			yb[0] = gH - bgH[0] + 150;
+			yb[1] = yb[0] - bgH[1] - 60;
+			yb[2] = yb[1] - bgH[2] - 40;
+			yb[3] = yb[2] - bgH[3] - 10;
+			yb[4] = yb[3] - bgH[4];
+			break;
 		case 3:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] + 10;
-			GameCanvas.yb[1] = GameCanvas.yb[0] + 80;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - GameCanvas.bgH[2] - 10;
-			return;
+			yb[0] = gH - bgH[0] + 10;
+			yb[1] = yb[0] + 80;
+			yb[2] = yb[1] - bgH[2] - 10;
+			break;
 		case 4:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] + 130;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1];
-			GameCanvas.yb[2] = GameCanvas.yb[1] - GameCanvas.bgH[2] - 20;
-			GameCanvas.yb[3] = GameCanvas.yb[1] - GameCanvas.bgH[2] - 80;
-			return;
+			yb[0] = gH - bgH[0] + 130;
+			yb[1] = yb[0] - bgH[1];
+			yb[2] = yb[1] - bgH[2] - 20;
+			yb[3] = yb[1] - bgH[2] - 80;
+			break;
 		case 5:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] + 40;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1] + 10;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - GameCanvas.bgH[2] + 15;
-			GameCanvas.yb[3] = GameCanvas.yb[2] - GameCanvas.bgH[3] + 50;
-			return;
+			yb[0] = gH - bgH[0] + 40;
+			yb[1] = yb[0] - bgH[1] + 10;
+			yb[2] = yb[1] - bgH[2] + 15;
+			yb[3] = yb[2] - bgH[3] + 50;
+			break;
 		case 6:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] + 100;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1] - 30;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - GameCanvas.bgH[2] + 10;
-			GameCanvas.yb[3] = GameCanvas.yb[2] - GameCanvas.bgH[3] + 15;
-			GameCanvas.yb[4] = GameCanvas.yb[3] - GameCanvas.bgH[4] + 15;
-			return;
+			yb[0] = gH - bgH[0] + 100;
+			yb[1] = yb[0] - bgH[1] - 30;
+			yb[2] = yb[1] - bgH[2] + 10;
+			yb[3] = yb[2] - bgH[3] + 15;
+			yb[4] = yb[3] - bgH[4] + 15;
+			break;
 		case 7:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] + 20;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1] + 15;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - GameCanvas.bgH[2] + 20;
-			GameCanvas.yb[3] = GameCanvas.yb[1] - GameCanvas.bgH[2] - 10;
-			return;
+			yb[0] = gH - bgH[0] + 20;
+			yb[1] = yb[0] - bgH[1] + 15;
+			yb[2] = yb[1] - bgH[2] + 20;
+			yb[3] = yb[1] - bgH[2] - 10;
+			break;
 		case 8:
-			GameCanvas.yb[0] = gH - 103 + 150;
+			yb[0] = gH - 103 + 150;
 			if (TileMap.mapID == 103)
 			{
-				GameCanvas.yb[0] -= 100;
+				yb[0] -= 100;
 			}
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1] - 10;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - GameCanvas.bgH[2] + 40;
-			GameCanvas.yb[3] = GameCanvas.yb[2] - GameCanvas.bgH[3] + 10;
-			return;
+			yb[1] = yb[0] - bgH[1] - 10;
+			yb[2] = yb[1] - bgH[2] + 40;
+			yb[3] = yb[2] - bgH[3] + 10;
+			break;
 		case 9:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] + 100;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1] + 22;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - GameCanvas.bgH[2] + 50;
-			GameCanvas.yb[3] = GameCanvas.yb[2] - GameCanvas.bgH[3];
-			return;
+			yb[0] = gH - bgH[0] + 100;
+			yb[1] = yb[0] - bgH[1] + 22;
+			yb[2] = yb[1] - bgH[2] + 50;
+			yb[3] = yb[2] - bgH[3];
+			break;
 		case 10:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] - 45;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1] - 10;
-			return;
+			yb[0] = gH - bgH[0] - 45;
+			yb[1] = yb[0] - bgH[1] - 10;
+			break;
 		case 11:
-			GameCanvas.yb[0] = gH - GameCanvas.bgH[0] + 60;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - GameCanvas.bgH[1] + 5;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - GameCanvas.bgH[2] - 15;
-			return;
+			yb[0] = gH - bgH[0] + 60;
+			yb[1] = yb[0] - bgH[1] + 5;
+			yb[2] = yb[1] - bgH[2] - 15;
+			break;
 		case 12:
-			GameCanvas.yb[0] = gH + 40;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - 40;
-			GameCanvas.yb[2] = GameCanvas.yb[1] - 40;
-			return;
+			yb[0] = gH + 40;
+			yb[1] = yb[0] - 40;
+			yb[2] = yb[1] - 40;
+			break;
 		case 13:
-			GameCanvas.yb[0] = gH - 80;
-			GameCanvas.yb[1] = GameCanvas.yb[0];
-			return;
-		case 14:
-			return;
+			yb[0] = gH - 80;
+			yb[1] = yb[0];
+			break;
 		case 15:
-			GameCanvas.yb[0] = gH - 20;
-			GameCanvas.yb[1] = GameCanvas.yb[0] - 80;
-			return;
-		default:
-			return;
+			yb[0] = gH - 20;
+			yb[1] = yb[0] - 80;
+			break;
 		}
 	}
 
-	// Token: 0x060008FC RID: 2300 RVA: 0x00081EE4 File Offset: 0x000800E4
 	public static void loadBG(int typeBG)
 	{
 		try
 		{
-			GameCanvas.isLoadBGok = true;
+			isLoadBGok = true;
+			if (typeBg == 12)
+			{
+				BackgroudEffect.yfog = TileMap.pxh - 100;
+			}
+			else
+			{
+				BackgroudEffect.yfog = TileMap.pxh - 160;
+			}
+			BackgroudEffect.clearImage();
+			randomRaintEff(typeBG);
+			if ((TileMap.lastBgID != typeBG || TileMap.lastType != TileMap.bgType) && typeBG != -1)
+			{
+				transY = 12;
+				TileMap.lastBgID = (sbyte)typeBG;
+				TileMap.lastType = (sbyte)TileMap.bgType;
+				layerSpeed = new int[5]
+				{
+					1,
+					2,
+					3,
+					7,
+					8
+				};
+				moveX = new int[5];
+				moveXSpeed = new int[5];
+				typeBg = typeBG;
+				isBoltEff = false;
+				GameScr.firstY = GameScr.cmy;
+				imgBG = null;
+				imgCloud = null;
+				imgSun = null;
+				imgCaycot = null;
+				GameScr.firstY = -1;
+				switch (typeBg)
+				{
+				case 15:
+					Res.outz("HELL");
+					nBg = 2;
+					break;
+				case 0:
+					imgCaycot = loadImageRMS("/bg/caycot.png");
+					layerSpeed = new int[4]
+					{
+						1,
+						3,
+						5,
+						7
+					};
+					nBg = 4;
+					if (TileMap.bgType == 2)
+					{
+						transY = 8;
+					}
+					break;
+				case 1:
+					transY = 7;
+					nBg = 4;
+					break;
+				case 2:
+					moveX = new int[5]
+					{
+						0,
+						0,
+						1,
+						0,
+						0
+					};
+					moveXSpeed = new int[5]
+					{
+						0,
+						0,
+						2,
+						0,
+						0
+					};
+					nBg = 5;
+					break;
+				case 3:
+					nBg = 3;
+					break;
+				case 4:
+					BackgroudEffect.addEffect(3);
+					moveX = new int[5]
+					{
+						0,
+						1,
+						0,
+						0,
+						0
+					};
+					moveXSpeed = new int[5]
+					{
+						0,
+						1,
+						0,
+						0,
+						0
+					};
+					nBg = 4;
+					break;
+				case 5:
+					nBg = 4;
+					break;
+				case 6:
+					moveX = new int[5]
+					{
+						1,
+						0,
+						0,
+						0,
+						0
+					};
+					moveXSpeed = new int[5]
+					{
+						2,
+						0,
+						0,
+						0,
+						0
+					};
+					nBg = 5;
+					break;
+				case 7:
+					nBg = 4;
+					break;
+				case 8:
+					transY = 8;
+					nBg = 4;
+					break;
+				case 9:
+					BackgroudEffect.addEffect(9);
+					nBg = 4;
+					break;
+				case 10:
+					nBg = 2;
+					break;
+				case 11:
+					transY = 7;
+					layerSpeed[2] = 0;
+					nBg = 3;
+					break;
+				case 12:
+					moveX = new int[5]
+					{
+						1,
+						1,
+						0,
+						0,
+						0
+					};
+					moveXSpeed = new int[5]
+					{
+						2,
+						1,
+						0,
+						0,
+						0
+					};
+					nBg = 3;
+					break;
+				case 13:
+					nBg = 2;
+					break;
+				}
+				skyColor = StaticObj.SKYCOLOR[typeBg];
+				if (lowGraphic)
+				{
+					tam = loadImageRMS("/bg/b63.png");
+				}
+				else
+				{
+					imgBG = new Image[nBg];
+					bgW = new int[nBg];
+					bgH = new int[nBg];
+					colorBotton = new int[nBg];
+					colorTop = new int[nBg];
+					if (TileMap.bgType == 100)
+					{
+						imgBG[0] = loadImageRMS("/bg/b100.png");
+						imgBG[1] = loadImageRMS("/bg/b100.png");
+						imgBG[2] = loadImageRMS("/bg/b82-1.png");
+						imgBG[3] = loadImageRMS("/bg/b93.png");
+						for (int i = 0; i < nBg; i++)
+						{
+							if (imgBG[i] != null)
+							{
+								int[] data = new int[1];
+								imgBG[i].getRGB(ref data, 0, 1, mGraphics.getRealImageWidth(imgBG[i]) / 2, 0, 1, 1);
+								colorTop[i] = data[0];
+								data = new int[1];
+								imgBG[i].getRGB(ref data, 0, 1, mGraphics.getRealImageWidth(imgBG[i]) / 2, mGraphics.getRealImageHeight(imgBG[i]) - 1, 1, 1);
+								colorBotton[i] = data[0];
+								bgW[i] = mGraphics.getImageWidth(imgBG[i]);
+								bgH[i] = mGraphics.getImageHeight(imgBG[i]);
+							}
+							else if (nBg > 1)
+							{
+								imgBG[i] = loadImageRMS("/bg/b" + typeBg + "0.png");
+								bgW[i] = mGraphics.getImageWidth(imgBG[i]);
+								bgH[i] = mGraphics.getImageHeight(imgBG[i]);
+							}
+						}
+					}
+					else
+					{
+						for (int j = 0; j < nBg; j++)
+						{
+							if (TileMap.bgType == 0)
+							{
+								imgBG[j] = loadImageRMS("/bg/b" + typeBg + j + ".png");
+							}
+							else
+							{
+								Res.outz("link type= /bg/b" + typeBg + j + "-" + TileMap.bgType + ".png");
+								imgBG[j] = loadImageRMS("/bg/b" + typeBg + j + "-" + TileMap.bgType + ".png");
+							}
+							if (imgBG[j] != null)
+							{
+								int[] data2 = new int[1];
+								imgBG[j].getRGB(ref data2, 0, 1, mGraphics.getRealImageWidth(imgBG[j]) / 2, 0, 1, 1);
+								colorTop[j] = data2[0];
+								data2 = new int[1];
+								imgBG[j].getRGB(ref data2, 0, 1, mGraphics.getRealImageWidth(imgBG[j]) / 2, mGraphics.getRealImageHeight(imgBG[j]) - 1, 1, 1);
+								colorBotton[j] = data2[0];
+								bgW[j] = mGraphics.getImageWidth(imgBG[j]);
+								bgH[j] = mGraphics.getImageHeight(imgBG[j]);
+							}
+							else if (nBg > 1)
+							{
+								imgBG[j] = loadImageRMS("/bg/b" + typeBg + "0.png");
+								bgW[j] = mGraphics.getImageWidth(imgBG[j]);
+								bgH[j] = mGraphics.getImageHeight(imgBG[j]);
+							}
+						}
+					}
+					getYBackground(typeBg);
+					cloudX = new int[5]
+					{
+						GameScr.gW / 2 - 40,
+						GameScr.gW / 2 + 40,
+						GameScr.gW / 2 - 100,
+						GameScr.gW / 2 - 80,
+						GameScr.gW / 2 - 120
+					};
+					cloudY = new int[5]
+					{
+						130,
+						100,
+						150,
+						140,
+						80
+					};
+					if (typeBg != 0)
+					{
+						if (typeBg == 2)
+						{
+							imgSun = loadImageRMS("/bg/sun0.png");
+							sunX = GameScr.gW / 2 + 50;
+							sunY = yb[4] - 40;
+						}
+						else if (typeBg == 4)
+						{
+							imgSun = loadImageRMS("/bg/sun2.png");
+							sunX = GameScr.gW / 2 + 30;
+							sunY = yb[3];
+						}
+						else if (typeBg == 7)
+						{
+							imgSun = loadImageRMS("/bg/sun3" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+							imgSun2 = loadImageRMS("/bg/sun4" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+							sunX = GameScr.gW - GameScr.gW / 3;
+							sunY = yb[3] - 80;
+							sunX2 = sunX - 100;
+							sunY2 = yb[3] - 30;
+						}
+						else if (typeBg == 6)
+						{
+							imgSun = loadImageRMS("/bg/sun5" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+							imgSun2 = loadImageRMS("/bg/sun6" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+							sunX = GameScr.gW - GameScr.gW / 3;
+							sunY = yb[4];
+							sunX2 = sunX - 100;
+							sunY2 = yb[4] + 20;
+						}
+						else if (typeBG == 5)
+						{
+							imgSun = loadImageRMS("/bg/sun8" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+							imgSun2 = loadImageRMS("/bg/sun7" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+							sunX = GameScr.gW / 2 - 50;
+							sunY = yb[3] + 20;
+							sunX2 = GameScr.gW / 2 + 20;
+							sunY2 = yb[3] - 30;
+						}
+						else if (typeBg == 8 && TileMap.mapID < 90)
+						{
+							imgSun = loadImageRMS("/bg/sun9" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+							imgSun2 = loadImageRMS("/bg/sun10" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+							sunX = GameScr.gW / 2 - 30;
+							sunY = yb[3] + 60;
+							sunX2 = GameScr.gW / 2 + 20;
+							sunY2 = yb[3] + 10;
+						}
+						else
+						{
+							switch (typeBG)
+							{
+							case 9:
+								imgSun = loadImageRMS("/bg/sun11" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+								imgSun2 = loadImageRMS("/bg/sun12" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+								sunX = GameScr.gW - GameScr.gW / 3;
+								sunY = yb[4] + 20;
+								sunX2 = sunX - 80;
+								sunY2 = yb[4] + 40;
+								break;
+							case 10:
+								imgSun = loadImageRMS("/bg/sun13" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+								imgSun2 = loadImageRMS("/bg/sun14" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+								sunX = GameScr.gW - GameScr.gW / 3;
+								sunY = yb[1] - 30;
+								sunX2 = sunX - 80;
+								sunY2 = yb[1];
+								break;
+							case 11:
+								imgSun = loadImageRMS("/bg/sun15" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+								imgSun2 = loadImageRMS("/bg/b113" + ((TileMap.bgType != 0) ? ("-" + TileMap.bgType) : string.Empty) + ".png");
+								sunX = GameScr.gW / 2 - 30;
+								sunY = yb[2] - 30;
+								break;
+							case 12:
+								cloudY = new int[5]
+								{
+									200,
+									170,
+									220,
+									150,
+									250
+								};
+								break;
+							default:
+								imgCloud = null;
+								imgSun = null;
+								imgSun2 = null;
+								break;
+							}
+						}
+					}
+					paintBG = false;
+					if (!paintBG)
+					{
+						paintBG = true;
+					}
+				}
+			}
 		}
 		catch (Exception)
 		{
-			GameCanvas.isLoadBGok = false;
+			isLoadBGok = false;
 		}
 	}
 
-	// Token: 0x060008FD RID: 2301 RVA: 0x00003584 File Offset: 0x00001784
 	private static void randomRaintEff(int typeBG)
 	{
+		int num = 0;
+		while (true)
+		{
+			if (num < bgRain.Length)
+			{
+				if (typeBG == bgRain[num] && Res.random(0, 2) == 0)
+				{
+					break;
+				}
+				num++;
+				continue;
+			}
+			return;
+		}
+		BackgroudEffect.addEffect(0);
 	}
 
-	// Token: 0x060008FE RID: 2302 RVA: 0x00081F14 File Offset: 0x00080114
 	public void keyPressedz(int keyCode)
 	{
-		GameCanvas.lastTimePress = mSystem.currentTimeMillis();
+		lastTimePress = mSystem.currentTimeMillis();
 		if ((keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 122) || keyCode == 10 || keyCode == 8 || keyCode == 13 || keyCode == 32 || keyCode == 31)
 		{
-			GameCanvas.keyAsciiPress = keyCode;
+			keyAsciiPress = keyCode;
 		}
-		this.mapKeyPress(keyCode);
+		mapKeyPress(keyCode);
 	}
 
-	// Token: 0x060008FF RID: 2303 RVA: 0x00081F64 File Offset: 0x00080164
 	public void mapKeyPress(int keyCode)
 	{
-		if (GameCanvas.currentDialog != null)
+		if (currentDialog != null)
 		{
-			GameCanvas.currentDialog.keyPress(keyCode);
-			GameCanvas.keyAsciiPress = 0;
+			currentDialog.keyPress(keyCode);
+			keyAsciiPress = 0;
 			return;
 		}
-		GameCanvas.currentScreen.keyPress(keyCode);
+		currentScreen.keyPress(keyCode);
 		switch (keyCode)
 		{
+		case -38:
+		case -1:
+			if (currentScreen is GameScr && Char.myCharz().isAttack)
+			{
+				clearKeyHold();
+				clearKeyPressed();
+			}
+			else
+			{
+				keyHold[21] = true;
+				keyPressed[21] = true;
+			}
+			break;
+		case -39:
+		case -2:
+			if (currentScreen is GameScr && Char.myCharz().isAttack)
+			{
+				clearKeyHold();
+				clearKeyPressed();
+			}
+			else
+			{
+				keyHold[22] = true;
+				keyPressed[22] = true;
+			}
+			break;
+		case -3:
+			if (currentScreen is GameScr && Char.myCharz().isAttack)
+			{
+				clearKeyHold();
+				clearKeyPressed();
+			}
+			else
+			{
+				keyHold[23] = true;
+				keyPressed[23] = true;
+			}
+			break;
+		case -4:
+			if (currentScreen is GameScr && Char.myCharz().isAttack)
+			{
+				clearKeyHold();
+				clearKeyPressed();
+			}
+			else
+			{
+				keyHold[24] = true;
+				keyPressed[24] = true;
+			}
+			break;
+		case -5:
+		case 10:
+			if (currentScreen is GameScr && Char.myCharz().isAttack)
+			{
+				clearKeyHold();
+				clearKeyPressed();
+				break;
+			}
+			keyHold[25] = true;
+			keyPressed[25] = true;
+			keyHold[15] = true;
+			keyPressed[15] = true;
+			break;
 		case 48:
-			GameCanvas.keyHold[0] = true;
-			GameCanvas.keyPressed[0] = true;
-			return;
+			keyHold[0] = true;
+			keyPressed[0] = true;
+			break;
 		case 49:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
 			{
-				GameCanvas.keyHold[1] = true;
-				GameCanvas.keyPressed[1] = true;
+				keyHold[1] = true;
+				keyPressed[1] = true;
 			}
-			return;
-		case 50:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
-			{
-				GameCanvas.keyHold[2] = true;
-				GameCanvas.keyPressed[2] = true;
-			}
-			return;
+			break;
 		case 51:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
 			{
-				GameCanvas.keyHold[3] = true;
-				GameCanvas.keyPressed[3] = true;
+				keyHold[3] = true;
+				keyPressed[3] = true;
 			}
-			return;
-		case 52:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
-			{
-				GameCanvas.keyHold[4] = true;
-				GameCanvas.keyPressed[4] = true;
-			}
-			return;
-		case 53:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
-			{
-				GameCanvas.keyHold[5] = true;
-				GameCanvas.keyPressed[5] = true;
-			}
-			return;
-		case 54:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
-			{
-				GameCanvas.keyHold[6] = true;
-				GameCanvas.keyPressed[6] = true;
-			}
-			return;
+			break;
 		case 55:
-			GameCanvas.keyHold[7] = true;
-			GameCanvas.keyPressed[7] = true;
-			return;
-		case 56:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
-			{
-				GameCanvas.keyHold[8] = true;
-				GameCanvas.keyPressed[8] = true;
-			}
-			return;
+			keyHold[7] = true;
+			keyPressed[7] = true;
+			break;
 		case 57:
-			GameCanvas.keyHold[9] = true;
-			GameCanvas.keyPressed[9] = true;
-			return;
-		default:
-			switch (keyCode + 8)
+			keyHold[9] = true;
+			keyPressed[9] = true;
+			break;
+		case 42:
+			keyHold[10] = true;
+			keyPressed[10] = true;
+			break;
+		case 35:
+			keyHold[11] = true;
+			keyPressed[11] = true;
+			break;
+		case -21:
+		case -6:
+			keyHold[12] = true;
+			keyPressed[12] = true;
+			break;
+		case -22:
+		case -7:
+			keyHold[13] = true;
+			keyPressed[13] = true;
+			break;
+		case 50:
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
 			{
-			case 0:
-				GameCanvas.keyHold[14] = true;
-				GameCanvas.keyPressed[14] = true;
-				return;
-			case 1:
-				goto IL_3D7;
-			case 2:
-				goto IL_3C4;
-			case 3:
-				goto IL_37C;
-			case 4:
-				if (GameCanvas.currentScreen is GameScr && global::Char.myCharz().isAttack)
-				{
-					GameCanvas.clearKeyHold();
-					GameCanvas.clearKeyPressed();
-					return;
-				}
-				GameCanvas.keyHold[24] = true;
-				GameCanvas.keyPressed[24] = true;
-				return;
-			case 5:
-				if (GameCanvas.currentScreen is GameScr && global::Char.myCharz().isAttack)
-				{
-					GameCanvas.clearKeyHold();
-					GameCanvas.clearKeyPressed();
-					return;
-				}
-				GameCanvas.keyHold[23] = true;
-				GameCanvas.keyPressed[23] = true;
-				return;
-			case 6:
-				goto IL_346;
-			case 7:
-				break;
-			default:
-				if (keyCode == -39)
-				{
-					goto IL_346;
-				}
-				if (keyCode != -38)
-				{
-					if (keyCode == -22)
-					{
-						goto IL_3D7;
-					}
-					if (keyCode == -21)
-					{
-						goto IL_3C4;
-					}
-					if (keyCode == -26)
-					{
-						GameCanvas.keyHold[16] = true;
-						GameCanvas.keyPressed[16] = true;
-						return;
-					}
-					if (keyCode == 10)
-					{
-						goto IL_37C;
-					}
-					if (keyCode == 35)
-					{
-						GameCanvas.keyHold[11] = true;
-						GameCanvas.keyPressed[11] = true;
-						return;
-					}
-					if (keyCode == 42)
-					{
-						GameCanvas.keyHold[10] = true;
-						GameCanvas.keyPressed[10] = true;
-						return;
-					}
-					if (keyCode != 113)
-					{
-						return;
-					}
-					GameCanvas.keyHold[17] = true;
-					GameCanvas.keyPressed[17] = true;
-					return;
-				}
-				break;
+				keyHold[2] = true;
+				keyPressed[2] = true;
 			}
-			if (GameCanvas.currentScreen is GameScr && global::Char.myCharz().isAttack)
+			break;
+		case 52:
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
 			{
-				GameCanvas.clearKeyHold();
-				GameCanvas.clearKeyPressed();
-				return;
+				keyHold[4] = true;
+				keyPressed[4] = true;
 			}
-			GameCanvas.keyHold[21] = true;
-			GameCanvas.keyPressed[21] = true;
-			return;
-			IL_346:
-			if (GameCanvas.currentScreen is GameScr && global::Char.myCharz().isAttack)
+			break;
+		case 54:
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
 			{
-				GameCanvas.clearKeyHold();
-				GameCanvas.clearKeyPressed();
-				return;
+				keyHold[6] = true;
+				keyPressed[6] = true;
 			}
-			GameCanvas.keyHold[22] = true;
-			GameCanvas.keyPressed[22] = true;
-			return;
-			IL_37C:
-			if (GameCanvas.currentScreen is GameScr && global::Char.myCharz().isAttack)
+			break;
+		case 56:
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
 			{
-				GameCanvas.clearKeyHold();
-				GameCanvas.clearKeyPressed();
-				return;
+				keyHold[8] = true;
+				keyPressed[8] = true;
 			}
-			GameCanvas.keyHold[25] = true;
-			GameCanvas.keyPressed[25] = true;
-			GameCanvas.keyHold[15] = true;
-			GameCanvas.keyPressed[15] = true;
-			return;
-			IL_3C4:
-			GameCanvas.keyHold[12] = true;
-			GameCanvas.keyPressed[12] = true;
-			return;
-			IL_3D7:
-			GameCanvas.keyHold[13] = true;
-			GameCanvas.keyPressed[13] = true;
-			return;
+			break;
+		case 53:
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
+			{
+				keyHold[5] = true;
+				keyPressed[5] = true;
+			}
+			break;
+		case -8:
+			keyHold[14] = true;
+			keyPressed[14] = true;
+			break;
+		case -26:
+			keyHold[16] = true;
+			keyPressed[16] = true;
+			break;
+		case 113:
+			keyHold[17] = true;
+			keyPressed[17] = true;
+			break;
 		}
 	}
 
-	// Token: 0x06000900 RID: 2304 RVA: 0x00007425 File Offset: 0x00005625
 	public void keyReleasedz(int keyCode)
 	{
-		GameCanvas.keyAsciiPress = 0;
-		this.mapKeyRelease(keyCode);
+		keyAsciiPress = 0;
+		mapKeyRelease(keyCode);
 	}
 
-	// Token: 0x06000901 RID: 2305 RVA: 0x0008235C File Offset: 0x0008055C
 	public void mapKeyRelease(int keyCode)
 	{
 		switch (keyCode)
 		{
+		case -38:
+		case -1:
+			keyHold[21] = false;
+			break;
+		case -39:
+		case -2:
+			keyHold[22] = false;
+			break;
+		case -3:
+			keyHold[23] = false;
+			break;
+		case -4:
+			keyHold[24] = false;
+			break;
+		case -5:
+		case 10:
+			keyHold[25] = false;
+			keyReleased[25] = true;
+			keyHold[15] = true;
+			keyPressed[15] = true;
+			break;
 		case 48:
-			GameCanvas.keyHold[0] = false;
-			GameCanvas.keyReleased[0] = true;
-			return;
+			keyHold[0] = false;
+			keyReleased[0] = true;
+			break;
 		case 49:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
 			{
-				GameCanvas.keyHold[1] = false;
-				GameCanvas.keyReleased[1] = true;
+				keyHold[1] = false;
+				keyReleased[1] = true;
 			}
-			return;
-		case 50:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
-			{
-				GameCanvas.keyHold[2] = false;
-				GameCanvas.keyReleased[2] = true;
-			}
-			return;
+			break;
 		case 51:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
 			{
-				GameCanvas.keyHold[3] = false;
-				GameCanvas.keyReleased[3] = true;
+				keyHold[3] = false;
+				keyReleased[3] = true;
 			}
-			return;
-		case 52:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
-			{
-				GameCanvas.keyHold[4] = false;
-				GameCanvas.keyReleased[4] = true;
-			}
-			return;
-		case 53:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
-			{
-				GameCanvas.keyHold[5] = false;
-				GameCanvas.keyReleased[5] = true;
-			}
-			return;
-		case 54:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
-			{
-				GameCanvas.keyHold[6] = false;
-				GameCanvas.keyReleased[6] = true;
-			}
-			return;
+			break;
 		case 55:
-			GameCanvas.keyHold[7] = false;
-			GameCanvas.keyReleased[7] = true;
-			return;
-		case 56:
-			if (GameCanvas.currentScreen == GameScr.instance && GameCanvas.isMoveNumberPad && !ChatTextField.gI().isShow)
-			{
-				GameCanvas.keyHold[8] = false;
-				GameCanvas.keyReleased[8] = true;
-			}
-			return;
+			keyHold[7] = false;
+			keyReleased[7] = true;
+			break;
 		case 57:
-			GameCanvas.keyHold[9] = false;
-			GameCanvas.keyReleased[9] = true;
-			return;
-		default:
-			switch (keyCode + 8)
+			keyHold[9] = false;
+			keyReleased[9] = true;
+			break;
+		case 42:
+			keyHold[10] = false;
+			keyReleased[10] = true;
+			break;
+		case 35:
+			keyHold[11] = false;
+			keyReleased[11] = true;
+			break;
+		case -21:
+		case -6:
+			keyHold[12] = false;
+			keyReleased[12] = true;
+			break;
+		case -22:
+		case -7:
+			keyHold[13] = false;
+			keyReleased[13] = true;
+			break;
+		case 50:
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
 			{
-			case 0:
-				GameCanvas.keyHold[14] = false;
-				return;
-			case 1:
-				goto IL_2C8;
-			case 2:
-				goto IL_2B5;
-			case 3:
-				goto IL_290;
-			case 4:
-				GameCanvas.keyHold[24] = false;
-				return;
-			case 5:
-				GameCanvas.keyHold[23] = false;
-				return;
-			case 6:
-				goto IL_286;
-			case 7:
-				break;
-			default:
-				if (keyCode == -39)
-				{
-					goto IL_286;
-				}
-				if (keyCode != -38)
-				{
-					if (keyCode == -22)
-					{
-						goto IL_2C8;
-					}
-					if (keyCode == -21)
-					{
-						goto IL_2B5;
-					}
-					if (keyCode == -26)
-					{
-						GameCanvas.keyHold[16] = false;
-						return;
-					}
-					if (keyCode == 10)
-					{
-						goto IL_290;
-					}
-					if (keyCode == 35)
-					{
-						GameCanvas.keyHold[11] = false;
-						GameCanvas.keyReleased[11] = true;
-						return;
-					}
-					if (keyCode == 42)
-					{
-						GameCanvas.keyHold[10] = false;
-						GameCanvas.keyReleased[10] = true;
-						return;
-					}
-					if (keyCode != 113)
-					{
-						return;
-					}
-					GameCanvas.keyHold[17] = false;
-					GameCanvas.keyReleased[17] = true;
-					return;
-				}
-				break;
+				keyHold[2] = false;
+				keyReleased[2] = true;
 			}
-			GameCanvas.keyHold[21] = false;
-			return;
-			IL_286:
-			GameCanvas.keyHold[22] = false;
-			return;
-			IL_290:
-			GameCanvas.keyHold[25] = false;
-			GameCanvas.keyReleased[25] = true;
-			GameCanvas.keyHold[15] = true;
-			GameCanvas.keyPressed[15] = true;
-			return;
-			IL_2B5:
-			GameCanvas.keyHold[12] = false;
-			GameCanvas.keyReleased[12] = true;
-			return;
-			IL_2C8:
-			GameCanvas.keyHold[13] = false;
-			GameCanvas.keyReleased[13] = true;
-			return;
+			break;
+		case 52:
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
+			{
+				keyHold[4] = false;
+				keyReleased[4] = true;
+			}
+			break;
+		case 54:
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
+			{
+				keyHold[6] = false;
+				keyReleased[6] = true;
+			}
+			break;
+		case 56:
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
+			{
+				keyHold[8] = false;
+				keyReleased[8] = true;
+			}
+			break;
+		case 53:
+			if (currentScreen == GameScr.instance && isMoveNumberPad && !ChatTextField.gI().isShow)
+			{
+				keyHold[5] = false;
+				keyReleased[5] = true;
+			}
+			break;
+		case -8:
+			keyHold[14] = false;
+			break;
+		case -26:
+			keyHold[16] = false;
+			break;
+		case 113:
+			keyHold[17] = false;
+			keyReleased[17] = true;
+			break;
 		}
 	}
 
-	// Token: 0x06000902 RID: 2306 RVA: 0x00007434 File Offset: 0x00005634
 	public void pointerMouse(int x, int y)
 	{
-		GameCanvas.pxMouse = x;
-		GameCanvas.pyMouse = y;
+		pxMouse = x;
+		pyMouse = y;
 	}
 
-	// Token: 0x06000903 RID: 2307 RVA: 0x00007442 File Offset: 0x00005642
 	public void scrollMouse(int a)
 	{
-		GameCanvas.pXYScrollMouse = a;
-		if (GameCanvas.panel != null && GameCanvas.panel.isShow)
+		pXYScrollMouse = a;
+		if (panel != null && panel.isShow)
 		{
-			GameCanvas.panel.updateScroolMouse(a);
+			panel.updateScroolMouse(a);
 		}
 	}
 
-	// Token: 0x06000904 RID: 2308 RVA: 0x00082644 File Offset: 0x00080844
 	public void pointerDragged(int x, int y)
 	{
-		if (Res.abs(x - GameCanvas.pxLast) >= 10 || Res.abs(y - GameCanvas.pyLast) >= 10)
+		if (Res.abs(x - pxLast) >= 10 || Res.abs(y - pyLast) >= 10)
 		{
-			GameCanvas.isPointerClick = false;
+			isPointerClick = false;
 		}
-		GameCanvas.px = x;
-		GameCanvas.py = y;
-		GameCanvas.curPos++;
-		if (GameCanvas.curPos > 3)
+		px = x;
+		py = y;
+		curPos++;
+		if (curPos > 3)
 		{
-			GameCanvas.curPos = 0;
+			curPos = 0;
 		}
-		GameCanvas.arrPos[GameCanvas.curPos] = new Position(x, y);
+		arrPos[curPos] = new Position(x, y);
 	}
 
-	// Token: 0x06000905 RID: 2309 RVA: 0x00007468 File Offset: 0x00005668
 	public static bool isHoldPress()
 	{
-		return mSystem.currentTimeMillis() - GameCanvas.lastTimePress >= 800L;
+		if (mSystem.currentTimeMillis() - lastTimePress >= 800)
+		{
+			return true;
+		}
+		return false;
 	}
 
-	// Token: 0x06000906 RID: 2310 RVA: 0x000826B0 File Offset: 0x000808B0
 	public void pointerPressed(int x, int y)
 	{
-		GameCanvas.isPointerJustRelease = false;
-		GameCanvas.isPointerJustDown = true;
-		GameCanvas.isPointerDown = true;
-		GameCanvas.isPointerClick = true;
-		GameCanvas.lastTimePress = mSystem.currentTimeMillis();
-		GameCanvas.pxFirst = x;
-		GameCanvas.pyFirst = y;
-		GameCanvas.pxLast = x;
-		GameCanvas.pyLast = y;
-		GameCanvas.px = x;
-		GameCanvas.py = y;
+		isPointerJustRelease = false;
+		isPointerJustDown = true;
+		isPointerDown = true;
+		isPointerClick = true;
+		lastTimePress = mSystem.currentTimeMillis();
+		pxFirst = x;
+		pyFirst = y;
+		pxLast = x;
+		pyLast = y;
+		px = x;
+		py = y;
 	}
 
-	// Token: 0x06000907 RID: 2311 RVA: 0x00007480 File Offset: 0x00005680
 	public void pointerReleased(int x, int y)
 	{
-		GameCanvas.isPointerDown = false;
-		GameCanvas.isPointerJustRelease = true;
+		isPointerDown = false;
+		isPointerJustRelease = true;
 		mScreen.keyTouch = -1;
-		GameCanvas.px = x;
-		GameCanvas.py = y;
+		px = x;
+		py = y;
 	}
 
-	// Token: 0x06000908 RID: 2312 RVA: 0x000074A0 File Offset: 0x000056A0
 	public static bool isPointerHoldIn(int x, int y, int w, int h)
 	{
-		return (GameCanvas.isPointerDown || GameCanvas.isPointerJustRelease) && GameCanvas.px >= x && GameCanvas.px <= x + w && GameCanvas.py >= y && GameCanvas.py <= y + h;
+		if (!isPointerDown && !isPointerJustRelease)
+		{
+			return false;
+		}
+		if (px >= x && px <= x + w && py >= y && py <= y + h)
+		{
+			return true;
+		}
+		return false;
 	}
 
-	// Token: 0x06000909 RID: 2313 RVA: 0x000074D9 File Offset: 0x000056D9
 	public static bool isMouseFocus(int x, int y, int w, int h)
 	{
-		return GameCanvas.pxMouse >= x && GameCanvas.pxMouse <= x + w && GameCanvas.pyMouse >= y && GameCanvas.pyMouse <= y + h;
+		if (pxMouse >= x && pxMouse <= x + w && pyMouse >= y && pyMouse <= y + h)
+		{
+			return true;
+		}
+		return false;
 	}
 
-	// Token: 0x0600090A RID: 2314 RVA: 0x00082704 File Offset: 0x00080904
 	public static void clearKeyPressed()
 	{
-		for (int i = 0; i < GameCanvas.keyPressed.Length; i++)
+		for (int i = 0; i < keyPressed.Length; i++)
 		{
-			GameCanvas.keyPressed[i] = false;
+			keyPressed[i] = false;
 		}
-		GameCanvas.isPointerJustRelease = false;
+		isPointerJustRelease = false;
 	}
 
-	// Token: 0x0600090B RID: 2315 RVA: 0x00082734 File Offset: 0x00080934
 	public static void clearKeyHold()
 	{
-		for (int i = 0; i < GameCanvas.keyHold.Length; i++)
+		for (int i = 0; i < keyHold.Length; i++)
 		{
-			GameCanvas.keyHold[i] = false;
+			keyHold[i] = false;
 		}
 	}
 
-	// Token: 0x0600090C RID: 2316 RVA: 0x0008275C File Offset: 0x0008095C
 	public static void checkBackButton()
 	{
 		if (ChatPopup.serverChatPopUp == null && ChatPopup.currChatPopup == null)
 		{
-			GameCanvas.startYesNoDlg(mResources.DOYOUWANTEXIT, new Command(mResources.YES, GameCanvas.instance, 8885, null), new Command(mResources.NO, GameCanvas.instance, 8882, null));
+			startYesNoDlg(mResources.DOYOUWANTEXIT, new Command(mResources.YES, instance, 8885, null), new Command(mResources.NO, instance, 8882, null));
 		}
 	}
 
-	// Token: 0x0600090D RID: 2317 RVA: 0x000827AC File Offset: 0x000809AC
 	public void paintChangeMap(mGraphics g)
 	{
-		GameCanvas.resetTrans(g);
+		resetTrans(g);
 		g.setColor(0);
-		g.fillRect(0, 0, GameCanvas.w, GameCanvas.h);
-		g.drawImage(LoginScr.imgTitle, GameCanvas.w / 2, GameCanvas.h / 2 - 24, StaticObj.BOTTOM_HCENTER);
-		GameCanvas.paintShukiren(GameCanvas.hw, GameCanvas.h / 2 + 24, g);
-		mFont.tahoma_7b_white.drawString(g, mResources.PLEASEWAIT + ((LoginScr.timeLogin <= 0) ? string.Empty : (" " + LoginScr.timeLogin + "s")), GameCanvas.w / 2, GameCanvas.h / 2, 2);
+		g.fillRect(0, 0, w, h);
+		g.drawImage(LoginScr.imgTitle, w / 2, h / 2 - 24, StaticObj.BOTTOM_HCENTER);
+		paintShukiren(hw, h / 2 + 24, g);
+		mFont.tahoma_7b_white.drawString(g, mResources.PLEASEWAIT + ((LoginScr.timeLogin <= 0) ? string.Empty : (" " + LoginScr.timeLogin + "s")), w / 2, h / 2, 2);
 	}
 
-	// Token: 0x0600090E RID: 2318 RVA: 0x0008285C File Offset: 0x00080A5C
 	public void paint(mGraphics gx)
 	{
 		try
 		{
-			GameCanvas.debugPaint.removeAllElements();
-			GameCanvas.debug("PA", 1);
-			if (GameCanvas.currentScreen != null)
+			debugPaint.removeAllElements();
+			debug("PA", 1);
+			if (currentScreen != null)
 			{
-				GameCanvas.currentScreen.paint(this.g);
+				currentScreen.paint(g);
 			}
-			GameCanvas.debug("PB", 1);
-			this.g.translate(-this.g.getTranslateX(), -this.g.getTranslateY());
-			this.g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
-			if (GameCanvas.panel.isShow)
+			debug("PB", 1);
+			g.translate(-g.getTranslateX(), -g.getTranslateY());
+			g.setClip(0, 0, w, h);
+			if (panel.isShow)
 			{
-				GameCanvas.panel.paint(this.g);
-				if (GameCanvas.panel2 != null && GameCanvas.panel2.isShow)
+				panel.paint(g);
+				if (panel2 != null && panel2.isShow)
 				{
-					GameCanvas.panel2.paint(this.g);
+					panel2.paint(g);
 				}
-				if (GameCanvas.panel.chatTField != null && GameCanvas.panel.chatTField.isShow)
+				if (panel.chatTField != null && panel.chatTField.isShow)
 				{
-					GameCanvas.panel.chatTField.paint(this.g);
+					panel.chatTField.paint(g);
 				}
-				if (GameCanvas.panel2 != null && GameCanvas.panel2.chatTField != null && GameCanvas.panel2.chatTField.isShow)
+				if (panel2 != null && panel2.chatTField != null && panel2.chatTField.isShow)
 				{
-					GameCanvas.panel2.chatTField.paint(this.g);
+					panel2.chatTField.paint(g);
 				}
 			}
-			Res.paintOnScreenDebug(this.g);
-			InfoDlg.paint(this.g);
-			if (GameCanvas.currentDialog != null)
+			Res.paintOnScreenDebug(g);
+			InfoDlg.paint(g);
+			if (currentDialog != null)
 			{
-				GameCanvas.debug("PC", 1);
-				GameCanvas.currentDialog.paint(this.g);
+				debug("PC", 1);
+				currentDialog.paint(g);
 			}
-			else if (GameCanvas.menu.showMenu)
+			else if (menu.showMenu)
 			{
-				GameCanvas.debug("PD", 1);
-				GameCanvas.menu.paintMenu(this.g);
+				debug("PD", 1);
+				menu.paintMenu(g);
 			}
+			GameScr.info1.paint(g);
+			GameScr.info2.paint(g);
 			if (GameScr.gI().popUpYesNo != null)
 			{
-				GameScr.gI().popUpYesNo.paint(this.g);
+				GameScr.gI().popUpYesNo.paint(g);
 			}
 			if (ChatPopup.currChatPopup != null)
 			{
-				ChatPopup.currChatPopup.paint(this.g);
+				ChatPopup.currChatPopup.paint(g);
 			}
-			Hint.paint(this.g);
+			Hint.paint(g);
 			if (ChatPopup.serverChatPopUp != null)
 			{
-				ChatPopup.serverChatPopUp.paint(this.g);
+				ChatPopup.serverChatPopUp.paint(g);
 			}
 			for (int i = 0; i < Effect2.vEffect2.size(); i++)
 			{
 				Effect2 effect = (Effect2)Effect2.vEffect2.elementAt(i);
 				if (effect is ChatPopup && !effect.Equals(ChatPopup.currChatPopup) && !effect.Equals(ChatPopup.serverChatPopUp))
 				{
-					effect.paint(this.g);
+					effect.paint(g);
 				}
 			}
-			if (global::Char.isLoadingMap || LoginScr.isContinueToLogin || ServerListScreen.waitToLogin || ServerListScreen.isWait)
+			if (Char.isLoadingMap || LoginScr.isContinueToLogin || ServerListScreen.waitToLogin || ServerListScreen.isWait)
 			{
-				this.paintChangeMap(this.g);
+				paintChangeMap(g);
 			}
-			GameCanvas.debug("PE", 1);
-			GameCanvas.resetTrans(this.g);
-			EffecMn.paintLayer4(this.g);
-			if (mResources.language == 0 && GameCanvas.open3Hour && !GameCanvas.isLoading)
+			debug("PE", 1);
+			resetTrans(g);
+			EffecMn.paintLayer4(g);
+			if (mResources.language == 0 && open3Hour && !isLoading)
 			{
-				if (GameCanvas.currentScreen == GameCanvas.loginScr || GameCanvas.currentScreen == GameCanvas.serverScreen)
+				if (currentScreen == loginScr || currentScreen == serverScreen)
 				{
-					this.g.drawImage(GameCanvas.img12, 5, 5, 0);
+					g.drawImage(img12, 5, 5, 0);
 				}
-				if (GameCanvas.currentScreen == CreateCharScr.instance)
+				if (currentScreen == CreateCharScr.instance)
 				{
-					this.g.drawImage(GameCanvas.img12, 5, 20, 0);
+					g.drawImage(img12, 5, 20, 0);
 				}
 			}
 		}
@@ -1557,196 +2266,159 @@ public class GameCanvas : IActionListener
 		}
 	}
 
-	// Token: 0x0600090F RID: 2319 RVA: 0x00007504 File Offset: 0x00005704
 	public static void endDlg()
 	{
-		if (GameCanvas.inputDlg != null)
+		if (inputDlg != null)
 		{
-			GameCanvas.inputDlg.tfInput.setMaxTextLenght(500);
+			inputDlg.tfInput.setMaxTextLenght(500);
 		}
-		GameCanvas.currentDialog = null;
+		currentDialog = null;
 		InfoDlg.hide();
 	}
 
-	// Token: 0x06000910 RID: 2320 RVA: 0x0000752C File Offset: 0x0000572C
 	public static void startOKDlg(string info)
 	{
-		GameCanvas.closeKeyBoard();
-		GameCanvas.msgdlg.setInfo(info, null, new Command(mResources.OK, GameCanvas.instance, 8882, null), null);
-		GameCanvas.currentDialog = GameCanvas.msgdlg;
+		closeKeyBoard();
+		msgdlg.setInfo(info, null, new Command(mResources.OK, instance, 8882, null), null);
+		currentDialog = msgdlg;
 	}
 
-	// Token: 0x06000911 RID: 2321 RVA: 0x0000755F File Offset: 0x0000575F
 	public static void startWaitDlg(string info)
 	{
-		GameCanvas.closeKeyBoard();
-		GameCanvas.msgdlg.setInfo(info, null, new Command(mResources.CANCEL, GameCanvas.instance, 8882, null), null);
-		GameCanvas.currentDialog = GameCanvas.msgdlg;
-		GameCanvas.msgdlg.isWait = true;
+		closeKeyBoard();
+		msgdlg.setInfo(info, null, new Command(mResources.CANCEL, instance, 8882, null), null);
+		currentDialog = msgdlg;
+		msgdlg.isWait = true;
 	}
 
-	// Token: 0x06000912 RID: 2322 RVA: 0x0000755F File Offset: 0x0000575F
 	public static void startOKDlg(string info, bool isError)
 	{
-		GameCanvas.closeKeyBoard();
-		GameCanvas.msgdlg.setInfo(info, null, new Command(mResources.CANCEL, GameCanvas.instance, 8882, null), null);
-		GameCanvas.currentDialog = GameCanvas.msgdlg;
-		GameCanvas.msgdlg.isWait = true;
+		closeKeyBoard();
+		msgdlg.setInfo(info, null, new Command(mResources.CANCEL, instance, 8882, null), null);
+		currentDialog = msgdlg;
+		msgdlg.isWait = true;
 	}
 
-	// Token: 0x06000913 RID: 2323 RVA: 0x0000759D File Offset: 0x0000579D
 	public static void startWaitDlg()
 	{
-		GameCanvas.closeKeyBoard();
-		global::Char.isLoadingMap = true;
+		closeKeyBoard();
+		Char.isLoadingMap = true;
 	}
 
-	// Token: 0x06000914 RID: 2324 RVA: 0x000075AA File Offset: 0x000057AA
 	public void openWeb(string strLeft, string strRight, string url, string str)
 	{
-		GameCanvas.msgdlg.setInfo(str, new Command(strLeft, this, 8881, url), null, new Command(strRight, this, 8882, null));
-		GameCanvas.currentDialog = GameCanvas.msgdlg;
+		msgdlg.setInfo(str, new Command(strLeft, this, 8881, url), null, new Command(strRight, this, 8882, null));
+		currentDialog = msgdlg;
 	}
 
-	// Token: 0x06000915 RID: 2325 RVA: 0x000075DD File Offset: 0x000057DD
 	public static void startOK(string info, int actionID, object p)
 	{
-		GameCanvas.closeKeyBoard();
-		GameCanvas.msgdlg.setInfo(info, null, new Command(mResources.OK, GameCanvas.instance, actionID, p), null);
-		GameCanvas.msgdlg.show();
+		closeKeyBoard();
+		msgdlg.setInfo(info, null, new Command(mResources.OK, instance, actionID, p), null);
+		msgdlg.show();
 	}
 
-	// Token: 0x06000916 RID: 2326 RVA: 0x00082B60 File Offset: 0x00080D60
 	public static void startYesNoDlg(string info, int iYes, object pYes, int iNo, object pNo)
 	{
-		GameCanvas.closeKeyBoard();
-		GameCanvas.msgdlg.setInfo(info, new Command(mResources.YES, GameCanvas.instance, iYes, pYes), new Command(string.Empty, GameCanvas.instance, iYes, pYes), new Command(mResources.NO, GameCanvas.instance, iNo, pNo));
-		GameCanvas.msgdlg.show();
+		closeKeyBoard();
+		msgdlg.setInfo(info, new Command(mResources.YES, instance, iYes, pYes), new Command(string.Empty, instance, iYes, pYes), new Command(mResources.NO, instance, iNo, pNo));
+		msgdlg.show();
 	}
 
-	// Token: 0x06000917 RID: 2327 RVA: 0x0000760C File Offset: 0x0000580C
 	public static void startYesNoDlg(string info, Command cmdYes, Command cmdNo)
 	{
-		GameCanvas.closeKeyBoard();
-		GameCanvas.msgdlg.setInfo(info, cmdYes, null, cmdNo);
-		GameCanvas.msgdlg.show();
+		closeKeyBoard();
+		msgdlg.setInfo(info, cmdYes, null, cmdNo);
+		msgdlg.show();
 	}
 
-	// Token: 0x06000918 RID: 2328 RVA: 0x00082BBC File Offset: 0x00080DBC
 	public static string getMoneys(int m)
 	{
 		string text = string.Empty;
 		int num = m / 1000 + 1;
 		for (int i = 0; i < num; i++)
 		{
-			if (m < 1000)
+			if (m >= 1000)
 			{
-				text = m + text;
-				break;
+				int num2 = m % 1000;
+				text = ((num2 != 0) ? ((num2 >= 10) ? ((num2 >= 100) ? ("." + num2 + text) : (".0" + num2 + text)) : (".00" + num2 + text)) : (".000" + text));
+				m /= 1000;
+				continue;
 			}
-			int num2 = m % 1000;
-			if (num2 == 0)
-			{
-				text = ".000" + text;
-			}
-			else if (num2 < 10)
-			{
-				text = ".00" + num2 + text;
-			}
-			else if (num2 < 100)
-			{
-				text = ".0" + num2 + text;
-			}
-			else
-			{
-				text = "." + num2 + text;
-			}
-			m /= 1000;
+			text = m + text;
+			break;
 		}
 		return text;
 	}
 
-	// Token: 0x06000919 RID: 2329 RVA: 0x0000762B File Offset: 0x0000582B
 	public static int getX(int start, int w)
 	{
-		return (GameCanvas.px - start) / w;
+		return (px - start) / w;
 	}
 
-	// Token: 0x0600091A RID: 2330 RVA: 0x00007636 File Offset: 0x00005836
 	public static int getY(int start, int w)
 	{
-		return (GameCanvas.py - start) / w;
+		return (py - start) / w;
 	}
 
-	// Token: 0x0600091B RID: 2331 RVA: 0x00003584 File Offset: 0x00001784
 	protected void sizeChanged(int w, int h)
 	{
 	}
 
-	// Token: 0x0600091C RID: 2332 RVA: 0x00006472 File Offset: 0x00004672
 	public static bool isGetResourceFromServer()
 	{
 		return true;
 	}
 
-	// Token: 0x0600091D RID: 2333 RVA: 0x00082C6C File Offset: 0x00080E6C
 	public static Image loadImageRMS(string path)
 	{
-		path = string.Concat(new object[]
-		{
-			Main.res,
-			"/x",
-			mGraphics.zoomLevel,
-			path
-		});
-		path = GameCanvas.cutPng(path);
+		path = Main.res + "/x" + mGraphics.zoomLevel + path;
+		path = cutPng(path);
 		Image result = null;
 		try
 		{
 			result = Image.createImage(path);
+			return result;
 		}
 		catch (Exception ex)
 		{
 			try
 			{
 				string[] array = Res.split(path, "/", 0);
-				sbyte[] array2 = Rms.loadRMS("x" + mGraphics.zoomLevel + array[array.Length - 1]);
-				if (array2 != null)
+				string filename = "x" + mGraphics.zoomLevel + array[array.Length - 1];
+				sbyte[] array2 = Rms.loadRMS(filename);
+				if (array2 == null)
 				{
-					result = Image.createImage(array2, 0, array2.Length);
+					return result;
 				}
+				result = Image.createImage(array2, 0, array2.Length);
+				array2 = null;
+				return result;
 			}
 			catch (Exception)
 			{
 				Cout.LogError("Loi ham khong tim thay a: " + ex.ToString());
+				return result;
 			}
 		}
-		return result;
 	}
 
-	// Token: 0x0600091E RID: 2334 RVA: 0x00082D30 File Offset: 0x00080F30
 	public static Image loadImage(string path)
 	{
-		path = string.Concat(new object[]
-		{
-			Main.res,
-			"/x",
-			mGraphics.zoomLevel,
-			path
-		});
-		path = GameCanvas.cutPng(path);
+		path = Main.res + "/x" + mGraphics.zoomLevel + path;
+		path = cutPng(path);
 		Image result = null;
 		try
 		{
 			result = Image.createImage(path);
+			return result;
 		}
 		catch (Exception)
 		{
+			return result;
 		}
-		return result;
 	}
 
-	// Token: 0x0600091F RID: 2335 RVA: 0x00082D94 File Offset: 0x00080F94
 	public static string cutPng(string str)
 	{
 		string result = str;
@@ -1757,357 +2429,243 @@ public class GameCanvas : IActionListener
 		return result;
 	}
 
-	// Token: 0x06000920 RID: 2336 RVA: 0x00007641 File Offset: 0x00005841
 	public static int random(int a, int b)
 	{
-		return a + GameCanvas.r.nextInt(b - a);
+		return a + r.nextInt(b - a);
 	}
 
-	// Token: 0x06000921 RID: 2337 RVA: 0x00082DC4 File Offset: 0x00080FC4
 	public bool startDust(int dir, int x, int y)
 	{
-		if (GameCanvas.lowGraphic)
+		if (lowGraphic)
 		{
 			return false;
 		}
 		int num = (dir != 1) ? 1 : 0;
-		if (this.dustState[num] != -1)
+		if (dustState[num] != -1)
 		{
 			return false;
 		}
-		this.dustState[num] = 0;
-		this.dustX[num] = x;
-		this.dustY[num] = y;
+		dustState[num] = 0;
+		dustX[num] = x;
+		dustY[num] = y;
 		return true;
 	}
 
-	// Token: 0x06000922 RID: 2338 RVA: 0x00082E0C File Offset: 0x0008100C
 	public void loadWaterSplash()
 	{
-		if (GameCanvas.lowGraphic)
+		if (!lowGraphic)
 		{
-			return;
+			imgWS = new Image[3];
+			for (int i = 0; i < 3; i++)
+			{
+				imgWS[i] = loadImage("/e/w" + i + ".png");
+			}
+			wsX = new int[2];
+			wsY = new int[2];
+			wsState = new int[2];
+			wsF = new int[2];
+			wsState[0] = (wsState[1] = -1);
 		}
-		GameCanvas.imgWS = new Image[3];
-		for (int i = 0; i < 3; i++)
-		{
-			GameCanvas.imgWS[i] = GameCanvas.loadImage("/e/w" + i + ".png");
-		}
-		GameCanvas.wsX = new int[2];
-		GameCanvas.wsY = new int[2];
-		GameCanvas.wsState = new int[2];
-		GameCanvas.wsF = new int[2];
-		GameCanvas.wsState[0] = (GameCanvas.wsState[1] = -1);
 	}
 
-	// Token: 0x06000923 RID: 2339 RVA: 0x00082E98 File Offset: 0x00081098
 	public bool startWaterSplash(int x, int y)
 	{
-		if (GameCanvas.lowGraphic)
+		if (lowGraphic)
 		{
 			return false;
 		}
-		int num = (GameCanvas.wsState[0] != -1) ? 1 : 0;
-		if (GameCanvas.wsState[num] != -1)
+		int num = (wsState[0] != -1) ? 1 : 0;
+		if (wsState[num] != -1)
 		{
 			return false;
 		}
-		GameCanvas.wsState[num] = 0;
-		GameCanvas.wsX[num] = x;
-		GameCanvas.wsY[num] = y;
+		wsState[num] = 0;
+		wsX[num] = x;
+		wsY[num] = y;
 		return true;
 	}
 
-	// Token: 0x06000924 RID: 2340 RVA: 0x00082EE4 File Offset: 0x000810E4
 	public void updateWaterSplash()
 	{
-		if (GameCanvas.lowGraphic)
+		if (lowGraphic)
 		{
 			return;
 		}
 		for (int i = 0; i < 2; i++)
 		{
-			if (GameCanvas.wsState[i] != -1)
+			if (wsState[i] == -1)
 			{
-				GameCanvas.wsY[i]--;
-				if (GameCanvas.gameTick % 2 == 0)
-				{
-					GameCanvas.wsState[i]++;
-					if (GameCanvas.wsState[i] > 2)
-					{
-						GameCanvas.wsState[i] = -1;
-					}
-					else
-					{
-						GameCanvas.wsF[i] = GameCanvas.wsState[i];
-					}
-				}
+				continue;
 			}
-		}
-	}
-
-	// Token: 0x06000925 RID: 2341 RVA: 0x00082F5C File Offset: 0x0008115C
-	public void updateDust()
-	{
-		if (GameCanvas.lowGraphic)
-		{
-			return;
-		}
-		for (int i = 0; i < 2; i++)
-		{
-			if (this.dustState[i] != -1)
+			wsY[i]--;
+			if (gameTick % 2 == 0)
 			{
-				this.dustState[i]++;
-				if (this.dustState[i] >= 5)
+				wsState[i]++;
+				if (wsState[i] > 2)
 				{
-					this.dustState[i] = -1;
-				}
-				if (i == 0)
-				{
-					this.dustX[i]--;
+					wsState[i] = -1;
 				}
 				else
 				{
-					this.dustX[i]++;
+					wsF[i] = wsState[i];
 				}
-				this.dustY[i]--;
 			}
 		}
 	}
 
-	// Token: 0x06000926 RID: 2342 RVA: 0x00007652 File Offset: 0x00005852
-	public static bool isPaint(int x, int y)
+	public void updateDust()
 	{
-		return x >= GameScr.cmx && x <= GameScr.cmx + GameScr.gW && y >= GameScr.cmy && y <= GameScr.cmy + GameScr.gH + 30;
-	}
-
-	// Token: 0x06000927 RID: 2343 RVA: 0x00082FE8 File Offset: 0x000811E8
-	public void paintDust(mGraphics g)
-	{
-		if (GameCanvas.lowGraphic)
+		if (lowGraphic)
 		{
 			return;
 		}
 		for (int i = 0; i < 2; i++)
 		{
-			if (this.dustState[i] != -1 && GameCanvas.isPaint(this.dustX[i], this.dustY[i]))
+			if (dustState[i] != -1)
 			{
-				g.drawImage(GameCanvas.imgDust[i][this.dustState[i]], this.dustX[i], this.dustY[i], 3);
+				dustState[i]++;
+				if (dustState[i] >= 5)
+				{
+					dustState[i] = -1;
+				}
+				if (i == 0)
+				{
+					dustX[i]--;
+				}
+				else
+				{
+					dustX[i]++;
+				}
+				dustY[i]--;
 			}
 		}
 	}
 
-	// Token: 0x06000928 RID: 2344 RVA: 0x00083054 File Offset: 0x00081254
-	public void loadDust()
+	public static bool isPaint(int x, int y)
 	{
-		if (GameCanvas.lowGraphic)
+		if (x < GameScr.cmx)
+		{
+			return false;
+		}
+		if (x > GameScr.cmx + GameScr.gW)
+		{
+			return false;
+		}
+		if (y < GameScr.cmy)
+		{
+			return false;
+		}
+		if (y > GameScr.cmy + GameScr.gH + 30)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	public void paintDust(mGraphics g)
+	{
+		if (lowGraphic)
 		{
 			return;
 		}
-		if (GameCanvas.imgDust == null)
+		for (int i = 0; i < 2; i++)
 		{
-			GameCanvas.imgDust = new Image[2][];
-			for (int i = 0; i < GameCanvas.imgDust.Length; i++)
+			if (dustState[i] != -1 && isPaint(dustX[i], dustY[i]))
 			{
-				GameCanvas.imgDust[i] = new Image[5];
+				g.drawImage(imgDust[i][dustState[i]], dustX[i], dustY[i], 3);
+			}
+		}
+	}
+
+	public void loadDust()
+	{
+		if (lowGraphic)
+		{
+			return;
+		}
+		if (imgDust == null)
+		{
+			imgDust = new Image[2][];
+			for (int i = 0; i < imgDust.Length; i++)
+			{
+				imgDust[i] = new Image[5];
 			}
 			for (int j = 0; j < 2; j++)
 			{
 				for (int k = 0; k < 5; k++)
 				{
-					GameCanvas.imgDust[j][k] = GameCanvas.loadImage(string.Concat(new object[]
-					{
-						"/e/d",
-						j,
-						k,
-						".png"
-					}));
+					imgDust[j][k] = loadImage("/e/d" + j + k + ".png");
 				}
 			}
 		}
-		this.dustX = new int[2];
-		this.dustY = new int[2];
-		this.dustState = new int[2];
-		this.dustState[0] = (this.dustState[1] = -1);
+		dustX = new int[2];
+		dustY = new int[2];
+		dustState = new int[2];
+		dustState[0] = (dustState[1] = -1);
 	}
 
-	// Token: 0x06000929 RID: 2345 RVA: 0x00083128 File Offset: 0x00081328
 	public static void paintShukiren(int x, int y, mGraphics g)
 	{
-		g.drawRegion(GameCanvas.imgShuriken, 0, Main.f * 16, 16, 16, 0, x, y, mGraphics.HCENTER | mGraphics.VCENTER);
+		g.drawRegion(imgShuriken, 0, Main.f * 16, 16, 16, 0, x, y, mGraphics.HCENTER | mGraphics.VCENTER);
 	}
 
-	// Token: 0x0600092A RID: 2346 RVA: 0x00007688 File Offset: 0x00005888
 	public void resetToLoginScrz()
 	{
-		this.resetToLoginScr = true;
+		resetToLoginScr = true;
 	}
 
-	// Token: 0x0600092B RID: 2347 RVA: 0x000074A0 File Offset: 0x000056A0
 	public static bool isPointer(int x, int y, int w, int h)
 	{
-		return (GameCanvas.isPointerDown || GameCanvas.isPointerJustRelease) && GameCanvas.px >= x && GameCanvas.px <= x + w && GameCanvas.py >= y && GameCanvas.py <= y + h;
+		if (!isPointerDown && !isPointerJustRelease)
+		{
+			return false;
+		}
+		if (px >= x && px <= x + w && py >= y && py <= y + h)
+		{
+			return true;
+		}
+		return false;
 	}
 
-	// Token: 0x0600092C RID: 2348 RVA: 0x0008315C File Offset: 0x0008135C
 	public void perform(int idAction, object p)
 	{
 		switch (idAction)
 		{
-		case 88810:
-		{
-			int playerMapId = (int)p;
-			GameCanvas.endDlg();
-			Service.gI().acceptInviteTrade(playerMapId);
-			return;
-		}
-		case 88811:
-			GameCanvas.endDlg();
-			Service.gI().cancelInviteTrade();
-			return;
-		case 88812:
-		case 88813:
-		case 88816:
-		case 88830:
-		case 88831:
-		case 88832:
-		case 88833:
-		case 88834:
-		case 88835:
-		case 88838:
-			goto IL_3DE;
-		case 88814:
-		{
-			Item[] items = (Item[])p;
-			GameCanvas.endDlg();
-			Service.gI().crystalCollectLock(items);
-			return;
-		}
-		case 88815:
-			return;
-		case 88817:
-			ChatPopup.addChatPopup(string.Empty, 1, global::Char.myCharz().npcFocus);
-			Service.gI().menu(global::Char.myCharz().npcFocus.template.npcTemplateId, GameCanvas.menu.menuSelectedItem, 0);
-			return;
-		case 88818:
-		{
-			short menuId = (short)p;
-			Service.gI().textBoxId(menuId, GameCanvas.inputDlg.tfInput.getText());
-			GameCanvas.endDlg();
-			return;
-		}
-		case 88819:
-		{
-			short menuId2 = (short)p;
-			Service.gI().menuId(menuId2);
-			return;
-		}
-		case 88820:
-		{
-			string[] array = (string[])p;
-			if (global::Char.myCharz().npcFocus == null)
+		case 9000:
+			endDlg();
+			SplashScr.imgLogo = null;
+			SmallImage.loadBigRMS();
+			mSystem.gcc();
+			ServerListScreen.bigOk = true;
+			ServerListScreen.loadScreen = true;
+			GameScr.gI().loadGameScr();
+			if (currentScreen != loginScr)
 			{
-				return;
-			}
-			int menuSelectedItem = GameCanvas.menu.menuSelectedItem;
-			if (array.Length > 1)
-			{
-				MyVector myVector = new MyVector();
-				for (int i = 0; i < array.Length - 1; i++)
-				{
-					myVector.addElement(new Command(array[i + 1], GameCanvas.instance, 88821, menuSelectedItem));
-				}
-				GameCanvas.menu.startAt(myVector, 3);
-				return;
-			}
-			ChatPopup.addChatPopup(string.Empty, 1, global::Char.myCharz().npcFocus);
-			Service.gI().menu(global::Char.myCharz().npcFocus.template.npcTemplateId, menuSelectedItem, 0);
-			return;
-		}
-		case 88821:
-		{
-			int menuId3 = (int)p;
-			ChatPopup.addChatPopup(string.Empty, 1, global::Char.myCharz().npcFocus);
-			Service.gI().menu(global::Char.myCharz().npcFocus.template.npcTemplateId, menuId3, GameCanvas.menu.menuSelectedItem);
-			return;
-		}
-		case 88822:
-			ChatPopup.addChatPopup(string.Empty, 1, global::Char.myCharz().npcFocus);
-			Service.gI().menu(global::Char.myCharz().npcFocus.template.npcTemplateId, GameCanvas.menu.menuSelectedItem, 0);
-			return;
-		case 88823:
-			GameCanvas.startOKDlg(mResources.SENTMSG);
-			return;
-		case 88824:
-			GameCanvas.startOKDlg(mResources.NOSENDMSG);
-			return;
-		case 88825:
-			GameCanvas.startOKDlg(mResources.sendMsgSuccess, false);
-			return;
-		case 88826:
-			GameCanvas.startOKDlg(mResources.cannotSendMsg, false);
-			return;
-		case 88827:
-			GameCanvas.startOKDlg(mResources.sendGuessMsgSuccess);
-			return;
-		case 88828:
-			GameCanvas.startOKDlg(mResources.sendMsgFail);
-			return;
-		case 88829:
-		{
-			string text = GameCanvas.inputDlg.tfInput.getText();
-			if (text.Equals(string.Empty))
-			{
-				return;
-			}
-			Service.gI().changeName(text, (int)p);
-			InfoDlg.showWait();
-			return;
-		}
-		case 88836:
-			GameCanvas.inputDlg.tfInput.setMaxTextLenght(6);
-			GameCanvas.inputDlg.show(mResources.INPUT_PRIVATE_PASS, new Command(mResources.ACCEPT, GameCanvas.instance, 888361, null), TField.INPUT_TYPE_NUMERIC);
-			return;
-		case 88837:
-		{
-			string text2 = GameCanvas.inputDlg.tfInput.getText();
-			GameCanvas.endDlg();
-			try
-			{
-				Service.gI().openLockAccProtect(int.Parse(text2.Trim()));
-				return;
-			}
-			catch (Exception ex)
-			{
-				Cout.println("Loi tai 88837 " + ex.ToString());
-				return;
+				serverScreen.switchToMe2();
 			}
 			break;
-		}
-		case 88839:
+		case 999:
+			mSystem.closeBanner();
+			endDlg();
 			break;
-		default:
-			goto IL_3DE;
-		}
-		string text3 = GameCanvas.inputDlg.tfInput.getText();
-		GameCanvas.endDlg();
-		if (text3.Length < 6 || text3.Equals(string.Empty))
+		case 888396:
+			endDlg();
+			break;
+		case 888397:
 		{
-			GameCanvas.startOKDlg(mResources.ALERT_PRIVATE_PASS_1);
-			return;
+			string text5 = (string)p;
+			break;
 		}
-		try
-		{
-			GameCanvas.startYesNoDlg(mResources.cancelAccountProtection, 888391, text3, 8882, null);
-		}
-		catch (Exception)
-		{
-			GameCanvas.startOKDlg(mResources.ALERT_PRIVATE_PASS_2);
-		}
-		return;
-		IL_3DE:
-		switch (idAction)
-		{
+		case 9999:
+			endDlg();
+			connect();
+			Service.gI().setClientType();
+			if (loginScr == null)
+			{
+				loginScr = new LoginScr();
+			}
+			loginScr.doLogin();
+			break;
 		case 8881:
 		{
 			string url = (string)p;
@@ -2118,726 +2676,321 @@ public class GameCanvas : IActionListener
 			catch (Exception)
 			{
 			}
-			GameCanvas.currentDialog = null;
-			return;
+			currentDialog = null;
+			break;
 		}
 		case 8882:
 			InfoDlg.hide();
-			GameCanvas.currentDialog = null;
-			return;
+			currentDialog = null;
+			break;
 		case 8884:
-			GameCanvas.endDlg();
-			GameCanvas.loginScr.switchToMe();
-			return;
+			endDlg();
+			loginScr.switchToMe();
+			break;
 		case 8885:
 			GameMidlet.instance.exit();
-			return;
+			break;
 		case 8886:
 		{
-			GameCanvas.endDlg();
+			endDlg();
 			string name = (string)p;
 			Service.gI().addFriend(name);
-			return;
+			break;
 		}
 		case 8887:
 		{
-			GameCanvas.endDlg();
+			endDlg();
 			int charId = (int)p;
 			Service.gI().addPartyAccept(charId);
-			return;
+			break;
 		}
 		case 8888:
 		{
 			int charId2 = (int)p;
 			Service.gI().addPartyCancel(charId2);
-			GameCanvas.endDlg();
-			return;
+			endDlg();
+			break;
 		}
 		case 8889:
 		{
 			string str = (string)p;
-			GameCanvas.endDlg();
+			endDlg();
 			Service.gI().acceptPleaseParty(str);
-			return;
+			break;
 		}
-		}
-		switch (idAction)
+		case 88810:
 		{
-		case 888391:
-		{
-			string s = (string)p;
-			GameCanvas.endDlg();
-			Service.gI().clearAccProtect(int.Parse(s));
-			return;
+			int playerMapId = (int)p;
+			endDlg();
+			Service.gI().acceptInviteTrade(playerMapId);
+			break;
 		}
-		case 888392:
-			Service.gI().menu(4, GameCanvas.menu.menuSelectedItem, 0);
-			return;
-		case 888393:
-			if (GameCanvas.loginScr == null)
+		case 88811:
+			endDlg();
+			Service.gI().cancelInviteTrade();
+			break;
+		case 88814:
+		{
+			Item[] items = (Item[])p;
+			endDlg();
+			Service.gI().crystalCollectLock(items);
+			break;
+		}
+		case 88817:
+			ChatPopup.addChatPopup(string.Empty, 1, Char.myCharz().npcFocus);
+			Service.gI().menu(Char.myCharz().npcFocus.template.npcTemplateId, menu.menuSelectedItem, 0);
+			break;
+		case 88818:
+		{
+			short menuId3 = (short)p;
+			Service.gI().textBoxId(menuId3, inputDlg.tfInput.getText());
+			endDlg();
+			break;
+		}
+		case 88819:
+		{
+			short menuId2 = (short)p;
+			Service.gI().menuId(menuId2);
+			break;
+		}
+		case 88820:
+		{
+			string[] array = (string[])p;
+			if (Char.myCharz().npcFocus == null)
 			{
-				GameCanvas.loginScr = new LoginScr();
+				break;
 			}
-			GameCanvas.loginScr.doLogin();
-			Main.closeKeyBoard();
-			return;
-		case 888394:
-			GameCanvas.endDlg();
-			return;
-		case 888395:
-			GameCanvas.endDlg();
-			return;
-		case 888396:
-			GameCanvas.endDlg();
-			return;
-		case 888397:
-		{
-			string text4 = (string)p;
-			return;
-		}
-		default:
-			if (idAction == 999)
+			int menuSelectedItem = menu.menuSelectedItem;
+			if (array.Length > 1)
 			{
-				mSystem.closeBanner();
-				GameCanvas.endDlg();
-				return;
-			}
-			if (idAction != 9000)
-			{
-				if (idAction != 9999)
+				MyVector myVector = new MyVector();
+				for (int i = 0; i < array.Length - 1; i++)
 				{
-					if (idAction != 101023)
-					{
-						if (idAction != 888361)
-						{
-							return;
-						}
-						string text5 = GameCanvas.inputDlg.tfInput.getText();
-						GameCanvas.endDlg();
-						if (text5.Length < 6 || text5.Equals(string.Empty))
-						{
-							GameCanvas.startOKDlg(mResources.ALERT_PRIVATE_PASS_1);
-							return;
-						}
-						try
-						{
-							Service.gI().activeAccProtect(int.Parse(text5));
-							break;
-						}
-						catch (Exception ex2)
-						{
-							GameCanvas.startOKDlg(mResources.ALERT_PRIVATE_PASS_2);
-							Cout.println("Loi tai 888361 Gamescavas " + ex2.ToString());
-							break;
-						}
-					}
-					Main.numberQuit = 0;
-					return;
+					myVector.addElement(new Command(array[i + 1], instance, 88821, menuSelectedItem));
 				}
-				GameCanvas.endDlg();
-				GameCanvas.connect();
-				Service.gI().setClientType();
-				if (GameCanvas.loginScr == null)
-				{
-					GameCanvas.loginScr = new LoginScr();
-				}
-				GameCanvas.loginScr.doLogin();
-				return;
+				menu.startAt(myVector, 3);
 			}
 			else
 			{
-				GameCanvas.endDlg();
-				SplashScr.imgLogo = null;
-				SmallImage.loadBigRMS();
-				mSystem.gcc();
-				ServerListScreen.bigOk = true;
-				ServerListScreen.loadScreen = true;
-				GameScr.gI().loadGameScr();
-				if (GameCanvas.currentScreen != GameCanvas.loginScr)
-				{
-					GameCanvas.serverScreen.switchToMe2();
-					return;
-				}
-				return;
+				ChatPopup.addChatPopup(string.Empty, 1, Char.myCharz().npcFocus);
+				Service.gI().menu(Char.myCharz().npcFocus.template.npcTemplateId, menuSelectedItem, 0);
 			}
+			break;
+		}
+		case 88821:
+		{
+			int menuId = (int)p;
+			ChatPopup.addChatPopup(string.Empty, 1, Char.myCharz().npcFocus);
+			Service.gI().menu(Char.myCharz().npcFocus.template.npcTemplateId, menuId, menu.menuSelectedItem);
+			break;
+		}
+		case 88822:
+			ChatPopup.addChatPopup(string.Empty, 1, Char.myCharz().npcFocus);
+			Service.gI().menu(Char.myCharz().npcFocus.template.npcTemplateId, menu.menuSelectedItem, 0);
+			break;
+		case 88823:
+			startOKDlg(mResources.SENTMSG);
+			break;
+		case 88824:
+			startOKDlg(mResources.NOSENDMSG);
+			break;
+		case 88825:
+			startOKDlg(mResources.sendMsgSuccess, isError: false);
+			break;
+		case 88826:
+			startOKDlg(mResources.cannotSendMsg, isError: false);
+			break;
+		case 88827:
+			startOKDlg(mResources.sendGuessMsgSuccess);
+			break;
+		case 88828:
+			startOKDlg(mResources.sendMsgFail);
+			break;
+		case 88829:
+		{
+			string text4 = inputDlg.tfInput.getText();
+			if (!text4.Equals(string.Empty))
+			{
+				Service.gI().changeName(text4, (int)p);
+				InfoDlg.showWait();
+			}
+			break;
+		}
+		case 88836:
+			inputDlg.tfInput.setMaxTextLenght(6);
+			inputDlg.show(mResources.INPUT_PRIVATE_PASS, new Command(mResources.ACCEPT, instance, 888361, null), TField.INPUT_TYPE_NUMERIC);
+			break;
+		case 888361:
+		{
+			string text3 = inputDlg.tfInput.getText();
+			endDlg();
+			if (text3.Length < 6 || text3.Equals(string.Empty))
+			{
+				startOKDlg(mResources.ALERT_PRIVATE_PASS_1);
+			}
+			else
+			{
+				try
+				{
+					Service.gI().activeAccProtect(int.Parse(text3));
+				}
+				catch (Exception ex3)
+				{
+					startOKDlg(mResources.ALERT_PRIVATE_PASS_2);
+					Cout.println("Loi tai 888361 Gamescavas " + ex3.ToString());
+				}
+			}
+			break;
+		}
+		case 88837:
+		{
+			string text2 = inputDlg.tfInput.getText();
+			endDlg();
+			try
+			{
+				Service.gI().openLockAccProtect(int.Parse(text2.Trim()));
+			}
+			catch (Exception ex2)
+			{
+				Cout.println("Loi tai 88837 " + ex2.ToString());
+			}
+			break;
+		}
+		case 88839:
+		{
+			string text = inputDlg.tfInput.getText();
+			endDlg();
+			if (text.Length < 6 || text.Equals(string.Empty))
+			{
+				startOKDlg(mResources.ALERT_PRIVATE_PASS_1);
+			}
+			else
+			{
+				try
+				{
+					startYesNoDlg(mResources.cancelAccountProtection, 888391, text, 8882, null);
+				}
+				catch (Exception)
+				{
+					startOKDlg(mResources.ALERT_PRIVATE_PASS_2);
+				}
+			}
+			break;
+		}
+		case 888391:
+		{
+			string s = (string)p;
+			endDlg();
+			Service.gI().clearAccProtect(int.Parse(s));
+			break;
+		}
+		case 888392:
+			Service.gI().menu(4, menu.menuSelectedItem, 0);
+			break;
+		case 888393:
+			if (loginScr == null)
+			{
+				loginScr = new LoginScr();
+			}
+			loginScr.doLogin();
+			Main.closeKeyBoard();
+			break;
+		case 888394:
+			endDlg();
+			break;
+		case 888395:
+			endDlg();
+			break;
+		case 101023:
+			Main.numberQuit = 0;
 			break;
 		}
 	}
 
-	// Token: 0x0600092D RID: 2349 RVA: 0x00007691 File Offset: 0x00005891
 	public static void clearAllPointerEvent()
 	{
-		GameCanvas.isPointerClick = false;
-		GameCanvas.isPointerDown = false;
-		GameCanvas.isPointerJustDown = false;
-		GameCanvas.isPointerJustRelease = false;
+		isPointerClick = false;
+		isPointerDown = false;
+		isPointerJustDown = false;
+		isPointerJustRelease = false;
 		GameScr.gI().lastSingleClick = 0L;
 		GameScr.gI().isPointerDowning = false;
 	}
 
-	// Token: 0x0600092E RID: 2350 RVA: 0x00003584 File Offset: 0x00001784
 	public static void backToRegister()
 	{
 	}
 
-	// Token: 0x0600092F RID: 2351 RVA: 0x00083824 File Offset: 0x00081A24
-	public string[] loadData()
+	static GameCanvas()
 	{
-		FileStream fileStream = new FileStream("Dragonboy166_Data//log", FileMode.Open, FileAccess.Read);
-		StreamReader streamReader = new StreamReader(fileStream);
-		string[] result = streamReader.ReadLine().Split(new char[]
+		timeNow = 0L;
+		lowGraphic = false;
+		isMoveNumberPad = true;
+		isTouch = false;
+		keyPressed = new bool[30];
+		keyReleased = new bool[30];
+		keyHold = new bool[30];
+		arrPos = new Position[4];
+		menu = new Menu();
+		currentPopup = new MyVector();
+		curPos = 0;
+		planet = 0;
+		imgBlue = new Image[7];
+		imgViolet = new Image[7];
+		isPlaySound = true;
+		isShowErrorForm = false;
+		imgBorder = new Image[3];
+		typeBg = -1;
+		yb = new int[5];
+		nBg = 0;
+		lastBg = -1;
+		bgRain = new int[3]
 		{
-			'|'
-		});
-		streamReader.Close();
-		fileStream.Close();
-		return result;
+			1,
+			4,
+			11
+		};
+		bgRainFont = new int[1]
+		{
+			-1
+		};
+		typeBackGround = -1;
+		saveIDBg = -10;
+		lastTimePress = 0L;
+		flyTexts = new MyVector();
+		isPointerJustDown = false;
+		r = new MyRandom();
 	}
 
-	// Token: 0x06000930 RID: 2352 RVA: 0x000076C2 File Offset: 0x000058C2
-	public static string GetRandomString()
+	public static void autoLogin()
 	{
-		return Path.GetRandomFileName().Replace(".", "").Substring(0, 8);
-	}
-
-	// Token: 0x06000931 RID: 2353 RVA: 0x00083868 File Offset: 0x00081A68
-	public void loginAgain()
-	{
-		GameCanvas.currentScreen = GameCanvas.loginScr;
+		for (int num = 25; num >= 0; num--)
+		{
+			startOK("Vào lại game sau " + num + " giây", 8885, null);
+			Thread.Sleep(1000);
+		}
+		while (!ServerListScreen.loadScreen)
+		{
+			Thread.Sleep(10);
+		}
+		if (Rms.loadRMSInt("svselect") != A0.server)
+		{
+			Rms.saveRMSInt("svselect", A0.server);
+			ServerListScreen.ipSelect = A0.server;
+			serverScreen.selectServer();
+		}
+		while (!Session_ME.gI().isConnected())
+		{
+			Thread.Sleep(100);
+		}
+		Thread.Sleep(100);
+		if (loginScr == null)
+		{
+			loginScr = new LoginScr();
+		}
+		loginScr.switchToMe();
+		loginScr.doLogin();
 		Thread.Sleep(1000);
-		GameCanvas.startOKDlg("Login lại sau 25s");
-		Thread.Sleep(25000);
-		Rms.saveRMSString("acc", this.data[1]);
-		Rms.saveRMSString("pass", this.data[2]);
-		Rms.saveRMSInt("svselect", int.Parse(this.data[3]) - 1);
-		Thread.Sleep(50);
-		GameCanvas.loginScr.doLogin();
+		gameTick = 0;
 	}
-
-	// Token: 0x04001077 RID: 4215
-	public static bool open3Hour;
-
-	// Token: 0x04001078 RID: 4216
-	public static bool lowGraphic = false;
-
-	// Token: 0x04001079 RID: 4217
-	public static bool isMoveNumberPad = true;
-
-	// Token: 0x0400107A RID: 4218
-	public static bool isLoading;
-
-	// Token: 0x0400107B RID: 4219
-	public static bool isTouch = false;
-
-	// Token: 0x0400107C RID: 4220
-	public static bool isTouchControl;
-
-	// Token: 0x0400107D RID: 4221
-	public static bool isTouchControlSmallScreen;
-
-	// Token: 0x0400107E RID: 4222
-	public static bool isTouchControlLargeScreen;
-
-	// Token: 0x0400107F RID: 4223
-	public static bool isConnectFail;
-
-	// Token: 0x04001080 RID: 4224
-	public static GameCanvas instance;
-
-	// Token: 0x04001081 RID: 4225
-	public static bool bRun;
-
-	// Token: 0x04001082 RID: 4226
-	public static bool[] keyPressed = new bool[30];
-
-	// Token: 0x04001083 RID: 4227
-	public static bool[] keyReleased = new bool[30];
-
-	// Token: 0x04001084 RID: 4228
-	public static bool[] keyHold = new bool[30];
-
-	// Token: 0x04001085 RID: 4229
-	public static bool isPointerDown;
-
-	// Token: 0x04001086 RID: 4230
-	public static bool isPointerClick;
-
-	// Token: 0x04001087 RID: 4231
-	public static bool isPointerJustRelease;
-
-	// Token: 0x04001088 RID: 4232
-	public static int px;
-
-	// Token: 0x04001089 RID: 4233
-	public static int py;
-
-	// Token: 0x0400108A RID: 4234
-	public static int pxFirst;
-
-	// Token: 0x0400108B RID: 4235
-	public static int pyFirst;
-
-	// Token: 0x0400108C RID: 4236
-	public static int pxLast;
-
-	// Token: 0x0400108D RID: 4237
-	public static int pyLast;
-
-	// Token: 0x0400108E RID: 4238
-	public static int pxMouse;
-
-	// Token: 0x0400108F RID: 4239
-	public static int pyMouse;
-
-	// Token: 0x04001090 RID: 4240
-	public static Position[] arrPos = new Position[4];
-
-	// Token: 0x04001091 RID: 4241
-	public static int gameTick;
-
-	// Token: 0x04001092 RID: 4242
-	public static int taskTick;
-
-	// Token: 0x04001093 RID: 4243
-	public static bool isEff1;
-
-	// Token: 0x04001094 RID: 4244
-	public static bool isEff2;
-
-	// Token: 0x04001095 RID: 4245
-	public static long timeTickEff1;
-
-	// Token: 0x04001096 RID: 4246
-	public static long timeTickEff2;
-
-	// Token: 0x04001097 RID: 4247
-	public static int w;
-
-	// Token: 0x04001098 RID: 4248
-	public static int h;
-
-	// Token: 0x04001099 RID: 4249
-	public static int hw;
-
-	// Token: 0x0400109A RID: 4250
-	public static int hh;
-
-	// Token: 0x0400109B RID: 4251
-	public static int wd3;
-
-	// Token: 0x0400109C RID: 4252
-	public static int hd3;
-
-	// Token: 0x0400109D RID: 4253
-	public static int w2d3;
-
-	// Token: 0x0400109E RID: 4254
-	public static int h2d3;
-
-	// Token: 0x0400109F RID: 4255
-	public static int w3d4;
-
-	// Token: 0x040010A0 RID: 4256
-	public static int h3d4;
-
-	// Token: 0x040010A1 RID: 4257
-	public static int wd6;
-
-	// Token: 0x040010A2 RID: 4258
-	public static int hd6;
-
-	// Token: 0x040010A3 RID: 4259
-	public static mScreen currentScreen;
-
-	// Token: 0x040010A4 RID: 4260
-	public static Menu menu = new Menu();
-
-	// Token: 0x040010A5 RID: 4261
-	public static Panel panel;
-
-	// Token: 0x040010A6 RID: 4262
-	public static Panel panel2;
-
-	// Token: 0x040010A7 RID: 4263
-	public static LoginScr loginScr;
-
-	// Token: 0x040010A8 RID: 4264
-	public static RegisterScreen registerScr;
-
-	// Token: 0x040010A9 RID: 4265
-	public static Dialog currentDialog;
-
-	// Token: 0x040010AA RID: 4266
-	public static MsgDlg msgdlg;
-
-	// Token: 0x040010AB RID: 4267
-	public static InputDlg inputDlg;
-
-	// Token: 0x040010AC RID: 4268
-	public static MyVector currentPopup = new MyVector();
-
-	// Token: 0x040010AD RID: 4269
-	public static int requestLoseCount;
-
-	// Token: 0x040010AE RID: 4270
-	public static MyVector listPoint;
-
-	// Token: 0x040010AF RID: 4271
-	public static Paint paintz;
-
-	// Token: 0x040010B0 RID: 4272
-	public static bool isGetResFromServer;
-
-	// Token: 0x040010B1 RID: 4273
-	public static Image[] imgBG;
-
-	// Token: 0x040010B2 RID: 4274
-	public static int skyColor;
-
-	// Token: 0x040010B3 RID: 4275
-	public static int curPos = 0;
-
-	// Token: 0x040010B4 RID: 4276
-	public static int[] bgW;
-
-	// Token: 0x040010B5 RID: 4277
-	public static int[] bgH;
-
-	// Token: 0x040010B6 RID: 4278
-	public static int planet = 0;
-
-	// Token: 0x040010B7 RID: 4279
-	private mGraphics g;
-
-	// Token: 0x040010B8 RID: 4280
-	public static Image img12;
-
-	// Token: 0x040010B9 RID: 4281
-	public static Image[] imgBlue = new Image[7];
-
-	// Token: 0x040010BA RID: 4282
-	public static Image[] imgViolet = new Image[7];
-
-	// Token: 0x040010BB RID: 4283
-	public static bool isPlaySound = true;
-
-	// Token: 0x040010BC RID: 4284
-	private static int clearOldData;
-
-	// Token: 0x040010BD RID: 4285
-	public static int timeOpenKeyBoard;
-
-	// Token: 0x040010BE RID: 4286
-	public static bool isFocusPanel2;
-
-	// Token: 0x040010BF RID: 4287
-	public bool isPaintCarret;
-
-	// Token: 0x040010C0 RID: 4288
-	public static MyVector debugUpdate;
-
-	// Token: 0x040010C1 RID: 4289
-	public static MyVector debugPaint;
-
-	// Token: 0x040010C2 RID: 4290
-	public static MyVector debugSession;
-
-	// Token: 0x040010C3 RID: 4291
-	private static bool isShowErrorForm = false;
-
-	// Token: 0x040010C4 RID: 4292
-	public static bool paintBG;
-
-	// Token: 0x040010C5 RID: 4293
-	public static int gsskyHeight;
-
-	// Token: 0x040010C6 RID: 4294
-	public static int gsgreenField1Y;
-
-	// Token: 0x040010C7 RID: 4295
-	public static int gsgreenField2Y;
-
-	// Token: 0x040010C8 RID: 4296
-	public static int gshouseY;
-
-	// Token: 0x040010C9 RID: 4297
-	public static int gsmountainY;
-
-	// Token: 0x040010CA RID: 4298
-	public static int bgLayer0y;
-
-	// Token: 0x040010CB RID: 4299
-	public static int bgLayer1y;
-
-	// Token: 0x040010CC RID: 4300
-	public static Image imgCloud;
-
-	// Token: 0x040010CD RID: 4301
-	public static Image imgSun;
-
-	// Token: 0x040010CE RID: 4302
-	public static Image imgSun2;
-
-	// Token: 0x040010CF RID: 4303
-	public static Image imgClear;
-
-	// Token: 0x040010D0 RID: 4304
-	public static Image[] imgBorder = new Image[3];
-
-	// Token: 0x040010D1 RID: 4305
-	public static int borderConnerW;
-
-	// Token: 0x040010D2 RID: 4306
-	public static int borderConnerH;
-
-	// Token: 0x040010D3 RID: 4307
-	public static int borderCenterW;
-
-	// Token: 0x040010D4 RID: 4308
-	public static int borderCenterH;
-
-	// Token: 0x040010D5 RID: 4309
-	public static int[] cloudX;
-
-	// Token: 0x040010D6 RID: 4310
-	public static int[] cloudY;
-
-	// Token: 0x040010D7 RID: 4311
-	public static int sunX;
-
-	// Token: 0x040010D8 RID: 4312
-	public static int sunY;
-
-	// Token: 0x040010D9 RID: 4313
-	public static int sunX2;
-
-	// Token: 0x040010DA RID: 4314
-	public static int sunY2;
-
-	// Token: 0x040010DB RID: 4315
-	public static int[] layerSpeed;
-
-	// Token: 0x040010DC RID: 4316
-	public static int[] moveX;
-
-	// Token: 0x040010DD RID: 4317
-	public static int[] moveXSpeed;
-
-	// Token: 0x040010DE RID: 4318
-	public static bool isBoltEff;
-
-	// Token: 0x040010DF RID: 4319
-	public static bool boltActive;
-
-	// Token: 0x040010E0 RID: 4320
-	public static int tBolt;
-
-	// Token: 0x040010E1 RID: 4321
-	public static int typeBg = -1;
-
-	// Token: 0x040010E2 RID: 4322
-	public static int transY;
-
-	// Token: 0x040010E3 RID: 4323
-	public static int[] yb = new int[5];
-
-	// Token: 0x040010E4 RID: 4324
-	public static int[] colorTop;
-
-	// Token: 0x040010E5 RID: 4325
-	public static int[] colorBotton;
-
-	// Token: 0x040010E6 RID: 4326
-	public static int yb1;
-
-	// Token: 0x040010E7 RID: 4327
-	public static int yb2;
-
-	// Token: 0x040010E8 RID: 4328
-	public static int yb3;
-
-	// Token: 0x040010E9 RID: 4329
-	public static int nBg = 0;
-
-	// Token: 0x040010EA RID: 4330
-	public static int lastBg = -1;
-
-	// Token: 0x040010EB RID: 4331
-	public static int[] bgRain = new int[]
-	{
-		1,
-		4,
-		11
-	};
-
-	// Token: 0x040010EC RID: 4332
-	public static int[] bgRainFont = new int[]
-	{
-		-1
-	};
-
-	// Token: 0x040010ED RID: 4333
-	public static Image imgCaycot;
-
-	// Token: 0x040010EE RID: 4334
-	public static Image tam;
-
-	// Token: 0x040010EF RID: 4335
-	public static int typeBackGround = -1;
-
-	// Token: 0x040010F0 RID: 4336
-	public static int saveIDBg = -10;
-
-	// Token: 0x040010F1 RID: 4337
-	public static bool isLoadBGok;
-
-	// Token: 0x040010F2 RID: 4338
-	private static long lastTimePress = 0L;
-
-	// Token: 0x040010F3 RID: 4339
-	public static int keyAsciiPress;
-
-	// Token: 0x040010F4 RID: 4340
-	public static int pXYScrollMouse;
-
-	// Token: 0x040010F5 RID: 4341
-	private static Image imgSignal;
-
-	// Token: 0x040010F6 RID: 4342
-	public static MyVector flyTexts = new MyVector();
-
-	// Token: 0x040010F7 RID: 4343
-	public int longTime;
-
-	// Token: 0x040010F8 RID: 4344
-	public static bool isPointerJustDown = false;
-
-	// Token: 0x040010F9 RID: 4345
-	private int count;
-
-	// Token: 0x040010FA RID: 4346
-	public static bool csWait;
-
-	// Token: 0x040010FB RID: 4347
-	public static MyRandom r = new MyRandom();
-
-	// Token: 0x040010FC RID: 4348
-	public static bool isBlackScreen;
-
-	// Token: 0x040010FD RID: 4349
-	public static int[] bgSpeed;
-
-	// Token: 0x040010FE RID: 4350
-	public static int cmdBarX;
-
-	// Token: 0x040010FF RID: 4351
-	public static int cmdBarY;
-
-	// Token: 0x04001100 RID: 4352
-	public static int cmdBarW;
-
-	// Token: 0x04001101 RID: 4353
-	public static int cmdBarH;
-
-	// Token: 0x04001102 RID: 4354
-	public static int cmdBarLeftW;
-
-	// Token: 0x04001103 RID: 4355
-	public static int cmdBarRightW;
-
-	// Token: 0x04001104 RID: 4356
-	public static int cmdBarCenterW;
-
-	// Token: 0x04001105 RID: 4357
-	public static int hpBarX;
-
-	// Token: 0x04001106 RID: 4358
-	public static int hpBarY;
-
-	// Token: 0x04001107 RID: 4359
-	public static int hpBarW;
-
-	// Token: 0x04001108 RID: 4360
-	public static int expBarW;
-
-	// Token: 0x04001109 RID: 4361
-	public static int lvPosX;
-
-	// Token: 0x0400110A RID: 4362
-	public static int moneyPosX;
-
-	// Token: 0x0400110B RID: 4363
-	public static int hpBarH;
-
-	// Token: 0x0400110C RID: 4364
-	public static int girlHPBarY;
-
-	// Token: 0x0400110D RID: 4365
-	public int timeOut;
-
-	// Token: 0x0400110E RID: 4366
-	public int[] dustX;
-
-	// Token: 0x0400110F RID: 4367
-	public int[] dustY;
-
-	// Token: 0x04001110 RID: 4368
-	public int[] dustState;
-
-	// Token: 0x04001111 RID: 4369
-	public static int[] wsX;
-
-	// Token: 0x04001112 RID: 4370
-	public static int[] wsY;
-
-	// Token: 0x04001113 RID: 4371
-	public static int[] wsState;
-
-	// Token: 0x04001114 RID: 4372
-	public static int[] wsF;
-
-	// Token: 0x04001115 RID: 4373
-	public static Image[] imgWS;
-
-	// Token: 0x04001116 RID: 4374
-	public static Image imgShuriken;
-
-	// Token: 0x04001117 RID: 4375
-	public static Image[][] imgDust;
-
-	// Token: 0x04001118 RID: 4376
-	public static bool isResume;
-
-	// Token: 0x04001119 RID: 4377
-	public static ServerListScreen serverScreen;
-
-	// Token: 0x0400111A RID: 4378
-	public bool resetToLoginScr;
-
-	// Token: 0x0400111B RID: 4379
-	public static long timeNow;
-
-	// Token: 0x0400111C RID: 4380
-	public bool isLoadData;
-
-	// Token: 0x0400111D RID: 4381
-	public string[] data;
-
-	// Token: 0x0400111E RID: 4382
-	public bool isCreat;
-
-	// Token: 0x0400111F RID: 4383
-	public bool isLogin;
-
-	// Token: 0x04001120 RID: 4384
-	public string userAo;
-
-	// Token: 0x04001121 RID: 4385
-	public string passAo;
-
-	// Token: 0x04001122 RID: 4386
-	public bool isRegis;
-
-	// Token: 0x04001123 RID: 4387
-	public long timeRegis;
 }

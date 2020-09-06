@@ -1,11 +1,9 @@
-﻿using System;
-
-// Token: 0x02000082 RID: 130
 public class T1 : mResources
 {
-	// Token: 0x0600041B RID: 1051 RVA: 0x0001ED14 File Offset: 0x0001CF14
 	public static void load()
 	{
+		mResources.functionMaintain1 = "Chức năng tạm dừng để bảo trì";
+		mResources.napngoc = "Nạp Ngọc";
 		mResources.nhatvatpham = "Bạn có chắc muốn nhặt vật phẩm này không ?";
 		mResources.xinchucmung = "Xin chúc mừng, bạn đã giành được giải thưởng Con số may mắn";
 		mResources.tang = "tầng";
@@ -52,7 +50,7 @@ public class T1 : mResources
 		mResources.note = "Bạn sẽ mất tài khoản đang chơi và không thể khôi phục được nếu đổi tài khoản khác, bạn có đồng ý không ?";
 		mResources.REGISTOPROTECT = "Đăng kí để bảo vệ tài khoản";
 		mResources.finishBomong = "Bạn phải hoàn thành nhiệm vụ tìm ngọc 6 sao mới có thể nạp tiền";
-		mResources.charger = "Diễn đàn và Nạp Ngọc";
+		mResources.charger = "Nạp tiền";
 		mResources.notYetSell = "Chưa có vật phẩm rao bán";
 		mResources.getUp = "Kéo lên để cập nhật thêm";
 		mResources.getDown = "Kéo xuống để cập nhật thêm";
@@ -96,13 +94,13 @@ public class T1 : mResources
 		mResources.selectServer = "Chọn\nmáy chủ";
 		mResources.forgetPass = "Quên M.khẩu";
 		mResources.password = "Mật khẩu";
-		mResources.LOGINLABELS = new string[]
+		mResources.LOGINLABELS = new string[2]
 		{
 			"Chưa có tài khoản xin",
 			"chọn menu đăng ký."
 		};
 		mResources.msg = "Tin nhắn";
-		mResources.msgg = new string[]
+		mResources.msgg = new string[2]
 		{
 			"Tin",
 			"nhắn"
@@ -146,7 +144,7 @@ public class T1 : mResources
 		mResources.website = "Website\ndiễn đàn";
 		mResources.server = "Máy chủ";
 		mResources.planet = "Hành tinh";
-		mResources.MENUME = new string[]
+		mResources.MENUME = new string[5]
 		{
 			"Hành trang",
 			"Kỹ năng",
@@ -154,13 +152,13 @@ public class T1 : mResources
 			"Thông tin",
 			"Trang bị"
 		};
-		mResources.MENUNEWCHAR = new string[]
+		mResources.MENUNEWCHAR = new string[3]
 		{
 			string.Empty,
 			"Dân tộc: ",
 			"Tóc: "
 		};
-		mResources.MENUGENDER = new string[]
+		mResources.MENUGENDER = new string[3]
 		{
 			"Trái đất",
 			"Namếc",
@@ -168,14 +166,14 @@ public class T1 : mResources
 		};
 		if (mSystem.clientType == 7)
 		{
-			mResources.MENUGENDER = new string[]
+			mResources.MENUGENDER = new string[3]
 			{
 				"Rồng đất",
 				"Rồng xanh",
 				"Rồng đỏ"
 			};
 		}
-		mResources.CHAR_ORDER = new string[]
+		mResources.CHAR_ORDER = new string[10]
 		{
 			"Thách đấu",
 			"Luyện tập",
@@ -188,89 +186,89 @@ public class T1 : mResources
 			"Mời vào tộc",
 			"Chặn xin vào tộc"
 		};
-		mResources.mainTab1 = new string[][]
+		mResources.mainTab1 = new string[4][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Nhiệm",
 				"Vụ"
 			},
-			new string[]
+			new string[2]
 			{
 				"Hành",
 				"Trang"
 			},
-			new string[]
+			new string[2]
 			{
 				"Kỹ",
 				"Năng"
 			},
-			new string[]
+			new string[2]
 			{
 				"Chức",
 				"Năng"
 			}
 		};
-		mResources.mainTab2 = new string[][]
+		mResources.mainTab2 = new string[5][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Nhiệm",
 				"Vụ"
 			},
-			new string[]
+			new string[2]
 			{
 				"Hành",
 				"Trang"
 			},
-			new string[]
+			new string[2]
 			{
 				"Kỹ",
 				"Năng"
 			},
-			new string[]
+			new string[2]
 			{
 				"Bang",
 				"Hội"
 			},
-			new string[]
+			new string[2]
 			{
 				"Chức",
 				"Năng"
 			}
 		};
-		mResources.petMainTab = new string[][]
+		mResources.petMainTab = new string[3][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Đệ",
 				"Tử"
 			},
-			new string[]
+			new string[2]
 			{
 				"Trạng",
 				"Thái"
 			},
-			new string[]
+			new string[2]
 			{
 				"Hành",
 				"Trang"
 			}
 		};
-		mResources.petMainTab2 = new string[][]
+		mResources.petMainTab2 = new string[2][]
 		{
-			new string[]
+			new string[2]
 			{
 				"Đệ",
 				"Tử"
 			},
-			new string[]
+			new string[2]
 			{
 				"Trạng",
 				"Thái"
 			}
 		};
-		mResources.key_skill_qwerty = new string[]
+		mResources.key_skill_qwerty = new string[5]
 		{
 			"Vào\nphím 1",
 			"Vào\nphím 2",
@@ -278,7 +276,7 @@ public class T1 : mResources
 			"Vào\nphím 4",
 			"Vào\nphím 5"
 		};
-		mResources.key_skill = new string[]
+		mResources.key_skill = new string[5]
 		{
 			"Vào\nphím 7",
 			"Vào\nphím 8",
@@ -289,27 +287,27 @@ public class T1 : mResources
 		mResources.SKILL_FAIL = "Chiêu đánh hiện tại của bạn chưa nâng cấp độ";
 		mResources.HP_EMPTY = "Đã hết đậu thần. Cậu hãy về thu hoạch thêm";
 		mResources.ZONE_HERE = "Bạn đang ở khu vực này";
-		mResources.DES_TASK = new string[]
+		mResources.DES_TASK = new string[4]
 		{
 			"Hãy đi tìm ",
 			" ở ",
 			" để nhận nhiệm vụ.",
 			"Bạn đã hoàn thành hết nhiệm vụ phiên bản này, vui lòng chờ cho đến khi ra phiên bản tiếp theo."
 		};
-		mResources.DIES = new string[]
+		mResources.DIES = new string[4]
 		{
 			"Kiệt sức",
 			"Chờ",
 			"Về nhà",
 			"Hồi sinh\nngay\n(1 ngọc)"
 		};
-		mResources.SYNTHESIS = new string[]
+		mResources.SYNTHESIS = new string[3]
 		{
 			"Bản đồ",
 			"Nhiệm vụ",
 			"Gia tộc"
 		};
-		mResources.tips = new string[]
+		mResources.tips = new string[13]
 		{
 			"Đậu thần dùng để tăng KI và HP ngay lập tức",
 			"Bạn chỉ mang theo người được 10 hạt đậu. Nếu muốn mang nhiều hơn, hãy xin từ bạn bè trong Bang",
@@ -395,37 +393,37 @@ public class T1 : mResources
 		mResources.x1Screen = "Màn hình nhỏ";
 		mResources.changeSizeScreen = "Bạn có muốn thoát game để thay đổi cỡ màn hình không ?";
 		mResources.chest = "Rương đồ";
-		mResources.chestt = new string[]
+		mResources.chestt = new string[2]
 		{
 			"Rương",
 			"Đồ"
 		};
-		mResources.inventory = new string[]
+		mResources.inventory = new string[2]
 		{
 			"Hành",
 			"Trang"
 		};
-		mResources.combine = new string[]
+		mResources.combine = new string[2]
 		{
 			"Kết",
 			"hợp"
 		};
-		mResources.mapp = new string[]
+		mResources.mapp = new string[2]
 		{
 			"Bản",
 			"đồ"
 		};
-		mResources.item_give = new string[]
+		mResources.item_give = new string[2]
 		{
 			"Item",
 			"cho"
 		};
-		mResources.item_receive = new string[]
+		mResources.item_receive = new string[2]
 		{
 			"Item",
 			"nhận"
 		};
-		mResources.zonee = new string[]
+		mResources.zonee = new string[2]
 		{
 			"Khu",
 			"Vực"
@@ -483,42 +481,42 @@ public class T1 : mResources
 		mResources.clan_coleader = "Phó bang";
 		mResources.power_point = "Điểm sức mạnh";
 		mResources.member = "Thành viên";
-		mResources.memberr = new string[]
+		mResources.memberr = new string[2]
 		{
 			"Thành",
 			"viên"
 		};
-		mResources.chatClan = new string[]
+		mResources.chatClan = new string[2]
 		{
 			"Chat",
 			"bang"
 		};
-		mResources.leaveClan = new string[]
+		mResources.leaveClan = new string[2]
 		{
 			"Rời",
 			"bang"
 		};
-		mResources.createClan = new string[]
+		mResources.createClan = new string[2]
 		{
 			"Lập",
 			"bang"
 		};
-		mResources.findClan = new string[]
+		mResources.findClan = new string[2]
 		{
 			"Tìm",
 			"bang"
 		};
-		mResources.khau_hieuu = new string[]
+		mResources.khau_hieuu = new string[2]
 		{
 			"Khẩu",
 			"hiệu"
 		};
-		mResources.bieu_tuongg = new string[]
+		mResources.bieu_tuongg = new string[2]
 		{
 			"Biểu",
 			"tượng"
 		};
-		mResources.request_pea2 = new string[]
+		mResources.request_pea2 = new string[2]
 		{
 			"Xin",
 			"đậu"
@@ -530,7 +528,7 @@ public class T1 : mResources
 		mResources.find = "Tìm";
 		mResources.leave = "Rời";
 		mResources.not_join_clan = "Chưa vào bang";
-		mResources.clanEmpty = new string[]
+		mResources.clanEmpty = new string[5]
 		{
 			"Hiện tại bang chỉ có",
 			" 1 thành viên là bạn.",
@@ -650,21 +648,21 @@ public class T1 : mResources
 		mResources.to_gain_20hp = "để tăng 20 HP gốc";
 		mResources.to_gain_20mp = "để tăng 20 MP gốc";
 		mResources.to_gain_1pow = "để tăng 1 sức mạnh gốc";
-		mResources.hairStyleName = new string[][]
+		mResources.hairStyleName = new string[3][]
 		{
-			new string[]
+			new string[3]
 			{
 				"Gohan",
 				"Krillin",
 				"Yamcha"
 			},
-			new string[]
+			new string[3]
 			{
 				"Ốc tiêu",
 				"Pocollo",
 				"Kami"
 			},
-			new string[]
+			new string[3]
 			{
 				"Cađic",
 				"Rađic",
@@ -673,21 +671,21 @@ public class T1 : mResources
 		};
 		if (mSystem.clientType == 7)
 		{
-			mResources.hairStyleName = new string[][]
+			mResources.hairStyleName = new string[3][]
 			{
-				new string[]
+				new string[3]
 				{
 					"Hango",
 					"Linkhi",
 					"Chayam"
 				},
-				new string[]
+				new string[3]
 				{
 					"Deden",
 					"Cololo",
 					"Mika"
 				},
-				new string[]
+				new string[3]
 				{
 					"Tageve",
 					"Ditra",

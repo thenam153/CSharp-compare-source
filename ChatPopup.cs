@@ -1,82 +1,449 @@
-﻿using System;
+using System;
 
-// Token: 0x02000033 RID: 51
 public class ChatPopup : Effect2, IActionListener
 {
-	// Token: 0x06000231 RID: 561 RVA: 0x00004866 File Offset: 0x00002A66
+	public int sayWidth = 100;
+
+	public int delay;
+
+	public int sayRun;
+
+	public string[] says;
+
+	public int cx;
+
+	public int cy;
+
+	public int ch;
+
+	public int cmx;
+
+	public int cmy;
+
+	public Npc c;
+
+	private bool outSide;
+
+	public static long curr;
+
+	public static long last;
+
+	private int currentLine;
+
+	private string[] lines;
+
+	public Command cmdNextLine;
+
+	public Command cmdMsg1;
+
+	public Command cmdMsg2;
+
+	public static ChatPopup currChatPopup;
+
+	public static ChatPopup serverChatPopUp;
+
+	public static string nextMultiChatPopUp;
+
+	public static Npc nextChar;
+
+	public bool isShopDetail;
+
+	public sbyte starSlot;
+
+	public sbyte maxStarSlot;
+
+	public static Scroll scr;
+
+	public static bool isHavePetNpc;
+
+	public int mH;
+
+	public static int performDelay;
+
+	public int dx;
+
+	public int dy;
+
+	public int second;
+
+	public int strY;
+
+	private int iconID;
+
 	public static void addNextPopUpMultiLine(string strNext, Npc next)
 	{
-		ChatPopup.nextMultiChatPopUp = strNext;
-		ChatPopup.nextChar = next;
-		if (ChatPopup.currChatPopup == null)
+		nextMultiChatPopUp = strNext;
+		nextChar = next;
+		if (currChatPopup == null)
 		{
-			ChatPopup.addChatPopupMultiLine(ChatPopup.nextMultiChatPopUp, 100000, ChatPopup.nextChar);
-			ChatPopup.nextMultiChatPopUp = null;
-			ChatPopup.nextChar = null;
+			addChatPopupMultiLine(nextMultiChatPopUp, 100000, nextChar);
+			nextMultiChatPopUp = null;
+			nextChar = null;
 		}
 	}
 
-	// Token: 0x06000232 RID: 562 RVA: 0x00003584 File Offset: 0x00001784
 	public static void addBigMessage(string chat, int howLong, Npc c)
 	{
+		string[] array = new string[1]
+		{
+			chat
+		};
+		if (c.charID != 5 && GameScr.info1.isDone)
+		{
+			GameScr.info1.isUpdate = false;
+		}
+		Char.isLockKey = true;
+		serverChatPopUp = addChatPopup(array[0], howLong, c);
+		serverChatPopUp.strY = 5;
+		serverChatPopUp.cx = GameCanvas.w / 2 - serverChatPopUp.sayWidth / 2 - 1;
+		serverChatPopUp.cy = GameCanvas.h - 20 - serverChatPopUp.ch;
+		serverChatPopUp.currentLine = 0;
+		serverChatPopUp.lines = array;
+		scr = new Scroll();
+		int nItem = serverChatPopUp.says.Length;
+		scr.setStyle(nItem, 12, serverChatPopUp.cx, serverChatPopUp.cy - serverChatPopUp.strY + 12, serverChatPopUp.sayWidth + 2, serverChatPopUp.ch - 25, styleUPDOWN: true, 1);
+		SoundMn.gI().openDialog();
 	}
 
-	// Token: 0x06000233 RID: 563 RVA: 0x00003584 File Offset: 0x00001784
 	public static void addChatPopupMultiLine(string chat, int howLong, Npc c)
 	{
+		string[] array = Res.split(chat, "\n", 0);
+		Char.isLockKey = true;
+		currChatPopup = addChatPopup(array[0], howLong, c);
+		currChatPopup.currentLine = 0;
+		currChatPopup.lines = array;
+		string caption = mResources.CONTINUE;
+		if (array.Length == 1)
+		{
+			caption = mResources.CLOSE;
+		}
+		currChatPopup.cmdNextLine = new Command(caption, currChatPopup, 8000, null);
+		currChatPopup.cmdNextLine.x = GameCanvas.w / 2 - 35;
+		currChatPopup.cmdNextLine.y = GameCanvas.h - 35;
+		SoundMn.gI().openDialog();
 	}
 
-	// Token: 0x06000234 RID: 564 RVA: 0x00003AD1 File Offset: 0x00001CD1
 	public static ChatPopup addChatPopupWithIcon(string chat, int howLong, Npc c, int idIcon)
 	{
-		return null;
+		performDelay = 10;
+		ChatPopup chatPopup = new ChatPopup();
+		chatPopup.sayWidth = GameCanvas.w - 30 - (GameCanvas.menu.showMenu ? GameCanvas.menu.menuX : 0);
+		if (chatPopup.sayWidth > 320)
+		{
+			chatPopup.sayWidth = 320;
+		}
+		if (chat.Length < 10)
+		{
+			chatPopup.sayWidth = 64;
+		}
+		if (GameCanvas.w == 128)
+		{
+			chatPopup.sayWidth = 128;
+		}
+		chatPopup.says = mFont.tahoma_7_red.splitFontArray(chat, chatPopup.sayWidth - 10);
+		chatPopup.delay = howLong;
+		chatPopup.c = c;
+		chatPopup.iconID = idIcon;
+		Char.chatPopup = chatPopup;
+		chatPopup.ch = 15 - chatPopup.sayRun + chatPopup.says.Length * 12 + 10;
+		if (chatPopup.ch > GameCanvas.h - 80)
+		{
+			chatPopup.ch = GameCanvas.h - 80;
+		}
+		chatPopup.mH = 10;
+		if (GameCanvas.menu.showMenu)
+		{
+			chatPopup.mH = 0;
+		}
+		Effect2.vEffect2.addElement(chatPopup);
+		isHavePetNpc = false;
+		if (c != null && c.charID == 5)
+		{
+			isHavePetNpc = true;
+			GameScr.info1.addInfo(string.Empty, 1);
+		}
+		curr = (last = mSystem.currentTimeMillis());
+		chatPopup.ch += 15;
+		return chatPopup;
 	}
 
-	// Token: 0x06000235 RID: 565 RVA: 0x00003AD1 File Offset: 0x00001CD1
 	public static ChatPopup addChatPopup(string chat, int howLong, Npc c)
 	{
-		return null;
+		performDelay = 10;
+		ChatPopup chatPopup = new ChatPopup();
+		chatPopup.sayWidth = GameCanvas.w - 30 - (GameCanvas.menu.showMenu ? GameCanvas.menu.menuX : 0);
+		if (chatPopup.sayWidth > 320)
+		{
+			chatPopup.sayWidth = 320;
+		}
+		if (chat.Length < 10)
+		{
+			chatPopup.sayWidth = 64;
+		}
+		if (GameCanvas.w == 128)
+		{
+			chatPopup.sayWidth = 128;
+		}
+		chatPopup.says = mFont.tahoma_7_red.splitFontArray(chat, chatPopup.sayWidth - 10);
+		chatPopup.delay = howLong;
+		chatPopup.c = c;
+		Char.chatPopup = chatPopup;
+		chatPopup.ch = 15 - chatPopup.sayRun + chatPopup.says.Length * 12 + 10;
+		if (chatPopup.ch > GameCanvas.h - 80)
+		{
+			chatPopup.ch = GameCanvas.h - 80;
+		}
+		chatPopup.mH = 10;
+		if (GameCanvas.menu.showMenu)
+		{
+			chatPopup.mH = 0;
+		}
+		Effect2.vEffect2.addElement(chatPopup);
+		isHavePetNpc = false;
+		if (c != null && c.charID == 5)
+		{
+			isHavePetNpc = true;
+			GameScr.info1.addInfo(string.Empty, 1);
+		}
+		curr = (last = mSystem.currentTimeMillis());
+		return chatPopup;
 	}
 
-	// Token: 0x06000236 RID: 566 RVA: 0x00003584 File Offset: 0x00001784
 	public static void addChatPopup(string chat, int howLong, int x, int y)
 	{
+		ChatPopup chatPopup = new ChatPopup();
+		scr = null;
+		chatPopup.sayWidth = GameCanvas.w - 30 - (GameCanvas.menu.showMenu ? GameCanvas.menu.menuX : 0);
+		if (chatPopup.sayWidth > 320)
+		{
+			chatPopup.sayWidth = 320;
+		}
+		if (chat.Length < 10)
+		{
+			chatPopup.sayWidth = 60;
+		}
+		if (GameCanvas.w == 128)
+		{
+			chatPopup.sayWidth = 128;
+		}
+		chatPopup.says = mFont.tahoma_7_red.splitFontArray(chat, chatPopup.sayWidth - 10);
+		chatPopup.delay = howLong;
+		chatPopup.c = null;
+		chatPopup.ch = 15 - chatPopup.sayRun + chatPopup.says.Length * 12 + 10;
+		Effect2.vEffect2.addElement(chatPopup);
 	}
 
-	// Token: 0x06000237 RID: 567 RVA: 0x00003584 File Offset: 0x00001784
 	public override void update()
 	{
+		if (scr != null)
+		{
+			GameScr.info1.isUpdate = false;
+			scr.updatecm();
+		}
+		else
+		{
+			GameScr.info1.isUpdate = true;
+		}
+		if (GameCanvas.menu.showMenu)
+		{
+			strY = 0;
+			cx = GameCanvas.w / 2 - sayWidth / 2 - 1;
+			cy = GameCanvas.menu.menuY - ch;
+		}
+		else
+		{
+			strY = 0;
+			if (GameScr.gI().right != null || GameScr.gI().left != null || GameScr.gI().center != null || cmdNextLine != null || cmdMsg1 != null)
+			{
+				strY = 5;
+				cx = GameCanvas.w / 2 - sayWidth / 2 - 1;
+				cy = GameCanvas.h - 20 - ch;
+			}
+			else
+			{
+				cx = GameCanvas.w / 2 - sayWidth / 2 - 1;
+				cy = GameCanvas.h - 5 - ch;
+			}
+		}
+		if (delay > 0)
+		{
+			delay--;
+		}
+		if (performDelay > 0)
+		{
+			performDelay--;
+		}
+		if (sayRun > 1)
+		{
+			sayRun--;
+		}
+		if ((c != null && Char.chatPopup != null && Char.chatPopup != this) || (c != null && Char.chatPopup == null) || delay == 0)
+		{
+			Effect2.vEffect2Outside.removeElement(this);
+			Effect2.vEffect2.removeElement(this);
+		}
 	}
 
-	// Token: 0x06000238 RID: 568 RVA: 0x00003584 File Offset: 0x00001784
 	public override void paint(mGraphics g)
 	{
+		if (GameScr.gI().activeRongThan && GameScr.gI().isUseFreez)
+		{
+			return;
+		}
+		GameCanvas.resetTrans(g);
+		int num = cx;
+		int num2 = cy;
+		int num3 = sayWidth + 2;
+		int num4 = ch;
+		if ((num <= 0 || num2 <= 0) && !GameCanvas.panel.isShow)
+		{
+			return;
+		}
+		PopUp.paintPopUp(g, num, num2, num3, num4, 16777215, isButton: false);
+		if (c != null)
+		{
+			SmallImage.drawSmallImage(g, c.avatar, cx + 14, cy, 0, StaticObj.BOTTOM_LEFT);
+		}
+		if (iconID != 0)
+		{
+			SmallImage.drawSmallImage(g, iconID, cx + num3 / 2, cy + ch - 15, 0, StaticObj.VCENTER_HCENTER);
+		}
+		if (scr != null)
+		{
+			g.setClip(num, num2, num3, num4 - 16);
+			g.translate(0, -scr.cmy);
+		}
+		int num5 = -1;
+		for (int i = 0; i < says.Length; i++)
+		{
+			if (says[i].StartsWith("--"))
+			{
+				g.setColor(0);
+				g.fillRect(num + 10, cy + sayRun + i * 12 + 6, num3 - 20, 1);
+				continue;
+			}
+			mFont mFont = mFont.tahoma_7;
+			int num6 = 2;
+			string st = says[i];
+			int num7 = 0;
+			if (says[i].StartsWith("|"))
+			{
+				string[] array = Res.split(says[i], "|", 0);
+				if (array.Length == 3)
+				{
+					st = array[2];
+				}
+				if (array.Length == 4)
+				{
+					st = array[3];
+					num6 = int.Parse(array[2]);
+				}
+				num7 = int.Parse(array[1]);
+				num5 = num7;
+			}
+			else
+			{
+				num7 = num5;
+			}
+			switch (num7)
+			{
+			case -1:
+				mFont = mFont.tahoma_7;
+				break;
+			case 0:
+				mFont = mFont.tahoma_7b_dark;
+				break;
+			case 1:
+				mFont = mFont.tahoma_7b_green;
+				break;
+			case 2:
+				mFont = mFont.tahoma_7b_blue;
+				break;
+			case 3:
+				mFont = mFont.tahoma_7_red;
+				break;
+			case 4:
+				mFont = mFont.tahoma_7_green;
+				break;
+			case 5:
+				mFont = mFont.tahoma_7_blue;
+				break;
+			case 7:
+				mFont = mFont.tahoma_7b_red;
+				break;
+			}
+			if (says[i].StartsWith("<"))
+			{
+				string[] array2 = Res.split(says[i], "<", 0);
+				string[] array3 = Res.split(array2[1], ">", 1);
+				if (second == 0)
+				{
+					second = int.Parse(array3[1]);
+				}
+				else
+				{
+					curr = mSystem.currentTimeMillis();
+					if (curr - last >= 1000)
+					{
+						last = curr;
+						second--;
+					}
+				}
+				st = second + " " + array3[2];
+				mFont.drawString(g, st, cx + sayWidth / 2, cy + sayRun + i * 12 - strY + 12, num6);
+			}
+			else
+			{
+				if (num6 == 2)
+				{
+					mFont.drawString(g, st, cx + sayWidth / 2, cy + sayRun + i * 12 - strY + 12, num6);
+				}
+				if (num6 == 1)
+				{
+					mFont.drawString(g, st, cx + sayWidth - 5, cy + sayRun + i * 12 - strY + 12, num6);
+				}
+			}
+		}
+		if (maxStarSlot > 0)
+		{
+			for (int j = 0; j < maxStarSlot; j++)
+			{
+				g.drawImage(Panel.imgMaxStar, num + num3 / 2 - maxStarSlot * 20 / 2 + j * 20 + mGraphics.getImageWidth(Panel.imgStar), num2 + num4 - 13, 3);
+			}
+		}
+		if (starSlot > 0)
+		{
+			for (int k = 0; k < starSlot; k++)
+			{
+				g.drawImage(Panel.imgStar, num + num3 / 2 - maxStarSlot * 20 / 2 + k * 20 + mGraphics.getImageWidth(Panel.imgStar), num2 + num4 - 13, 3);
+			}
+		}
+		paintCmd(g);
 	}
 
-	// Token: 0x06000239 RID: 569 RVA: 0x000121C0 File Offset: 0x000103C0
 	public void updateKey()
 	{
-		if (ChatPopup.scr != null)
+		if (scr != null)
 		{
 			if (GameCanvas.isTouch)
 			{
-				ChatPopup.scr.updateKey();
+				scr.updateKey();
 			}
 			if (GameCanvas.keyHold[(!Main.isPC) ? 2 : 21])
 			{
-				ChatPopup.scr.cmtoY -= 12;
-				if (ChatPopup.scr.cmtoY < 0)
+				scr.cmtoY -= 12;
+				if (scr.cmtoY < 0)
 				{
-					ChatPopup.scr.cmtoY = 0;
+					scr.cmtoY = 0;
 				}
 			}
 			if (GameCanvas.keyHold[(!Main.isPC) ? 8 : 22])
 			{
 				GameCanvas.keyPressed[(!Main.isPC) ? 8 : 22] = false;
-				ChatPopup.scr.cmtoY += 12;
-				if (ChatPopup.scr.cmtoY > ChatPopup.scr.cmyLim)
+				scr.cmtoY += 12;
+				if (scr.cmtoY > scr.cmyLim)
 				{
-					ChatPopup.scr.cmtoY = ChatPopup.scr.cmyLim;
+					scr.cmtoY = scr.cmyLim;
 				}
 			}
 		}
@@ -84,59 +451,56 @@ public class ChatPopup : Effect2, IActionListener
 		{
 			GameCanvas.keyPressed[(!Main.isPC) ? 5 : 25] = false;
 			mScreen.keyTouch = -1;
-			if (this.cmdNextLine != null)
+			if (cmdNextLine != null)
 			{
-				this.cmdNextLine.performAction();
+				cmdNextLine.performAction();
 			}
-			else if (this.cmdMsg1 != null)
+			else if (cmdMsg1 != null)
 			{
-				this.cmdMsg1.performAction();
+				cmdMsg1.performAction();
 			}
-			else if (this.cmdMsg2 != null)
+			else if (cmdMsg2 != null)
 			{
-				this.cmdMsg2.performAction();
+				cmdMsg2.performAction();
 			}
 		}
-		if (ChatPopup.scr != null && ChatPopup.scr.pointerIsDowning)
+		if (scr == null || !scr.pointerIsDowning)
 		{
-			return;
-		}
-		if (this.cmdMsg1 != null && (GameCanvas.keyPressed[12] || GameCanvas.keyPressed[(!Main.isPC) ? 5 : 25] || mScreen.getCmdPointerLast(this.cmdMsg1)))
-		{
-			GameCanvas.keyPressed[12] = false;
-			GameCanvas.keyPressed[(!Main.isPC) ? 5 : 25] = false;
-			GameCanvas.isPointerClick = false;
-			GameCanvas.isPointerJustRelease = false;
-			this.cmdMsg1.performAction();
-			mScreen.keyTouch = -1;
-		}
-		if (this.cmdMsg2 != null && (GameCanvas.keyPressed[13] || mScreen.getCmdPointerLast(this.cmdMsg2)))
-		{
-			GameCanvas.keyPressed[13] = false;
-			GameCanvas.isPointerClick = false;
-			GameCanvas.isPointerJustRelease = false;
-			this.cmdMsg2.performAction();
-			mScreen.keyTouch = -1;
+			if (cmdMsg1 != null && (GameCanvas.keyPressed[12] || GameCanvas.keyPressed[(!Main.isPC) ? 5 : 25] || mScreen.getCmdPointerLast(cmdMsg1)))
+			{
+				GameCanvas.keyPressed[12] = false;
+				GameCanvas.keyPressed[(!Main.isPC) ? 5 : 25] = false;
+				GameCanvas.isPointerClick = false;
+				GameCanvas.isPointerJustRelease = false;
+				cmdMsg1.performAction();
+				mScreen.keyTouch = -1;
+			}
+			if (cmdMsg2 != null && (GameCanvas.keyPressed[13] || mScreen.getCmdPointerLast(cmdMsg2)))
+			{
+				GameCanvas.keyPressed[13] = false;
+				GameCanvas.isPointerClick = false;
+				GameCanvas.isPointerJustRelease = false;
+				cmdMsg2.performAction();
+				mScreen.keyTouch = -1;
+			}
 		}
 	}
 
-	// Token: 0x0600023A RID: 570 RVA: 0x000123CC File Offset: 0x000105CC
 	public void paintCmd(mGraphics g)
 	{
 		g.translate(-g.getTranslateX(), -g.getTranslateY());
 		g.setClip(0, 0, GameCanvas.w, GameCanvas.h);
 		GameCanvas.paintz.paintTabSoft(g);
-		if (this.cmdNextLine != null)
+		if (cmdNextLine != null)
 		{
-			GameCanvas.paintz.paintCmdBar(g, null, this.cmdNextLine, null);
+			GameCanvas.paintz.paintCmdBar(g, null, cmdNextLine, null);
 		}
-		if (this.cmdMsg1 != null)
+		if (cmdMsg1 != null)
 		{
-			GameCanvas.paintz.paintCmdBar(g, this.cmdMsg1, null, this.cmdMsg2);
+			GameCanvas.paintz.paintCmdBar(g, cmdMsg1, null, cmdMsg2);
 		}
 	}
 
-	// Token: 0x0600023B RID: 571 RVA: 0x00012448 File Offset: 0x00010648
 	public void perform(int idAction, object p)
 	{
 		if (idAction == 1000)
@@ -160,161 +524,59 @@ public class ChatPopup : Effect2, IActionListener
 		}
 		if (idAction == 1001)
 		{
-			ChatPopup.scr = null;
-			global::Char.chatPopup = null;
-			ChatPopup.serverChatPopUp = null;
+			scr = null;
+			Char.chatPopup = null;
+			serverChatPopUp = null;
 			GameScr.info1.isUpdate = true;
-			global::Char.isLockKey = false;
-			if (ChatPopup.isHavePetNpc)
+			Char.isLockKey = false;
+			if (isHavePetNpc)
 			{
 				GameScr.info1.info.time = 0;
 				GameScr.info1.info.info.speed = 10;
 			}
 		}
-		if (idAction == 8000)
+		if (idAction != 8000 || performDelay > 0)
 		{
-			if (ChatPopup.performDelay > 0)
+			return;
+		}
+		int num = currChatPopup.currentLine;
+		num++;
+		if (num >= currChatPopup.lines.Length)
+		{
+			Char.chatPopup = null;
+			currChatPopup = null;
+			GameScr.info1.isUpdate = true;
+			Char.isLockKey = false;
+			if (nextMultiChatPopUp != null)
 			{
-				return;
-			}
-			int num = ChatPopup.currChatPopup.currentLine;
-			num++;
-			if (num >= ChatPopup.currChatPopup.lines.Length)
-			{
-				global::Char.chatPopup = null;
-				ChatPopup.currChatPopup = null;
-				GameScr.info1.isUpdate = true;
-				global::Char.isLockKey = false;
-				if (ChatPopup.nextMultiChatPopUp != null)
-				{
-					ChatPopup.addChatPopupMultiLine(ChatPopup.nextMultiChatPopUp, 100000, ChatPopup.nextChar);
-					ChatPopup.nextMultiChatPopUp = null;
-					ChatPopup.nextChar = null;
-					return;
-				}
-				if (ChatPopup.isHavePetNpc)
-				{
-					GameScr.info1.info.time = 0;
-					for (int i = 0; i < GameScr.info1.info.infoWaitToShow.size(); i++)
-					{
-						if (((InfoItem)GameScr.info1.info.infoWaitToShow.elementAt(i)).speed == 10000000)
-						{
-							((InfoItem)GameScr.info1.info.infoWaitToShow.elementAt(i)).speed = 10;
-						}
-					}
-				}
-				return;
+				num = 0;
+				addChatPopupMultiLine(nextMultiChatPopUp, 100000, nextChar);
+				nextMultiChatPopUp = null;
+				nextChar = null;
 			}
 			else
 			{
-				ChatPopup chatPopup = ChatPopup.addChatPopup(ChatPopup.currChatPopup.lines[num], ChatPopup.currChatPopup.delay, ChatPopup.currChatPopup.c);
-				chatPopup.currentLine = num;
-				chatPopup.lines = ChatPopup.currChatPopup.lines;
-				chatPopup.cmdNextLine = ChatPopup.currChatPopup.cmdNextLine;
-				ChatPopup.currChatPopup = chatPopup;
+				if (!isHavePetNpc)
+				{
+					return;
+				}
+				GameScr.info1.info.time = 0;
+				for (int i = 0; i < GameScr.info1.info.infoWaitToShow.size(); i++)
+				{
+					if (((InfoItem)GameScr.info1.info.infoWaitToShow.elementAt(i)).speed == 10000000)
+					{
+						((InfoItem)GameScr.info1.info.infoWaitToShow.elementAt(i)).speed = 10;
+					}
+				}
 			}
 		}
+		else
+		{
+			ChatPopup chatPopup = addChatPopup(currChatPopup.lines[num], currChatPopup.delay, currChatPopup.c);
+			chatPopup.currentLine = num;
+			chatPopup.lines = currChatPopup.lines;
+			chatPopup.cmdNextLine = currChatPopup.cmdNextLine;
+			currChatPopup = chatPopup;
+		}
 	}
-
-	// Token: 0x04000247 RID: 583
-	public int sayWidth = 100;
-
-	// Token: 0x04000248 RID: 584
-	public int delay;
-
-	// Token: 0x04000249 RID: 585
-	public int sayRun;
-
-	// Token: 0x0400024A RID: 586
-	public string[] says;
-
-	// Token: 0x0400024B RID: 587
-	public int cx;
-
-	// Token: 0x0400024C RID: 588
-	public int cy;
-
-	// Token: 0x0400024D RID: 589
-	public int ch;
-
-	// Token: 0x0400024E RID: 590
-	public int cmx;
-
-	// Token: 0x0400024F RID: 591
-	public int cmy;
-
-	// Token: 0x04000250 RID: 592
-	public Npc c;
-
-	// Token: 0x04000251 RID: 593
-	private bool outSide;
-
-	// Token: 0x04000252 RID: 594
-	public static long curr;
-
-	// Token: 0x04000253 RID: 595
-	public static long last;
-
-	// Token: 0x04000254 RID: 596
-	private int currentLine;
-
-	// Token: 0x04000255 RID: 597
-	private string[] lines;
-
-	// Token: 0x04000256 RID: 598
-	public Command cmdNextLine;
-
-	// Token: 0x04000257 RID: 599
-	public Command cmdMsg1;
-
-	// Token: 0x04000258 RID: 600
-	public Command cmdMsg2;
-
-	// Token: 0x04000259 RID: 601
-	public static ChatPopup currChatPopup;
-
-	// Token: 0x0400025A RID: 602
-	public static ChatPopup serverChatPopUp;
-
-	// Token: 0x0400025B RID: 603
-	public static string nextMultiChatPopUp;
-
-	// Token: 0x0400025C RID: 604
-	public static Npc nextChar;
-
-	// Token: 0x0400025D RID: 605
-	public bool isShopDetail;
-
-	// Token: 0x0400025E RID: 606
-	public sbyte starSlot;
-
-	// Token: 0x0400025F RID: 607
-	public sbyte maxStarSlot;
-
-	// Token: 0x04000260 RID: 608
-	public static Scroll scr;
-
-	// Token: 0x04000261 RID: 609
-	public static bool isHavePetNpc;
-
-	// Token: 0x04000262 RID: 610
-	public int mH;
-
-	// Token: 0x04000263 RID: 611
-	public static int performDelay;
-
-	// Token: 0x04000264 RID: 612
-	public int dx;
-
-	// Token: 0x04000265 RID: 613
-	public int dy;
-
-	// Token: 0x04000266 RID: 614
-	public int second;
-
-	// Token: 0x04000267 RID: 615
-	public int strY;
-
-	// Token: 0x04000268 RID: 616
-	private int iconID;
 }

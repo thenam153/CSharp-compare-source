@@ -1,210 +1,321 @@
-﻿using System;
+using System;
 
-// Token: 0x020000A4 RID: 164
 public class LoginScr : mScreen, IActionListener
 {
-	// Token: 0x06000704 RID: 1796 RVA: 0x0005CF50 File Offset: 0x0005B150
+	public TField tfUser;
+
+	public TField tfPass;
+
+	public static bool isContinueToLogin;
+
+	private int focus;
+
+	private int wC;
+
+	private int yL;
+
+	private int defYL;
+
+	public bool isCheck;
+
+	public bool isRes;
+
+	public Command cmdLogin;
+
+	public Command cmdCheck;
+
+	public Command cmdFogetPass;
+
+	public Command cmdRes;
+
+	public Command cmdMenu;
+
+	public Command cmdBackFromRegister;
+
+	public string listFAQ = string.Empty;
+
+	public string titleFAQ;
+
+	public string subtitleFAQ;
+
+	private string numSupport = string.Empty;
+
+	public static bool isLocal;
+
+	public static bool isUpdateAll;
+
+	public static bool isUpdateData;
+
+	public static bool isUpdateMap;
+
+	public static bool isUpdateSkill;
+
+	public static bool isUpdateItem;
+
+	public static string serverName;
+
+	public static Image imgTitle;
+
+	public int plX;
+
+	public int plY;
+
+	public int lY;
+
+	public int lX;
+
+	public int logoDes;
+
+	public int lineX;
+
+	public int lineY;
+
+	public static int[] bgId;
+
+	public static bool isTryGetIPFromWap;
+
+	public static short timeLogin;
+
+	public static long lastTimeLogin;
+
+	public static long currTimeLogin;
+
+	private int yt;
+
+	private Command cmdSelect;
+
+	private Command cmdOK;
+
+	private int xLog;
+
+	private int yLog;
+
+	public static GameMidlet m;
+
+	private int yy = GameCanvas.hh - mScreen.ITEM_HEIGHT - 5;
+
+	private int freeAreaHeight;
+
+	private int xP;
+
+	private int yP;
+
+	private int wP;
+
+	private int hP;
+
+	private int t = 20;
+
+	private bool isRegistering;
+
+	private string passRe = string.Empty;
+
+	public bool isFAQ;
+
+	private int tipid = -1;
+
+	public bool isLogin2;
+
+	private int v = 2;
+
+	private int g;
+
+	private int ylogo = -40;
+
+	private int dir = 1;
+
+	private Command cmdCallHotline;
+
+	public static bool isLoggingIn;
+
 	public LoginScr()
 	{
-		this.yLog = GameCanvas.hh - 30;
-		TileMap.bgID = (int)((sbyte)(mSystem.currentTimeMillis() % 9L));
+		yLog = GameCanvas.hh - 30;
+		TileMap.bgID = (sbyte)(mSystem.currentTimeMillis() % 9);
 		if (TileMap.bgID == 5 || TileMap.bgID == 6)
 		{
 			TileMap.bgID = 4;
 		}
-		GameScr.loadCamera(true, -1, -1);
+		GameScr.loadCamera(fullmScreen: true, -1, -1);
 		GameScr.cmx = 100;
 		GameScr.cmy = 200;
 		Main.closeKeyBoard();
 		if (GameCanvas.h > 200)
 		{
-			this.defYL = GameCanvas.hh - 80;
+			defYL = GameCanvas.hh - 80;
 		}
 		else
 		{
-			this.defYL = GameCanvas.hh - 65;
+			defYL = GameCanvas.hh - 65;
 		}
-		this.resetLogo();
-		int num = (GameCanvas.w < 200) ? 140 : 160;
-		this.wC = num;
-		this.yt = GameCanvas.hh - mScreen.ITEM_HEIGHT - 5;
+		resetLogo();
+		int num = wC = ((GameCanvas.w < 200) ? 140 : 160);
+		yt = GameCanvas.hh - mScreen.ITEM_HEIGHT - 5;
 		if (GameCanvas.h <= 160)
 		{
-			this.yt = 20;
+			yt = 20;
 		}
-		this.tfUser = new TField();
-		this.tfUser.y = GameCanvas.hh - mScreen.ITEM_HEIGHT - 9;
-		this.tfUser.width = this.wC;
-		this.tfUser.height = mScreen.ITEM_HEIGHT + 2;
-		this.tfUser.isFocus = true;
-		this.tfUser.setIputType(TField.INPUT_TYPE_ANY);
-		this.tfUser.name = (((int)mResources.language != 2) ? (mResources.phone + "/") : string.Empty) + mResources.email;
-		this.tfPass = new TField();
-		this.tfPass.y = GameCanvas.hh - 4;
-		this.tfPass.setIputType(TField.INPUT_TYPE_PASSWORD);
-		this.tfPass.width = this.wC;
-		this.tfPass.height = mScreen.ITEM_HEIGHT + 2;
-		this.yt += 35;
-		this.isCheck = true;
-		int num2 = Rms.loadRMSInt("check");
-		if (num2 == 1)
+		tfUser = new TField();
+		tfUser.y = GameCanvas.hh - mScreen.ITEM_HEIGHT - 9;
+		tfUser.width = wC;
+		tfUser.height = mScreen.ITEM_HEIGHT + 2;
+		tfUser.isFocus = true;
+		tfUser.setIputType(TField.INPUT_TYPE_ANY);
+		tfUser.name = ((mResources.language != 2) ? (mResources.phone + "/") : string.Empty) + mResources.email;
+		tfPass = new TField();
+		tfPass.y = GameCanvas.hh - 4;
+		tfPass.setIputType(TField.INPUT_TYPE_PASSWORD);
+		tfPass.width = wC;
+		tfPass.height = mScreen.ITEM_HEIGHT + 2;
+		yt += 35;
+		isCheck = true;
+		switch (Rms.loadRMSInt("check"))
 		{
-			this.isCheck = true;
+		case 1:
+			isCheck = true;
+			break;
+		case 2:
+			isCheck = false;
+			break;
 		}
-		else if (num2 == 2)
+		tfUser.setText(Rms.loadRMSString("acc"));
+		tfPass.setText(Rms.loadRMSString("pass"));
+		if (cmdCallHotline == null)
 		{
-			this.isCheck = false;
-		}
-		this.tfUser.setText(Rms.loadRMSString("acc"));
-		this.tfPass.setText(Rms.loadRMSString("pass"));
-		if (this.cmdCallHotline == null)
-		{
-			this.cmdCallHotline = new Command("Gọi hotline", this, 13, null);
-			this.cmdCallHotline.x = GameCanvas.w - 75;
+			cmdCallHotline = new Command("Gọi hotline", this, 13, null);
+			cmdCallHotline.x = GameCanvas.w - 75;
 			if (mSystem.clientType == 1 && !GameCanvas.isTouch)
 			{
-				this.cmdCallHotline.y = GameCanvas.h - 20;
+				cmdCallHotline.y = GameCanvas.h - 20;
 			}
 			else
 			{
-				int num3 = 2;
-				this.cmdCallHotline.y = num3 + 6;
+				int num2 = 2;
+				cmdCallHotline.y = num2 + 6;
 			}
 		}
-		this.focus = 0;
-		this.cmdLogin = new Command((GameCanvas.w <= 200) ? mResources.login2 : mResources.login, GameCanvas.instance, 888393, null);
-		this.cmdCheck = new Command(mResources.remember, this, 2001, null);
-		this.cmdRes = new Command(mResources.register, this, 2002, null);
-		this.cmdBackFromRegister = new Command(mResources.CANCEL, this, 10021, null);
-		this.left = (this.cmdMenu = new Command(mResources.MENU, this, 2003, null));
-		this.freeAreaHeight = this.tfUser.y - 2 * this.tfUser.height;
+		focus = 0;
+		cmdLogin = new Command((GameCanvas.w <= 200) ? mResources.login2 : mResources.login, GameCanvas.instance, 888393, null);
+		cmdCheck = new Command(mResources.remember, this, 2001, null);
+		cmdRes = new Command(mResources.register, this, 2002, null);
+		cmdBackFromRegister = new Command(mResources.CANCEL, this, 10021, null);
+		left = (cmdMenu = new Command(mResources.MENU, this, 2003, null));
+		freeAreaHeight = tfUser.y - 2 * tfUser.height;
 		if (GameCanvas.isTouch)
 		{
-			this.cmdLogin.x = GameCanvas.w / 2 + 8;
-			this.cmdMenu.x = GameCanvas.w / 2 - mScreen.cmdW - 8;
+			cmdLogin.x = GameCanvas.w / 2 + 8;
+			cmdMenu.x = GameCanvas.w / 2 - mScreen.cmdW - 8;
 			if (GameCanvas.h >= 200)
 			{
-				this.cmdLogin.y = this.yLog + 110;
-				this.cmdMenu.y = this.yLog + 110;
+				cmdLogin.y = yLog + 110;
+				cmdMenu.y = yLog + 110;
 			}
-			this.cmdBackFromRegister.x = GameCanvas.w / 2 + 3;
-			this.cmdBackFromRegister.y = this.yLog + 110;
-			this.cmdRes.x = GameCanvas.w / 2 - 84;
-			this.cmdRes.y = this.cmdMenu.y;
+			cmdBackFromRegister.x = GameCanvas.w / 2 + 3;
+			cmdBackFromRegister.y = yLog + 110;
+			cmdRes.x = GameCanvas.w / 2 - 84;
+			cmdRes.y = cmdMenu.y;
 		}
-		this.wP = 170;
-		this.hP = ((!this.isRes) ? 100 : 110);
-		this.xP = GameCanvas.hw - this.wP / 2;
-		this.yP = this.tfUser.y - 15;
-		int num4 = 4;
-		int num5 = num4 * 32 + 23 + 33;
-		if (num5 >= GameCanvas.w)
+		wP = 170;
+		hP = ((!isRes) ? 100 : 110);
+		xP = GameCanvas.hw - wP / 2;
+		yP = tfUser.y - 15;
+		int num3 = 4;
+		int num4 = num3 * 32 + 23 + 33;
+		if (num4 >= GameCanvas.w)
 		{
-			num4--;
-			num5 = num4 * 32 + 23 + 33;
+			num3--;
+			num4 = num3 * 32 + 23 + 33;
 		}
-		this.xLog = GameCanvas.w / 2 - num5 / 2;
-		this.yLog = GameCanvas.hh - 30;
-		this.lY = ((GameCanvas.w < 200) ? (this.tfUser.y - 30) : (this.yLog - 30));
-		this.tfUser.x = this.xLog + 10;
-		this.tfUser.y = this.yLog + 20;
-		this.cmdOK = new Command(mResources.OK, this, 2008, null);
-		this.cmdOK.x = GameCanvas.w / 2 - 84;
-		this.cmdOK.y = this.cmdLogin.y;
-		this.cmdFogetPass = new Command(mResources.forgetPass, this, 1003, null);
-		this.cmdFogetPass.x = GameCanvas.w / 2 + 3;
-		this.cmdFogetPass.y = this.cmdLogin.y;
-		this.center = this.cmdOK;
-		this.left = this.cmdFogetPass;
+		xLog = GameCanvas.w / 2 - num4 / 2;
+		yLog = GameCanvas.hh - 30;
+		lY = ((GameCanvas.w < 200) ? (tfUser.y - 30) : (yLog - 30));
+		tfUser.x = xLog + 10;
+		tfUser.y = yLog + 20;
+		cmdOK = new Command(mResources.OK, this, 2008, null);
+		cmdOK.x = GameCanvas.w / 2 - 84;
+		cmdOK.y = cmdLogin.y;
+		cmdFogetPass = new Command(mResources.forgetPass, this, 1003, null);
+		cmdFogetPass.x = GameCanvas.w / 2 + 3;
+		cmdFogetPass.y = cmdLogin.y;
+		center = cmdOK;
+		left = cmdFogetPass;
 	}
 
-	// Token: 0x06000706 RID: 1798 RVA: 0x0005D570 File Offset: 0x0005B770
 	public static void getServerLink()
 	{
 		try
 		{
-			if (!LoginScr.isTryGetIPFromWap)
+			if (!isTryGetIPFromWap)
 			{
 				Command command = new Command();
-				ActionChat actionChat = delegate(string str)
+				ActionChat actionChat = command.actionChat = delegate(string str)
 				{
 					try
 					{
-						if (str == null)
+						if (str != null && !(str == string.Empty))
 						{
-							return;
+							Rms.saveIP(str);
+							if (str.Contains(":"))
+							{
+								int num = str.IndexOf(":");
+								string text = str.Substring(0, num);
+								string s = str.Substring(num + 1);
+								GameMidlet.IP = text;
+								GameMidlet.PORT = int.Parse(s);
+								Session_ME.gI().connect(text, int.Parse(s));
+								isTryGetIPFromWap = true;
+							}
 						}
-						if (str == string.Empty)
-						{
-							return;
-						}
-						Rms.saveIP(str);
-						if (!str.Contains(":"))
-						{
-							return;
-						}
-						int num = str.IndexOf(":");
-						string text = str.Substring(0, num);
-						string s = str.Substring(num + 1);
-						GameMidlet.IP = text;
-						GameMidlet.PORT = int.Parse(s);
-						Session_ME.gI().connect(text, int.Parse(s));
-						LoginScr.isTryGetIPFromWap = true;
 					}
-					catch (Exception ex)
+					catch (Exception)
 					{
 					}
 				};
-				command.actionChat = actionChat;
-				Net.connectHTTP("http://27.0.14.75/game/ngocrong031_t.php", command);
+				Net.connectHTTP(ServerListScreen.linkGetHost, command);
 			}
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
 		}
 	}
 
-	// Token: 0x06000707 RID: 1799 RVA: 0x0005D5E0 File Offset: 0x0005B7E0
 	public override void switchToMe()
 	{
-		this.isRegistering = false;
+		isRegistering = false;
 		SoundMn.gI().stopAll();
-		this.tfUser.isFocus = true;
-		this.tfPass.isFocus = false;
+		tfUser.isFocus = true;
+		tfPass.isFocus = false;
 		if (GameCanvas.isTouch)
 		{
-			this.tfUser.isFocus = false;
+			tfUser.isFocus = false;
 		}
 		GameCanvas.loadBG(0);
 		base.switchToMe();
 	}
 
-	// Token: 0x06000708 RID: 1800 RVA: 0x0005D638 File Offset: 0x0005B838
 	public void setUserPass()
 	{
 		string text = Rms.loadRMSString("acc");
 		if (text != null && !text.Equals(string.Empty))
 		{
-			this.tfUser.setText(text);
+			tfUser.setText(text);
 		}
 		string text2 = Rms.loadRMSString("pass");
 		if (text2 != null && !text2.Equals(string.Empty))
 		{
-			this.tfPass.setText(text2);
+			tfPass.setText(text2);
 		}
 	}
 
-	// Token: 0x06000709 RID: 1801 RVA: 0x00003584 File Offset: 0x00001784
 	public void updateTfWhenOpenKb()
 	{
 	}
 
-	// Token: 0x0600070A RID: 1802 RVA: 0x0005D6A0 File Offset: 0x0005B8A0
 	protected void doMenu()
 	{
 		MyVector myVector = new MyVector();
 		myVector.addElement(new Command(mResources.registerNewAcc, this, 2004, null));
-		if (!this.isLogin2)
+		if (!isLogin2)
 		{
 			myVector.addElement(new Command(mResources.selectServer, this, 1004, null));
 		}
@@ -217,30 +328,29 @@ public class LoginScr : mScreen, IActionListener
 		GameCanvas.menu.startAt(myVector, 0);
 	}
 
-	// Token: 0x0600070B RID: 1803 RVA: 0x0005D74C File Offset: 0x0005B94C
 	protected void doRegister()
 	{
-		if (this.tfUser.getText().Equals(string.Empty))
+		if (tfUser.getText().Equals(string.Empty))
 		{
 			GameCanvas.startOKDlg(mResources.userBlank);
 			return;
 		}
-		char[] array = this.tfUser.getText().ToCharArray();
-		if (this.tfPass.getText().Equals(string.Empty))
+		char[] array = tfUser.getText().ToCharArray();
+		if (tfPass.getText().Equals(string.Empty))
 		{
 			GameCanvas.startOKDlg(mResources.passwordBlank);
 			return;
 		}
-		if (this.tfUser.getText().Length < 5)
+		if (tfUser.getText().Length < 5)
 		{
 			GameCanvas.startOKDlg(mResources.accTooShort);
 			return;
 		}
 		int num = 0;
 		string text = null;
-		if ((int)mResources.language == 2)
+		if (mResources.language == 2)
 		{
-			if (this.tfUser.getText().IndexOf("@") == -1 || this.tfUser.getText().IndexOf(".") == -1)
+			if (tfUser.getText().IndexOf("@") == -1 || tfUser.getText().IndexOf(".") == -1)
 			{
 				text = mResources.emailInvalid;
 			}
@@ -250,16 +360,16 @@ public class LoginScr : mScreen, IActionListener
 		{
 			try
 			{
-				long num2 = long.Parse(this.tfUser.getText());
-				if (this.tfUser.getText().Length < 8 || this.tfUser.getText().Length > 12 || (!this.tfUser.getText().StartsWith("0") && !this.tfUser.getText().StartsWith("84")))
+				long num2 = long.Parse(tfUser.getText());
+				if (tfUser.getText().Length < 8 || tfUser.getText().Length > 12 || (!tfUser.getText().StartsWith("0") && !tfUser.getText().StartsWith("84")))
 				{
 					text = mResources.phoneInvalid;
 				}
 				num = 1;
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
-				if (this.tfUser.getText().IndexOf("@") == -1 || this.tfUser.getText().IndexOf(".") == -1)
+				if (tfUser.getText().IndexOf("@") == -1 || tfUser.getText().IndexOf(".") == -1)
 				{
 					text = mResources.emailInvalid;
 				}
@@ -272,54 +382,42 @@ public class LoginScr : mScreen, IActionListener
 		}
 		else
 		{
-			GameCanvas.msgdlg.setInfo(string.Concat(new string[]
-			{
-				mResources.plsCheckAcc,
-				(num != 1) ? (mResources.email + ": ") : (mResources.phone + ": "),
-				this.tfUser.getText(),
-				"\n",
-				mResources.password,
-				": ",
-				this.tfPass.getText()
-			}), new Command(mResources.ACCEPT, this, 4000, null), null, new Command(mResources.NO, GameCanvas.instance, 8882, null));
+			GameCanvas.msgdlg.setInfo(mResources.plsCheckAcc + ((num != 1) ? (mResources.email + ": ") : (mResources.phone + ": ")) + tfUser.getText() + "\n" + mResources.password + ": " + tfPass.getText(), new Command(mResources.ACCEPT, this, 4000, null), null, new Command(mResources.NO, GameCanvas.instance, 8882, null));
 		}
 		GameCanvas.currentDialog = GameCanvas.msgdlg;
 	}
 
-	// Token: 0x0600070C RID: 1804 RVA: 0x0005D9BC File Offset: 0x0005BBBC
 	protected void doRegister(string user)
 	{
-		this.isFAQ = false;
+		isFAQ = false;
 		GameCanvas.startWaitDlg(mResources.CONNECTING);
 		GameCanvas.connect();
 		GameCanvas.startWaitDlg(mResources.REGISTERING);
-		this.passRe = this.tfPass.getText();
-		Service.gI().requestRegister(user, this.tfPass.getText(), Rms.loadRMSString("userAo" + ServerListScreen.ipSelect), Rms.loadRMSString("passAo" + ServerListScreen.ipSelect), GameMidlet.VERSION);
+		passRe = tfPass.getText();
+		Service.gI().requestRegister(user, tfPass.getText(), Rms.loadRMSString("userAo" + ServerListScreen.ipSelect), Rms.loadRMSString("passAo" + ServerListScreen.ipSelect), GameMidlet.VERSION);
 		Rms.saveRMSString("acc", user);
-		Rms.saveRMSString("pass", this.tfPass.getText());
-		this.t = 20;
-		this.isRegistering = true;
+		Rms.saveRMSString("pass", tfPass.getText());
+		t = 20;
+		isRegistering = true;
 	}
 
-	// Token: 0x0600070D RID: 1805 RVA: 0x0005DA78 File Offset: 0x0005BC78
 	public void doViewFAQ()
 	{
-		if (!this.listFAQ.Equals(string.Empty) || !this.listFAQ.Equals(string.Empty))
+		if (!listFAQ.Equals(string.Empty) || !listFAQ.Equals(string.Empty))
 		{
 		}
 		if (!Session_ME.connected)
 		{
-			this.isFAQ = true;
+			isFAQ = true;
 			GameCanvas.connect();
 		}
 		GameCanvas.startWaitDlg();
 	}
 
-	// Token: 0x0600070E RID: 1806 RVA: 0x0005DACC File Offset: 0x0005BCCC
 	protected void doSelectServer()
 	{
 		MyVector myVector = new MyVector();
-		if (LoginScr.isLocal)
+		if (isLocal)
 		{
 			myVector.addElement(new Command("Server LOCAL", this, 20004, null));
 		}
@@ -327,74 +425,25 @@ public class LoginScr : mScreen, IActionListener
 		myVector.addElement(new Command("Server Shuriken", this, 20002, null));
 		myVector.addElement(new Command("Server Tessen (mới)", this, 20003, null));
 		GameCanvas.menu.startAt(myVector, 0);
-		if (this.loadIndexServer() != -1 && !GameCanvas.isTouch)
+		if (loadIndexServer() != -1 && !GameCanvas.isTouch)
 		{
-			GameCanvas.menu.menuSelectedItem = this.loadIndexServer();
+			GameCanvas.menu.menuSelectedItem = loadIndexServer();
 		}
 	}
 
-	// Token: 0x0600070F RID: 1807 RVA: 0x00006841 File Offset: 0x00004A41
 	protected void saveIndexServer(int index)
 	{
 		Rms.saveRMSInt("indServer", index);
 	}
 
-	// Token: 0x06000710 RID: 1808 RVA: 0x0000684E File Offset: 0x00004A4E
 	protected int loadIndexServer()
 	{
 		return Rms.loadRMSInt("indServer");
 	}
 
-	// Token: 0x06000711 RID: 1809 RVA: 0x0005DB78 File Offset: 0x0005BD78
 	public void doLogin()
 	{
-		string text = Rms.loadRMSString("acc");
-		string text2 = Rms.loadRMSString("pass");
-		if (text != null && !text.Equals(string.Empty))
-		{
-			this.isLogin2 = false;
-		}
-		else if (Rms.loadRMSString("userAo" + ServerListScreen.ipSelect) != null && !Rms.loadRMSString("userAo" + ServerListScreen.ipSelect).Equals(string.Empty))
-		{
-			this.isLogin2 = true;
-		}
-		else
-		{
-			this.isLogin2 = false;
-		}
-		if ((text == null || text.Equals(string.Empty)) && this.isLogin2)
-		{
-			text = Rms.loadRMSString("userAo" + ServerListScreen.ipSelect);
-			text2 = "a";
-		}
-		if (text == null || text2 == null || GameMidlet.VERSION == null || text.Equals(string.Empty))
-		{
-			return;
-		}
-		if (text2.Equals(string.Empty))
-		{
-			this.focus = 1;
-			this.tfUser.isFocus = false;
-			this.tfPass.isFocus = true;
-			if (!GameCanvas.isTouch)
-			{
-				this.right = this.tfPass.cmdClear;
-			}
-			return;
-		}
-		GameCanvas.connect();
-		Res.outz(string.Concat(new object[]
-		{
-			"ccccccc ",
-			text,
-			" ",
-			text2,
-			" ",
-			GameMidlet.VERSION,
-			" ",
-			(!this.isLogin2) ? 0 : 1
-		}));
-		Service.gI().login(text, text2, GameMidlet.VERSION, (!this.isLogin2) ? 0 : 1);
+		Service.gI().login(A0.username, A0.password, GameMidlet.VERSION, 0);
 		if (Session_ME.connected)
 		{
 			GameCanvas.startWaitDlg();
@@ -403,21 +452,15 @@ public class LoginScr : mScreen, IActionListener
 		{
 			GameCanvas.startOKDlg(mResources.maychutathoacmatsong);
 		}
-		this.focus = 0;
-		if (!this.isLogin2)
-		{
-			this.actRegisterLeft();
-		}
 	}
 
-	// Token: 0x06000712 RID: 1810 RVA: 0x0005DD84 File Offset: 0x0005BF84
 	public void savePass()
 	{
-		if (this.isCheck)
+		if (isCheck)
 		{
 			Rms.saveRMSInt("check", 1);
-			Rms.saveRMSString("acc", this.tfUser.getText().ToLower().Trim());
-			Rms.saveRMSString("pass", this.tfPass.getText().ToLower().Trim());
+			Rms.saveRMSString("acc", tfUser.getText().ToLower().Trim());
+			Rms.saveRMSString("pass", tfPass.getText().ToLower().Trim());
 		}
 		else
 		{
@@ -427,53 +470,52 @@ public class LoginScr : mScreen, IActionListener
 		}
 	}
 
-	// Token: 0x06000713 RID: 1811 RVA: 0x0005DE14 File Offset: 0x0005C014
 	public override void update()
 	{
-		if (Main.isWindowsPhone && this.isRegistering)
+		if (Main.isWindowsPhone && isRegistering)
 		{
-			if (this.t < 0)
+			if (t < 0)
 			{
 				GameCanvas.endDlg();
 				Session_ME.gI().close();
 				GameCanvas.serverScreen.switchToMe();
-				this.isRegistering = false;
+				isRegistering = false;
 			}
 			else
 			{
-				this.t--;
+				t--;
 			}
 		}
-		if (LoginScr.timeLogin > 0)
+		if (timeLogin > 0)
 		{
 			GameCanvas.startWaitDlg();
-			LoginScr.currTimeLogin = mSystem.currentTimeMillis();
-			if (LoginScr.currTimeLogin - LoginScr.lastTimeLogin >= 1000L)
+			currTimeLogin = mSystem.currentTimeMillis();
+			if (currTimeLogin - lastTimeLogin >= 1000)
 			{
-				LoginScr.timeLogin -= 1;
-				if (LoginScr.timeLogin == 0)
+				timeLogin--;
+				if (timeLogin == 0)
 				{
 					Session_ME.gI().close();
 					GameCanvas.loginScr.doLogin();
 				}
-				LoginScr.lastTimeLogin = LoginScr.currTimeLogin;
+				lastTimeLogin = currTimeLogin;
 			}
 		}
-		if (this.isLogin2 && !this.isRes)
+		if (isLogin2 && !isRes)
 		{
-			this.tfUser.name = (((int)mResources.language != 2) ? (mResources.phone + "/") : string.Empty) + mResources.email;
-			this.tfPass.name = mResources.password;
-			this.tfUser.isPaintCarret = false;
-			this.tfPass.isPaintCarret = false;
-			this.tfUser.update();
-			this.tfPass.update();
+			tfUser.name = ((mResources.language != 2) ? (mResources.phone + "/") : string.Empty) + mResources.email;
+			tfPass.name = mResources.password;
+			tfUser.isPaintCarret = false;
+			tfPass.isPaintCarret = false;
+			tfUser.update();
+			tfPass.update();
 		}
 		else
 		{
-			this.tfUser.name = (((int)mResources.language != 2) ? (mResources.phone + "/") : string.Empty) + mResources.email;
-			this.tfPass.name = mResources.password;
-			this.tfUser.update();
-			this.tfPass.update();
+			tfUser.name = ((mResources.language != 2) ? (mResources.phone + "/") : string.Empty) + mResources.email;
+			tfPass.name = mResources.password;
+			tfUser.update();
+			tfPass.update();
 		}
 		if (TouchScreenKeyboard.visible)
 		{
@@ -484,9 +526,9 @@ public class LoginScr : mScreen, IActionListener
 			Effect2 effect = (Effect2)Effect2.vEffect2.elementAt(i);
 			effect.update();
 		}
-		if (LoginScr.isUpdateAll && !LoginScr.isUpdateData && !LoginScr.isUpdateItem && !LoginScr.isUpdateMap && !LoginScr.isUpdateSkill)
+		if (isUpdateAll && !isUpdateData && !isUpdateItem && !isUpdateMap && !isUpdateSkill)
 		{
-			LoginScr.isUpdateAll = false;
+			isUpdateAll = false;
 			mSystem.gcc();
 			Service.gI().finishUpdate();
 		}
@@ -502,128 +544,123 @@ public class LoginScr : mScreen, IActionListener
 		GameCanvas.debug("LGU1", 0);
 		GameCanvas.debug("LGU2", 0);
 		GameCanvas.debug("LGU3", 0);
-		this.updateLogo();
+		updateLogo();
 		GameCanvas.debug("LGU4", 0);
 		GameCanvas.debug("LGU5", 0);
-		if (this.g >= 0)
+		if (g >= 0)
 		{
-			this.ylogo += this.dir * this.g;
-			this.g += this.dir * this.v;
-			if (this.g <= 0)
+			ylogo += dir * g;
+			g += dir * v;
+			if (g <= 0)
 			{
-				this.dir *= -1;
+				dir *= -1;
 			}
-			if (this.ylogo > 0)
+			if (ylogo > 0)
 			{
-				this.dir *= -1;
-				this.g -= 2 * this.v;
+				dir *= -1;
+				g -= 2 * v;
 			}
 		}
 		GameCanvas.debug("LGU6", 0);
-		if (this.tipid >= 0 && GameCanvas.gameTick % 100 == 0)
+		if (tipid >= 0 && GameCanvas.gameTick % 100 == 0)
 		{
-			this.doChangeTip();
+			doChangeTip();
 		}
-		if (this.isLogin2 && !this.isRes)
+		if (isLogin2 && !isRes)
 		{
-			this.tfUser.isPaintCarret = false;
-			this.tfPass.isPaintCarret = false;
-			this.tfUser.update();
-			this.tfPass.update();
+			tfUser.isPaintCarret = false;
+			tfPass.isPaintCarret = false;
+			tfUser.update();
+			tfPass.update();
 		}
 		else
 		{
-			this.tfUser.name = (((int)mResources.language != 2) ? (mResources.phone + "/") : string.Empty) + mResources.email;
-			this.tfPass.name = mResources.password;
-			this.tfUser.update();
-			this.tfPass.update();
+			tfUser.name = ((mResources.language != 2) ? (mResources.phone + "/") : string.Empty) + mResources.email;
+			tfPass.name = mResources.password;
+			tfUser.update();
+			tfPass.update();
 		}
 		if (GameCanvas.isTouch)
 		{
-			if (this.isRes)
+			if (isRes)
 			{
-				this.center = this.cmdRes;
-				this.left = this.cmdBackFromRegister;
+				center = cmdRes;
+				left = cmdBackFromRegister;
 			}
 			else
 			{
-				this.center = this.cmdOK;
-				this.left = this.cmdFogetPass;
+				center = cmdOK;
+				left = cmdFogetPass;
 			}
 		}
-		else if (this.isRes)
+		else if (isRes)
 		{
-			this.center = this.cmdRes;
-			this.left = this.cmdBackFromRegister;
+			center = cmdRes;
+			left = cmdBackFromRegister;
 		}
 		else
 		{
-			this.center = this.cmdOK;
-			this.left = this.cmdFogetPass;
+			center = cmdOK;
+			left = cmdFogetPass;
 		}
 		if (!Main.isPC && !TouchScreenKeyboard.visible && !Main.isMiniApp && !Main.isWindowsPhone)
 		{
-			string text = this.tfUser.getText().ToLower().Trim();
-			string text2 = this.tfPass.getText().ToLower().Trim();
+			string text = tfUser.getText().ToLower().Trim();
+			string text2 = tfPass.getText().ToLower().Trim();
 			if (!text.Equals(string.Empty) && !text2.Equals(string.Empty))
 			{
-				this.doLogin();
+				doLogin();
 			}
 			Main.isMiniApp = true;
 		}
-		this.updateTfWhenOpenKb();
+		updateTfWhenOpenKb();
 	}
 
-	// Token: 0x06000714 RID: 1812 RVA: 0x0005E338 File Offset: 0x0005C538
 	private void doChangeTip()
 	{
-		this.tipid++;
-		if (this.tipid >= mResources.tips.Length)
+		tipid++;
+		if (tipid >= mResources.tips.Length)
 		{
-			this.tipid = 0;
+			tipid = 0;
 		}
 		if (GameCanvas.currentDialog == GameCanvas.msgdlg && GameCanvas.msgdlg.isWait)
 		{
-			GameCanvas.msgdlg.setInfo(mResources.tips[this.tipid]);
+			GameCanvas.msgdlg.setInfo(mResources.tips[tipid]);
 		}
 	}
 
-	// Token: 0x06000715 RID: 1813 RVA: 0x0000685A File Offset: 0x00004A5A
 	public void updateLogo()
 	{
-		if (this.defYL != this.yL)
+		if (defYL != yL)
 		{
-			this.yL += this.defYL - this.yL >> 1;
+			yL += defYL - yL >> 1;
 		}
 	}
 
-	// Token: 0x06000716 RID: 1814 RVA: 0x0005E3A0 File Offset: 0x0005C5A0
 	public override void keyPress(int keyCode)
 	{
-		if (this.tfUser.isFocus)
+		if (tfUser.isFocus)
 		{
-			this.tfUser.keyPressed(keyCode);
+			tfUser.keyPressed(keyCode);
 		}
-		else if (this.tfPass.isFocus)
+		else if (tfPass.isFocus)
 		{
-			this.tfPass.keyPressed(keyCode);
+			tfPass.keyPressed(keyCode);
 		}
 		base.keyPress(keyCode);
 	}
 
-	// Token: 0x06000717 RID: 1815 RVA: 0x00006889 File Offset: 0x00004A89
 	public override void unLoad()
 	{
 		base.unLoad();
 	}
 
-	// Token: 0x06000718 RID: 1816 RVA: 0x0005E3F4 File Offset: 0x0005C5F4
 	public override void paint(mGraphics g)
 	{
 		GameCanvas.debug("PLG1", 1);
 		GameCanvas.paintBGGameScr(g);
 		GameCanvas.debug("PLG2", 2);
-		int num = this.tfUser.y - 50;
+		int num = tfUser.y - 50;
 		if (GameCanvas.h <= 220)
 		{
 			num += 5;
@@ -637,11 +674,7 @@ public class LoginScr : mScreen, IActionListener
 		{
 			mFont.tahoma_7_white.drawString(g, ServerListScreen.linkweb, GameCanvas.w - 2, 2, 1, mFont.tahoma_7_grey);
 		}
-		if (ChatPopup.currChatPopup != null)
-		{
-			return;
-		}
-		if (ChatPopup.serverChatPopUp != null)
+		if (ChatPopup.currChatPopup != null || ChatPopup.serverChatPopUp != null)
 		{
 			return;
 		}
@@ -649,10 +682,10 @@ public class LoginScr : mScreen, IActionListener
 		{
 			int h = 105;
 			int w = (GameCanvas.w < 200) ? 160 : 180;
-			PopUp.paintPopUp(g, this.xLog, this.yLog - 10, w, h, -1, true);
-			if (GameCanvas.h > 160 && LoginScr.imgTitle != null)
+			PopUp.paintPopUp(g, xLog, yLog - 10, w, h, -1, isButton: true);
+			if (GameCanvas.h > 160 && imgTitle != null)
 			{
-				g.drawImage(LoginScr.imgTitle, GameCanvas.hw, num, 3);
+				g.drawImage(imgTitle, GameCanvas.hw, num, 3);
 			}
 			GameCanvas.debug("PLG4", 1);
 			int num2 = 4;
@@ -662,274 +695,245 @@ public class LoginScr : mScreen, IActionListener
 				num2--;
 				num3 = num2 * 32 + 23 + 33;
 			}
-			this.xLog = GameCanvas.w / 2 - num3 / 2;
-			this.tfUser.x = this.xLog + 10;
-			this.tfUser.y = this.yLog + 20;
-			this.tfPass.x = this.xLog + 10;
-			this.tfPass.y = this.yLog + 55;
-			this.tfUser.paint(g);
-			this.tfPass.paint(g);
-			if (GameCanvas.w < 176)
+			xLog = GameCanvas.w / 2 - num3 / 2;
+			tfUser.x = xLog + 10;
+			tfUser.y = yLog + 20;
+			tfPass.x = xLog + 10;
+			tfPass.y = yLog + 55;
+			tfUser.paint(g);
+			tfPass.paint(g);
+			int num4 = 0;
+			if (GameCanvas.w >= 176)
 			{
-				mFont.tahoma_7b_green2.drawString(g, mResources.acc + ":", this.tfUser.x - 35, this.tfUser.y + 7, 0);
-				mFont.tahoma_7b_green2.drawString(g, mResources.pwd + ":", this.tfPass.x - 35, this.tfPass.y + 7, 0);
-				mFont.tahoma_7b_green2.drawString(g, mResources.server + ":" + LoginScr.serverName, GameCanvas.w / 2, this.tfPass.y + 32, 2);
+				num4 = 50;
+			}
+			else
+			{
+				mFont.tahoma_7b_green2.drawString(g, mResources.acc + ":", tfUser.x - 35, tfUser.y + 7, 0);
+				mFont.tahoma_7b_green2.drawString(g, mResources.pwd + ":", tfPass.x - 35, tfPass.y + 7, 0);
+				mFont.tahoma_7b_green2.drawString(g, mResources.server + ":" + serverName, GameCanvas.w / 2, tfPass.y + 32, 2);
+				num4 = 0;
 			}
 		}
 		base.paint(g);
 	}
 
-	// Token: 0x06000719 RID: 1817 RVA: 0x0005E6C0 File Offset: 0x0005C8C0
 	public override void updateKey()
 	{
 		if (GameCanvas.isTouch)
 		{
-			if (this.cmdCallHotline != null && this.cmdCallHotline.isPointerPressInside())
+			if (cmdCallHotline != null && cmdCallHotline.isPointerPressInside())
 			{
-				this.cmdCallHotline.performAction();
+				cmdCallHotline.performAction();
 			}
 		}
 		else if (mSystem.clientType == 1 && GameCanvas.keyPressed[13])
 		{
 			GameCanvas.keyPressed[13] = false;
-			this.cmdCallHotline.performAction();
+			cmdCallHotline.performAction();
 		}
-		if (LoginScr.isContinueToLogin)
+		if (isContinueToLogin)
 		{
 			return;
 		}
 		if (!GameCanvas.isTouch)
 		{
-			if (this.tfUser.isFocus)
+			if (tfUser.isFocus)
 			{
-				this.right = this.tfUser.cmdClear;
+				right = tfUser.cmdClear;
 			}
 			else
 			{
-				this.right = this.tfPass.cmdClear;
+				right = tfPass.cmdClear;
 			}
 		}
 		if (GameCanvas.keyPressed[(!Main.isPC) ? 2 : 21])
 		{
-			this.focus--;
-			if (this.focus < 0)
+			focus--;
+			if (focus < 0)
 			{
-				this.focus = 1;
+				focus = 1;
 			}
 		}
 		else if (GameCanvas.keyPressed[(!Main.isPC) ? 8 : 22] || GameCanvas.keyPressed[16])
 		{
-			this.focus++;
-			if (this.focus > 1)
+			focus++;
+			if (focus > 1)
 			{
-				this.focus = 0;
+				focus = 0;
 			}
 		}
 		if (GameCanvas.keyPressed[(!Main.isPC) ? 2 : 21] || GameCanvas.keyPressed[(!Main.isPC) ? 8 : 22] || GameCanvas.keyPressed[16])
 		{
 			GameCanvas.clearKeyPressed();
-			if (!this.isLogin2 || this.isRes)
+			if (!isLogin2 || isRes)
 			{
-				if (this.focus == 1)
+				if (focus == 1)
 				{
-					this.tfUser.isFocus = false;
-					this.tfPass.isFocus = true;
+					tfUser.isFocus = false;
+					tfPass.isFocus = true;
 				}
-				else if (this.focus == 0)
+				else if (focus == 0)
 				{
-					this.tfUser.isFocus = true;
-					this.tfPass.isFocus = false;
+					tfUser.isFocus = true;
+					tfPass.isFocus = false;
 				}
 				else
 				{
-					this.tfUser.isFocus = false;
-					this.tfPass.isFocus = false;
+					tfUser.isFocus = false;
+					tfPass.isFocus = false;
 				}
 			}
 		}
 		if (GameCanvas.isTouch)
 		{
-			if (this.isRes)
+			if (isRes)
 			{
-				this.center = this.cmdRes;
-				this.left = this.cmdBackFromRegister;
+				center = cmdRes;
+				left = cmdBackFromRegister;
 			}
 			else
 			{
-				this.center = this.cmdOK;
-				this.left = this.cmdFogetPass;
+				center = cmdOK;
+				left = cmdFogetPass;
 			}
 		}
-		else if (this.isRes)
+		else if (isRes)
 		{
-			this.center = this.cmdRes;
-			this.left = this.cmdBackFromRegister;
+			center = cmdRes;
+			left = cmdBackFromRegister;
 		}
 		else
 		{
-			this.center = this.cmdOK;
-			this.left = this.cmdFogetPass;
+			center = cmdOK;
+			left = cmdFogetPass;
 		}
-		if (GameCanvas.isPointerJustRelease)
+		if (GameCanvas.isPointerJustRelease && (!isLogin2 || isRes))
 		{
-			if (!this.isLogin2 || this.isRes)
+			if (GameCanvas.isPointerHoldIn(tfUser.x, tfUser.y, tfUser.width, tfUser.height))
 			{
-				if (GameCanvas.isPointerHoldIn(this.tfUser.x, this.tfUser.y, this.tfUser.width, this.tfUser.height))
-				{
-					this.focus = 0;
-				}
-				else if (GameCanvas.isPointerHoldIn(this.tfPass.x, this.tfPass.y, this.tfPass.width, this.tfPass.height))
-				{
-					this.focus = 1;
-				}
+				focus = 0;
+			}
+			else if (GameCanvas.isPointerHoldIn(tfPass.x, tfPass.y, tfPass.width, tfPass.height))
+			{
+				focus = 1;
 			}
 		}
-		if (Main.isPC && GameCanvas.keyPressed[(!Main.isPC) ? 5 : 25] && this.right != null)
+		if (Main.isPC && GameCanvas.keyPressed[(!Main.isPC) ? 5 : 25] && right != null)
 		{
-			this.right.performAction();
+			right.performAction();
 		}
 		base.updateKey();
 		GameCanvas.clearKeyPressed();
 	}
 
-	// Token: 0x0600071A RID: 1818 RVA: 0x00006891 File Offset: 0x00004A91
 	public void resetLogo()
 	{
-		this.yL = -50;
+		yL = -50;
 	}
 
-	// Token: 0x0600071B RID: 1819 RVA: 0x0005EA54 File Offset: 0x0005CC54
 	public void perform(int idAction, object p)
 	{
 		switch (idAction)
 		{
-		case 2000:
+		case 13:
+			switch (mSystem.clientType)
+			{
+			case 2:
+				break;
+			case 1:
+				mSystem.callHotlineJava();
+				break;
+			case 3:
+			case 5:
+				mSystem.callHotlineIphone();
+				break;
+			case 6:
+				mSystem.callHotlineWindowsPhone();
+				break;
+			case 4:
+				mSystem.callHotlinePC();
+				break;
+			}
+			break;
+		case 1000:
+			try
+			{
+				GameMidlet.instance.platformRequest((string)p);
+			}
+			catch (Exception)
+			{
+			}
+			GameCanvas.endDlg();
+			break;
+		case 1001:
+			GameCanvas.endDlg();
+			isRes = false;
+			break;
+		case 1002:
+		{
+			GameCanvas.startWaitDlg();
+			string text = Rms.loadRMSString("userAo" + ServerListScreen.ipSelect);
+			if (text == null || text.Equals(string.Empty))
+			{
+				Service.gI().login2(string.Empty);
+				break;
+			}
+			GameCanvas.loginScr.isLogin2 = true;
+			GameCanvas.connect();
+			Service.gI().setClientType();
+			Service.gI().login(text, string.Empty, GameMidlet.VERSION, 1);
+			break;
+		}
+		case 1004:
+			ServerListScreen.doUpdateServer();
+			GameCanvas.serverScreen.switchToMe();
+			break;
+		case 10021:
+			actRegisterLeft();
+			break;
+		case 1003:
+			GameCanvas.startOKDlg(mResources.goToWebForPassword);
+			break;
+		case 1005:
+			try
+			{
+				GameMidlet.instance.platformRequest("http://ngocrongonline.com");
+			}
+			catch (Exception)
+			{
+			}
+			break;
+		case 10041:
+			Rms.saveRMSInt("lowGraphic", 0);
+			GameCanvas.startOK(mResources.plsRestartGame, 8885, null);
+			break;
+		case 10042:
+			Rms.saveRMSInt("lowGraphic", 1);
+			GameCanvas.startOK(mResources.plsRestartGame, 8885, null);
 			break;
 		case 2001:
-			if (this.isCheck)
+			if (isCheck)
 			{
-				this.isCheck = false;
+				isCheck = false;
 			}
 			else
 			{
-				this.isCheck = true;
+				isCheck = true;
 			}
 			break;
 		case 2002:
-			this.doRegister();
+			doRegister();
 			break;
 		case 2003:
-			this.doMenu();
+			doMenu();
 			break;
 		case 2004:
-			this.actRegister();
-			break;
-		default:
-			switch (idAction)
-			{
-			case 1000:
-				try
-				{
-					GameMidlet.instance.platformRequest((string)p);
-				}
-				catch (Exception ex)
-				{
-				}
-				GameCanvas.endDlg();
-				break;
-			case 1001:
-				GameCanvas.endDlg();
-				this.isRes = false;
-				break;
-			case 1002:
-			{
-				GameCanvas.startWaitDlg();
-				string text = Rms.loadRMSString("userAo" + ServerListScreen.ipSelect);
-				if (text == null || text.Equals(string.Empty))
-				{
-					Service.gI().login2(string.Empty);
-				}
-				else
-				{
-					GameCanvas.loginScr.isLogin2 = true;
-					GameCanvas.connect();
-					Service.gI().setClientType();
-					Service.gI().login(text, string.Empty, GameMidlet.VERSION, 1);
-				}
-				break;
-			}
-			case 1003:
-				GameCanvas.startOKDlg(mResources.goToWebForPassword);
-				break;
-			case 1004:
-				ServerListScreen.doUpdateServer();
-				GameCanvas.serverScreen.switchToMe();
-				break;
-			case 1005:
-				try
-				{
-					GameMidlet.instance.platformRequest("http://ngocrongonline.com");
-				}
-				catch (Exception ex2)
-				{
-				}
-				break;
-			default:
-				if (idAction != 10041)
-				{
-					if (idAction != 10042)
-					{
-						if (idAction != 13)
-						{
-							if (idAction != 4000)
-							{
-								if (idAction == 10021)
-								{
-									this.actRegisterLeft();
-								}
-							}
-							else
-							{
-								this.doRegister(this.tfUser.getText());
-							}
-						}
-						else
-						{
-							switch (mSystem.clientType)
-							{
-							case 1:
-								mSystem.callHotlineJava();
-								break;
-							case 3:
-							case 5:
-								mSystem.callHotlineIphone();
-								break;
-							case 4:
-								mSystem.callHotlinePC();
-								break;
-							case 6:
-								mSystem.callHotlineWindowsPhone();
-								break;
-							}
-						}
-					}
-					else
-					{
-						Rms.saveRMSInt("lowGraphic", 1);
-						GameCanvas.startOK(mResources.plsRestartGame, 8885, null);
-					}
-				}
-				else
-				{
-					Rms.saveRMSInt("lowGraphic", 0);
-					GameCanvas.startOK(mResources.plsRestartGame, 8885, null);
-				}
-				break;
-			}
+			actRegister();
 			break;
 		case 2008:
-			Rms.saveRMSString("acc", this.tfUser.getText().Trim());
-			Rms.saveRMSString("pass", this.tfPass.getText().Trim());
+			Rms.saveRMSString("acc", tfUser.getText().Trim());
+			Rms.saveRMSString("pass", tfPass.getText().Trim());
 			if (ServerListScreen.loadScreen)
 			{
 				GameCanvas.serverScreen.switchToMe();
@@ -939,33 +943,33 @@ public class LoginScr : mScreen, IActionListener
 				GameCanvas.serverScreen.show2();
 			}
 			break;
+		case 4000:
+			doRegister(tfUser.getText());
+			break;
 		}
 	}
 
-	// Token: 0x0600071C RID: 1820 RVA: 0x0000689B File Offset: 0x00004A9B
 	public void actRegisterLeft()
 	{
-		if (this.isLogin2)
+		if (isLogin2)
 		{
-			this.doLogin();
+			doLogin();
 			return;
 		}
-		this.isRes = false;
-		this.tfPass.isFocus = false;
-		this.tfUser.isFocus = true;
-		this.left = this.cmdMenu;
+		isRes = false;
+		tfPass.isFocus = false;
+		tfUser.isFocus = true;
+		left = cmdMenu;
 	}
 
-	// Token: 0x0600071D RID: 1821 RVA: 0x000068DA File Offset: 0x00004ADA
 	public void actRegister()
 	{
 		GameCanvas.endDlg();
-		this.isRes = true;
-		this.tfPass.isFocus = false;
-		this.tfUser.isFocus = true;
+		isRes = true;
+		tfPass.isFocus = false;
+		tfUser.isFocus = true;
 	}
 
-	// Token: 0x0600071E RID: 1822 RVA: 0x0005ED64 File Offset: 0x0005CF64
 	public void backToRegister()
 	{
 		if (GameCanvas.loginScr.isLogin2)
@@ -982,199 +986,17 @@ public class LoginScr : mScreen, IActionListener
 		Session_ME.gI().close();
 	}
 
-	// Token: 0x04000D24 RID: 3364
-	public TField tfUser;
-
-	// Token: 0x04000D25 RID: 3365
-	public TField tfPass;
-
-	// Token: 0x04000D26 RID: 3366
-	public static bool isContinueToLogin = false;
-
-	// Token: 0x04000D27 RID: 3367
-	private int focus;
-
-	// Token: 0x04000D28 RID: 3368
-	private int wC;
-
-	// Token: 0x04000D29 RID: 3369
-	private int yL;
-
-	// Token: 0x04000D2A RID: 3370
-	private int defYL;
-
-	// Token: 0x04000D2B RID: 3371
-	public bool isCheck;
-
-	// Token: 0x04000D2C RID: 3372
-	public bool isRes;
-
-	// Token: 0x04000D2D RID: 3373
-	public Command cmdLogin;
-
-	// Token: 0x04000D2E RID: 3374
-	public Command cmdCheck;
-
-	// Token: 0x04000D2F RID: 3375
-	public Command cmdFogetPass;
-
-	// Token: 0x04000D30 RID: 3376
-	public Command cmdRes;
-
-	// Token: 0x04000D31 RID: 3377
-	public Command cmdMenu;
-
-	// Token: 0x04000D32 RID: 3378
-	public Command cmdBackFromRegister;
-
-	// Token: 0x04000D33 RID: 3379
-	public string listFAQ = string.Empty;
-
-	// Token: 0x04000D34 RID: 3380
-	public string titleFAQ;
-
-	// Token: 0x04000D35 RID: 3381
-	public string subtitleFAQ;
-
-	// Token: 0x04000D36 RID: 3382
-	private string numSupport = string.Empty;
-
-	// Token: 0x04000D37 RID: 3383
-	public static bool isLocal = false;
-
-	// Token: 0x04000D38 RID: 3384
-	public static bool isUpdateAll;
-
-	// Token: 0x04000D39 RID: 3385
-	public static bool isUpdateData;
-
-	// Token: 0x04000D3A RID: 3386
-	public static bool isUpdateMap;
-
-	// Token: 0x04000D3B RID: 3387
-	public static bool isUpdateSkill;
-
-	// Token: 0x04000D3C RID: 3388
-	public static bool isUpdateItem;
-
-	// Token: 0x04000D3D RID: 3389
-	public static string serverName;
-
-	// Token: 0x04000D3E RID: 3390
-	public static Image imgTitle;
-
-	// Token: 0x04000D3F RID: 3391
-	public int plX;
-
-	// Token: 0x04000D40 RID: 3392
-	public int plY;
-
-	// Token: 0x04000D41 RID: 3393
-	public int lY;
-
-	// Token: 0x04000D42 RID: 3394
-	public int lX;
-
-	// Token: 0x04000D43 RID: 3395
-	public int logoDes;
-
-	// Token: 0x04000D44 RID: 3396
-	public int lineX;
-
-	// Token: 0x04000D45 RID: 3397
-	public int lineY;
-
-	// Token: 0x04000D46 RID: 3398
-	public static int[] bgId = new int[]
+	static LoginScr()
 	{
-		0,
-		8,
-		2,
-		6,
-		9
-	};
-
-	// Token: 0x04000D47 RID: 3399
-	public static bool isTryGetIPFromWap;
-
-	// Token: 0x04000D48 RID: 3400
-	public static short timeLogin;
-
-	// Token: 0x04000D49 RID: 3401
-	public static long lastTimeLogin;
-
-	// Token: 0x04000D4A RID: 3402
-	public static long currTimeLogin;
-
-	// Token: 0x04000D4B RID: 3403
-	private int yt;
-
-	// Token: 0x04000D4C RID: 3404
-	private Command cmdSelect;
-
-	// Token: 0x04000D4D RID: 3405
-	private Command cmdOK;
-
-	// Token: 0x04000D4E RID: 3406
-	private int xLog;
-
-	// Token: 0x04000D4F RID: 3407
-	private int yLog;
-
-	// Token: 0x04000D50 RID: 3408
-	public static GameMidlet m;
-
-	// Token: 0x04000D51 RID: 3409
-	private int yy = GameCanvas.hh - mScreen.ITEM_HEIGHT - 5;
-
-	// Token: 0x04000D52 RID: 3410
-	private int freeAreaHeight;
-
-	// Token: 0x04000D53 RID: 3411
-	private int xP;
-
-	// Token: 0x04000D54 RID: 3412
-	private int yP;
-
-	// Token: 0x04000D55 RID: 3413
-	private int wP;
-
-	// Token: 0x04000D56 RID: 3414
-	private int hP;
-
-	// Token: 0x04000D57 RID: 3415
-	private int t = 20;
-
-	// Token: 0x04000D58 RID: 3416
-	private bool isRegistering;
-
-	// Token: 0x04000D59 RID: 3417
-	private string passRe = string.Empty;
-
-	// Token: 0x04000D5A RID: 3418
-	public bool isFAQ;
-
-	// Token: 0x04000D5B RID: 3419
-	private int tipid = -1;
-
-	// Token: 0x04000D5C RID: 3420
-	public bool isLogin2;
-
-	// Token: 0x04000D5D RID: 3421
-	private int v = 2;
-
-	// Token: 0x04000D5E RID: 3422
-	private int g;
-
-	// Token: 0x04000D5F RID: 3423
-	private int ylogo = -40;
-
-	// Token: 0x04000D60 RID: 3424
-	private int dir = 1;
-
-	// Token: 0x04000D61 RID: 3425
-	private Command cmdCallHotline;
-
-	// Token: 0x04000D62 RID: 3426
-	public static bool isLoggingIn;
+		isContinueToLogin = false;
+		isLocal = false;
+		bgId = new int[5]
+		{
+			0,
+			8,
+			2,
+			6,
+			9
+		};
+	}
 }

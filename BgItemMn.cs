@@ -1,9 +1,7 @@
-﻿using System;
+using System;
 
-// Token: 0x02000049 RID: 73
 public class BgItemMn
 {
-	// Token: 0x060002B1 RID: 689 RVA: 0x000154E0 File Offset: 0x000136E0
 	public static Image blendImage(Image img, int layer, int idImage)
 	{
 		int num = TileMap.tileID - 1;
@@ -116,61 +114,38 @@ public class BgItemMn
 				image = mGraphics.blend(img, 0.15f, 0);
 			}
 		}
-		byte[] byteArray = BgItemMn.getByteArray(image);
-		Rms.saveRMS(string.Concat(new object[]
-		{
-			"x",
-			mGraphics.zoomLevel,
-			"blend",
-			idImage,
-			"layer",
-			layer
-		}), ArrayCast.cast(byteArray));
+		byte[] byteArray = getByteArray(image);
+		Rms.saveRMS("x" + mGraphics.zoomLevel + "blend" + idImage + "layer" + layer, ArrayCast.cast(byteArray));
 		return image;
 	}
 
-	// Token: 0x060002B2 RID: 690 RVA: 0x0001579C File Offset: 0x0001399C
 	public static byte[] getByteArray(Image img)
 	{
-		byte[] result;
 		try
 		{
-			byte[] array = img.texture.EncodeToPNG();
-			result = array;
+			return img.texture.EncodeToPNG();
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
-			result = null;
+			return null;
 		}
-		return result;
 	}
 
-	// Token: 0x060002B3 RID: 691 RVA: 0x000157E0 File Offset: 0x000139E0
 	public static void blendcurrBg(short id, Image img)
 	{
 		for (int i = 0; i < TileMap.vCurrItem.size(); i++)
 		{
 			BgItem bgItem = (BgItem)TileMap.vCurrItem.elementAt(i);
-			if (bgItem.idImage == id && !bgItem.isNotBlend() && (int)bgItem.layer != 2 && (int)bgItem.layer != 4 && !BgItem.imgNew.containsKey(bgItem.idImage + "blend" + bgItem.layer))
+			if (bgItem.idImage == id && !bgItem.isNotBlend() && bgItem.layer != 2 && bgItem.layer != 4 && !BgItem.imgNew.containsKey(bgItem.idImage + "blend" + bgItem.layer))
 			{
-				sbyte[] array = Rms.loadRMS(string.Concat(new object[]
-				{
-					"x",
-					mGraphics.zoomLevel,
-					"blend",
-					id,
-					"layer",
-					bgItem.layer
-				}));
+				sbyte[] array = Rms.loadRMS("x" + mGraphics.zoomLevel + "blend" + id + "layer" + bgItem.layer);
 				if (array == null)
 				{
-					BgItem.imgNew.put(bgItem.idImage + "blend" + bgItem.layer, BgItemMn.blendImage(img, (int)bgItem.layer, (int)bgItem.idImage));
+					BgItem.imgNew.put(bgItem.idImage + "blend" + bgItem.layer, blendImage(img, bgItem.layer, bgItem.idImage));
+					continue;
 				}
-				else
-				{
-					Image v = Image.createImage(array, 0, array.Length);
-					BgItem.imgNew.put(bgItem.idImage + "blend" + bgItem.layer, v);
-				}
+				Image v = Image.createImage(array, 0, array.Length);
+				BgItem.imgNew.put(bgItem.idImage + "blend" + bgItem.layer, v);
 			}
 		}
 	}
